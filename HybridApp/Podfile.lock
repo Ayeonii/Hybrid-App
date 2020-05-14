@@ -1,0 +1,16 @@
+PODS:
+  - FlexHybridApp (0.2)
+
+DEPENDENCIES:
+  - FlexHybridApp
+
+SPEC REPOS:
+  trunk:
+    - FlexHybridApp
+
+SPEC CHECKSUMS:
+  FlexHybridApp: 73982a1e319da3bf6001526d7bf5b977a3739be2
+
+PODFILE CHECKSUM: 9e90ce833f465b72ba66c2f9721371c49f3f94c9
+
+COCOAPODS: 1.9.1
