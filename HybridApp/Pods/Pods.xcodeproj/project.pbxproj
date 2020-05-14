@@ -33,13 +33,13 @@
 /* Begin PBXFileReference section */
 		06CE169D88A7F090CD9D591661CEBC8A /* FlexHybridApp.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = FlexHybridApp.modulemap; sourceTree = "<group>"; };
 		0BA2C3CB8CA1FAEF241339C25EFF1917 /* FlexHybridApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FlexHybridApp.debug.xcconfig; sourceTree = "<group>"; };
-		0C87C259DE22F8D230CB96B9B3CF73C8 /* FlexHybridApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = FlexHybridApp.framework; path = FlexHybridApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0C87C259DE22F8D230CB96B9B3CF73C8 /* FlexHybridApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FlexHybridApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0E368F7AA26F422BE96414DE332C3123 /* FlexUtil.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FlexUtil.swift; path = framework/flexhybridapp/FlexUtil.swift; sourceTree = "<group>"; };
-		10F246264CF3CCAE060E5F99C4164AFB /* FlexHybridiOS.min.js */ = {isa = PBXFileReference; includeInIndex = 1; name = FlexHybridiOS.min.js; path = framework/flexhybridapp/js/FlexHybridiOS.min.js; sourceTree = "<group>"; };
+		10F246264CF3CCAE060E5F99C4164AFB /* FlexHybridiOS.min.js */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.javascript; name = FlexHybridiOS.min.js; path = framework/flexhybridapp/js/FlexHybridiOS.min.js; sourceTree = "<group>"; };
 		1A44855A0B1B1CEEB470E2EAFF328B98 /* Pods-HybridApp-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-HybridApp-dummy.m"; sourceTree = "<group>"; };
 		3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.2.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		3918D22B1A5BD46E04235148292E961F /* Pods-HybridApp-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-HybridApp-umbrella.h"; sourceTree = "<group>"; };
-		546E171AE180488FE435DA72E9597B2E /* FlexHybridiOS.js */ = {isa = PBXFileReference; includeInIndex = 1; name = FlexHybridiOS.js; path = framework/flexhybridapp/js/FlexHybridiOS.js; sourceTree = "<group>"; };
+		546E171AE180488FE435DA72E9597B2E /* FlexHybridiOS.js */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.javascript; name = FlexHybridiOS.js; path = framework/flexhybridapp/js/FlexHybridiOS.js; sourceTree = "<group>"; };
 		59101389F6EAC152396342068BC93511 /* Pods-HybridApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-HybridApp.release.xcconfig"; sourceTree = "<group>"; };
 		63901FC6B9F2005BDF46D4118339A894 /* FlexWebView.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; name = FlexWebView.xib; path = framework/flexhybridapp/FlexWebView.xib; sourceTree = "<group>"; };
 		70E802F136CB8A8497311F78BF8B0359 /* FlexHybridApp-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "FlexHybridApp-dummy.m"; sourceTree = "<group>"; };
@@ -48,13 +48,13 @@
 		8A7EF277F8F9843DC8930BF9D9A6E4E5 /* FlexHybridApp-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "FlexHybridApp-Info.plist"; sourceTree = "<group>"; };
 		97844DEDD5F3E5D5980DDB39518FB5D0 /* FlexWebView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FlexWebView.swift; path = framework/flexhybridapp/FlexWebView.swift; sourceTree = "<group>"; };
 		9AF82B5E1248F6A075796390FD202609 /* Pods-HybridApp-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-HybridApp-acknowledgements.plist"; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A3D5ADCFB49E0E1EEAF3B19413AFEFC8 /* FlexHybridApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FlexHybridApp.release.xcconfig; sourceTree = "<group>"; };
 		B1DF3163A51972A60D81A47983672516 /* FlexHybridApp-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FlexHybridApp-umbrella.h"; sourceTree = "<group>"; };
 		B6E236E0BF59DC8F6F1DAD64A9FED7CB /* Pods-HybridApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-HybridApp.debug.xcconfig"; sourceTree = "<group>"; };
 		D9339FB57F35204BEB2AD8F688A16517 /* Pods-HybridApp.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-HybridApp.modulemap"; sourceTree = "<group>"; };
 		E6A74BADB24496B1A8A3CF3AE9A2052D /* FlexHybridApp-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FlexHybridApp-prefix.pch"; sourceTree = "<group>"; };
-		F4E4A040E69CE7D41B3946397330A3E2 /* Pods_HybridApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_HybridApp.framework; path = "Pods-HybridApp.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F4E4A040E69CE7D41B3946397330A3E2 /* Pods_HybridApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HybridApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FDDC840F9A9DBA0F7CF0F8D37C539E41 /* Pods-HybridApp-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-HybridApp-frameworks.sh"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -129,7 +129,6 @@
 				E6BE8304EE8936E73212F5811121C315 /* Resources */,
 				D5A2966BB2547D1E0A4DE5FE1A6BBB1B /* Support Files */,
 			);
-			name = FlexHybridApp;
 			path = FlexHybridApp;
 			sourceTree = "<group>";
 		};

@@ -2,8 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) 는 앨범 접근 권한을 필요로 합니다. 허용 안함 시 일부 기능이 동작하지 않습니다.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) 는 카메라 권한을 필요로 합니다. 허용 안함 시 일부 기능이 동작하지 않습니다.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>$(DEVELOPMENT_LANGUAGE) 는 연락처 접근 권한을 필요로 합니다. 허용 안함 시 일부 기능이 동작하지 않습니다. </string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
