@@ -21,17 +21,15 @@ enum AuthrizeStatus : String {
     case restricted = "Access Restricted"
 }
 
-
-
-
-
 class Utils: NSObject {
     
     let deniedDialog = UIAlertController (title : "알림", message : "권한을 거부하였습니다.", preferredStyle: .alert)
     let authDialog = UIAlertController (title : "권한요청", message : "권한을 허용해야만 해당 기능을 사용하실 수 있습니다.", preferredStyle: .alert)
     var flagImageSave = true
     
-    //Camera
+    /*
+     카메라를 실행시키는 모듈
+     */
     func CameraFunction(_ currentVC : UIViewController) -> String? {
         var returnStr : String?
         let cameraAuthorizationsStatus : AVAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
@@ -61,7 +59,9 @@ class Utils: NSObject {
         return returnStr
     }
     
-    //Photos
+    /*
+     Photos를 실행시킨 후 선택한 이미지를 가져오는 모듈
+     */
     func PhotosFunction(_ currentVC : UIViewController) -> String? {
         let photoAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
         var returnStr : String?
@@ -127,21 +127,17 @@ class Utils: NSObject {
         }
     }
     
-    func DialogAction(_ currentVC : UIViewController , ){
-        
-    }
-    
+   
 }
 
 extension Utils : UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func CameraPhotosAction(_ currentVC : UIViewController, _ type : String) -> Void {
-
         DispatchQueue.main.async {
+            let imagePicker: UIImagePickerController! = UIImagePickerController()
             switch type {
             case "Camera":
-                let imagePicker: UIImagePickerController! = UIImagePickerController()
-                
+
                 if(UIImagePickerController.isSourceTypeAvailable(.camera)){
                     self.flagImageSave = false
                     imagePicker.delegate = self
@@ -158,8 +154,6 @@ extension Utils : UIImagePickerControllerDelegate, UINavigationControllerDelegat
                 }
                 
             case "Photos":
-                let imagePicker: UIImagePickerController! = UIImagePickerController()
-                
                 if (UIImagePickerController.isSourceTypeAvailable(.photoLibrary)) {
                     self.flagImageSave = false
                     imagePicker.delegate = self
@@ -174,6 +168,15 @@ extension Utils : UIImagePickerControllerDelegate, UINavigationControllerDelegat
                 return
             }
         }
+    }
+    
+    private func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
+    //{
+        //if let image = info[UIImagePickerControllerOriginalImage.rawValue] as? UIImage{
+        //            print(info)
+        //        }
+        //        dismiss(animated: true, completion: nil)
+        
     }
     
 }

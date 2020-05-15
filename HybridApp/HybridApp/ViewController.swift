@@ -46,13 +46,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             }
         }
         
-        component.setInterface("dialog") { (arguments) -> Any? in
-            if arguments != nil {
-                
-            }else {
-                return nil
-            }
-        }
         
         component.setInterface("test2")
         { (arguments) -> Any? in
