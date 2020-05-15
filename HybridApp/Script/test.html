@@ -31,15 +31,18 @@
     }
 
     const Camera = async () => {
-        console.log('Send to Native --- ' + t);
         const z = await $flex.Camera(t);
-        console.log('Return by Native with t1 --- ' + z);
-        t = z;
+        console.log('Return by Native with Camera : ' + z);
     }
 
     const Photos = async () => {
-       const z = await $flex.Photos();
-       console.log('return값 : ' + z)
+        const z = await $flex.Photos();
+        console.log('Return by Native with Photos   : ' + z)
+    }
+
+    const Dialog = async () => {
+        const z = await $flex.Photos();
+        console.log('Return by Native with Dialog   : ' + z)
     }
 
 </script>
@@ -49,6 +52,7 @@
 <button onclick='t3()' style="width: 100%; height: 150px; font-size : 50px">TestAction</button>
 <button onclick='Camera()' style="width: 100%; height: 150px; font-size : 50px">Camera</button>
 <button onclick='Photos()' style="width: 100%; height: 150px; font-size : 50px">Photos</button>
+<button onclick='Dialog()' style="width: 100%; height: 150px; font-size : 50px">Dialog</button>
 </body>
 </html>
 
