@@ -32,7 +32,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         
         component.setInterface("Camera") { (arguments) -> Any? in
             if arguments != nil {
-                self.util.CameraPhotosAction(self, "Camera")
+                self.util.CameraFunction(self)
                 return "Camera Activated"
             }else {
                 return nil
@@ -41,7 +41,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         
         component.setInterface("Photos") { (arguments) -> Any? in
             if arguments != nil {
-                 self.util.CameraPhotosAction(self, "Photos")
+                 self.util.PhotosFunction(self)
                 return "Photos Activated"
             }else {
                 return nil
