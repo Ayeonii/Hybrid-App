@@ -50,8 +50,8 @@ class Utils: NSObject {
                 })
             case .restricted:
                 print("Photos Access Restricted.")
-            @unknown default:
-                <#fatalError()#>
+            default : 
+                return
         }
         
     }
