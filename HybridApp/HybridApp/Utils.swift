@@ -23,6 +23,13 @@ enum AuthrizeStatus : String {
 
 class Utils: NSObject {
     
+    let currentVC : UIViewController
+    
+    init(currentVC : UIViewController){
+        self.currentVC = currentVC
+    }
+    
+    
     let deniedDialog = UIAlertController (title : "알림", message : "권한을 거부하였습니다.", preferredStyle: .alert)
     let authDialog = UIAlertController (title : "권한요청", message : "권한을 허용해야만 해당 기능을 사용하실 수 있습니다.", preferredStyle: .alert)
     var flagImageSave = true
@@ -30,25 +37,25 @@ class Utils: NSObject {
     /*
      카메라를 실행시키는 모듈
      */
-    func CameraFunction(_ currentVC : UIViewController) -> String? {
+    func CameraFunction() -> String? {
         var returnStr : String?
         let cameraAuthorizationsStatus : AVAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
         
         switch cameraAuthorizationsStatus {
         case .authorized :
             returnStr = AuthrizeStatus.authorized.rawValue
-            self.CameraPhotosAction(currentVC, ModuleType.camera.rawValue)
+            self.CameraPhotosAction(ModuleType.camera.rawValue)
         case .denied :
             returnStr = AuthrizeStatus.denied.rawValue
-            self.setAuthAlertAction(currentVC, dialog: self.authDialog)
+            self.setAuthAlertAction(dialog: self.authDialog)
         case .notDetermined:
             AVCaptureDevice.requestAccess(for: AVMediaType.video) { (response) in
                 if response {
-                    self.CameraPhotosAction(currentVC, ModuleType.camera.rawValue)
+                    self.CameraPhotosAction(ModuleType.camera.rawValue)
                 }else {
                     var confirmAction : Array <UIAlertAction> = []
                     confirmAction.append(UIAlertAction(title : "확인", style: .destructive, handler: nil))
-                    self.AlertDialog(currentVC, self.deniedDialog, animated: true, action: confirmAction, completion: nil)
+                    self.AlertDialog(self.deniedDialog, animated: true, action: confirmAction, completion: nil)
                 }
             }
         case .restricted:
@@ -62,27 +69,27 @@ class Utils: NSObject {
     /*
      Photos를 실행시킨 후 선택한 이미지를 가져오는 모듈
      */
-    func PhotosFunction(_ currentVC : UIViewController) -> String? {
+    func PhotosFunction() -> String? {
         let photoAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
         var returnStr : String?
         
         switch photoAuthorizationStatus{
         case .authorized:
             returnStr = AuthrizeStatus.authorized.rawValue
-            self.CameraPhotosAction(currentVC, ModuleType.photos.rawValue)
+            self.CameraPhotosAction(ModuleType.photos.rawValue)
         case .denied:
             returnStr = AuthrizeStatus.denied.rawValue
-            self.setAuthAlertAction(currentVC, dialog: self.authDialog)
+            self.setAuthAlertAction( dialog: self.authDialog)
         case .notDetermined:
             PHPhotoLibrary.requestAuthorization({ (status) in
                 switch status {
                 case .authorized :
                     returnStr = AuthrizeStatus.authorized.rawValue
-                    self.CameraPhotosAction(currentVC, ModuleType.photos.rawValue)
+                    self.CameraPhotosAction(ModuleType.photos.rawValue)
                 case .denied :
                     var confirmAction : Array <UIAlertAction> = []
                     confirmAction.append(UIAlertAction(title : "확인", style: .destructive, handler: nil))
-                    self.AlertDialog(currentVC, self.deniedDialog, animated: true, action: confirmAction, completion: nil)
+                    self.AlertDialog( self.deniedDialog, animated: true, action: confirmAction, completion: nil)
                     returnStr = AuthrizeStatus.denied.rawValue
                 default:
                     break
@@ -97,7 +104,7 @@ class Utils: NSObject {
     }
     
     //Dialog
-    func setAuthAlertAction(_ currentVC : UIViewController, dialog : UIAlertController){
+    func setAuthAlertAction( dialog : UIAlertController){
         var actions : Array<UIAlertAction>? = []
         
         let getAuthBtnAction = UIAlertAction(title : "설정", style: .default) {(UIAlertAction) in
@@ -110,11 +117,11 @@ class Utils: NSObject {
         actions?.append(getAuthBtnAction)
         actions?.append(cancelBtnAction)
         
-        self.AlertDialog(currentVC, dialog, animated: true,  action : actions, completion: nil)
+        self.AlertDialog(dialog, animated: true,  action : actions, completion: nil)
     }
     
     //Alert
-    func AlertDialog (_ currentVC : UIViewController , _ dialog: UIAlertController, animated: Bool,  action : Array<UIAlertAction>?, completion: (() -> Void)? = nil){
+    func AlertDialog (_ dialog: UIAlertController, animated: Bool,  action : Array<UIAlertAction>?, completion: (() -> Void)? = nil){
         DispatchQueue.main.async {
             if let size = action {
                 if dialog.actions.isEmpty{
@@ -123,7 +130,7 @@ class Utils: NSObject {
                     }
                 }
             }
-            currentVC.present(dialog, animated: animated, completion: completion)
+            self.currentVC.present(dialog, animated: animated, completion: completion)
         }
     }
     
@@ -132,7 +139,7 @@ class Utils: NSObject {
 
 extension Utils : UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    func CameraPhotosAction(_ currentVC : UIViewController, _ type : String) -> Void {
+    func CameraPhotosAction( _ type : String) -> Void {
         DispatchQueue.main.async {
             let imagePicker: UIImagePickerController! = UIImagePickerController()
             switch type {
@@ -145,12 +152,12 @@ extension Utils : UIImagePickerControllerDelegate, UINavigationControllerDelegat
                     imagePicker.mediaTypes = [kUTTypeImage as String]
                     imagePicker.allowsEditing = false
 
-                    currentVC.present(imagePicker, animated: true, completion: nil)
+                    self.currentVC.present(imagePicker, animated: true, completion: nil)
                 }else {
                     let cameraAvailDialog = UIAlertController (title : "경고", message : "카메라를 사용할 수 없습니다.", preferredStyle: .alert)
                     let confirmAction = UIAlertAction(title : "확인", style: .destructive, handler: nil)
                     cameraAvailDialog.addAction(confirmAction)
-                    currentVC.present(cameraAvailDialog, animated: true, completion: nil)
+                    self.currentVC.present(cameraAvailDialog, animated: true, completion: nil)
                 }
                 
             case "Photos":
@@ -161,7 +168,7 @@ extension Utils : UIImagePickerControllerDelegate, UINavigationControllerDelegat
                     imagePicker.mediaTypes = [kUTTypeImage as String]
                     imagePicker.allowsEditing = true
                     
-                    currentVC.present(imagePicker, animated: true, completion: nil)
+                    self.currentVC.present(imagePicker, animated: true, completion: nil)
                 }
                 
             default:
@@ -170,13 +177,11 @@ extension Utils : UIImagePickerControllerDelegate, UINavigationControllerDelegat
         }
     }
     
-    private func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
-    //{
-        //if let image = info[UIImagePickerControllerOriginalImage.rawValue] as? UIImage{
-        //            print(info)
-        //        }
-        //        dismiss(animated: true, completion: nil)
-        
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]){
+        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
+                    print(image)
+                    print(info)
+                }
+        self.currentVC.dismiss(animated: true, completion: nil)
     }
-    
 }

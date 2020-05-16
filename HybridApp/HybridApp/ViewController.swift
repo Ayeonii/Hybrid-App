@@ -15,11 +15,12 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     
     var mWebView: FlexWebView!
     var component = FlexComponent()
-    var util = Utils()
-    
+    var util : Utils!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.util = Utils(currentVC : self)
+        
         // add js interface
         component.setInterface("test1") { (arguments) -> Any? in
             // code works in background...
@@ -32,7 +33,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         
         component.setInterface("Camera") { (arguments) -> Any? in
             if arguments != nil {
-                return self.util.CameraFunction(self)
+                return self.util.CameraFunction()
             }else {
                 return nil
             }
@@ -40,12 +41,11 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         
         component.setInterface("Photos") { (arguments) -> Any? in
             if arguments != nil {
-                return self.util.PhotosFunction(self)
+                return self.util.PhotosFunction()
             }else {
                 return nil
             }
         }
-        
         
         component.setInterface("test2")
         { (arguments) -> Any? in
