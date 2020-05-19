@@ -237,6 +237,7 @@ class Location: NSObject, CLLocationManagerDelegate {
                 self.util.setAuthAlertAction(currentVC : self.currentVC, dialog: self.util.authDialog)
                 break
             case .notDetermined :
+                self.returnLocation.removeAll()
                 print("locationFunction : notDetermined")
                 self.locationManager.requestWhenInUseAuthorization()
                 break
@@ -254,7 +255,8 @@ class Location: NSObject, CLLocationManagerDelegate {
                 self.util.deniedDialog.addAction(UIAlertAction(title : "확인", style: .destructive, handler: nil))
             }
         }else if(status == .authorizedAlways || status == .authorizedWhenInUse){
-            self.getLocation()
+            locationManager.delegate = self
+            print(AuthrizeStatus.authorized.rawValue)
         }
     }
     

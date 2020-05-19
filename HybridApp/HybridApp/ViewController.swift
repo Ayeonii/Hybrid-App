@@ -15,7 +15,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     
     var mWebView: FlexWebView!
     var component = FlexComponent()
-    var util = Utils()
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,7 +37,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     
         component.setInterface("Location", Location(self).locationFunction())
         
-        component.setInterface("Location2", Location(self).locationFunction())
+        //component.setInterface("Dialog", Dialog(self).locationFunction())
 
         component.setInterface("test2")
         { (arguments) -> Any? in
