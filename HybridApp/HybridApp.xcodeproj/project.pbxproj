@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,8 @@
 		CC9B3425246CFABC00FD9FCA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC9B3423246CFABC00FD9FCA /* Main.storyboard */; };
 		CC9B3427246CFABE00FD9FCA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CC9B3426246CFABE00FD9FCA /* Assets.xcassets */; };
 		CC9B342A246CFABE00FD9FCA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC9B3428246CFABE00FD9FCA /* LaunchScreen.storyboard */; };
+		CCAF06902473BCE2002F47AD /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCAF068F2473BCE2002F47AD /* Utils.swift */; };
+		CCAF06922473BD0B002F47AD /* Script in Resources */ = {isa = PBXBuildFile; fileRef = CCAF06912473BD0B002F47AD /* Script */; };
 		FBE2896C51E95E20393F5A1E /* Pods_HybridApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 731392CD847A8C4CC03B12CC /* Pods_HybridApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +30,8 @@
 		CC9B3426246CFABE00FD9FCA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CC9B3429246CFABE00FD9FCA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CC9B342B246CFABE00FD9FCA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CCAF068F2473BCE2002F47AD /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		CCAF06912473BD0B002F47AD /* Script */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Script; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,7 +60,6 @@
 				284B488D0335B88A34CD9DA7 /* Pods-HybridApp.debug.xcconfig */,
 				358768DC37C3913A4B4905D3 /* Pods-HybridApp.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -81,6 +84,7 @@
 		CC9B341C246CFABC00FD9FCA /* HybridApp */ = {
 			isa = PBXGroup;
 			children = (
+				CCAF06912473BD0B002F47AD /* Script */,
 				CC9B341D246CFABC00FD9FCA /* AppDelegate.swift */,
 				CC9B341F246CFABC00FD9FCA /* SceneDelegate.swift */,
 				CC9B3421246CFABC00FD9FCA /* ViewController.swift */,
@@ -88,6 +92,7 @@
 				CC9B3426246CFABE00FD9FCA /* Assets.xcassets */,
 				CC9B3428246CFABE00FD9FCA /* LaunchScreen.storyboard */,
 				CC9B342B246CFABE00FD9FCA /* Info.plist */,
+				CCAF068F2473BCE2002F47AD /* Utils.swift */,
 			);
 			path = HybridApp;
 			sourceTree = "<group>";
@@ -155,6 +160,7 @@
 				CC9B342A246CFABE00FD9FCA /* LaunchScreen.storyboard in Resources */,
 				CC9B3427246CFABE00FD9FCA /* Assets.xcassets in Resources */,
 				CC9B3425246CFABC00FD9FCA /* Main.storyboard in Resources */,
+				CCAF06922473BD0B002F47AD /* Script in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,6 +216,7 @@
 				CC9B3422246CFABC00FD9FCA /* ViewController.swift in Sources */,
 				CC9B341E246CFABC00FD9FCA /* AppDelegate.swift in Sources */,
 				CC9B3420246CFABC00FD9FCA /* SceneDelegate.swift in Sources */,
+				CCAF06902473BCE2002F47AD /* Utils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
