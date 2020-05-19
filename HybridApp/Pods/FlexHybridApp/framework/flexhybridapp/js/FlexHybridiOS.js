@@ -7,10 +7,9 @@ const logs = { log: console.log, debug: console.debug, error: console.error, inf
 window.$flex = {};
 Object.defineProperties($flex,
     {
-        version: { value: '0.2.2', writable: false, enumerable: true },
+        version: { value: '0.2', writable: false },
         //addEventListener: { value: function(event, callback) { listeners.push({ e: event, c: callback }) }, writable: false },
-        web: { value: {}, writable: false, enumerable: true },
-        flex: { value: {}, writable: false, enumerable: false }
+        web: { value: {} , writable: false },
     }
 );
 const genFName = () => {
@@ -35,9 +34,9 @@ keys.forEach(key => {
             function(...args) {
                 return new Promise(resolve => {
                     genFName().then(name => {
-                        $flex.flex[name] = (r) => {
+                        window[name] = (r) => {
                             resolve(r);
-                            delete $flex.flex[name];
+                            delete window[name];
                         };
                         webkit.messageHandlers[key].postMessage(
                             {
@@ -48,8 +47,7 @@ keys.forEach(key => {
                     });
                 });
             },
-            writable: false,
-            enumerable: true
+            writable: false
         });
     }
 });

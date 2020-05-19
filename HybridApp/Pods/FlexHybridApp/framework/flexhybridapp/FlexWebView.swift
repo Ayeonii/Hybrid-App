@@ -128,7 +128,7 @@ open class FlexComponent: NSObject, WKNavigationDelegate, WKScriptMessageHandler
         flexWebView = webView
         checkDelegateChange()
         do {
-            jsString = try String(contentsOfFile: Bundle.main.privateFrameworksPath! + "/FlexHybridApp.framework/FlexHybridiOS.js", encoding: .utf8)
+            jsString = try String(contentsOfFile: Bundle.main.privateFrameworksPath! + "/FlexHybridApp.framework/FlexHybridiOS.min.js", encoding: .utf8)
             var keys = ""
             keys.append("[\"")
             keys.append(FlexString.FLEX_DEFINE.joined(separator: "\",\""))
@@ -210,16 +210,16 @@ open class FlexComponent: NSObject, WKNavigationDelegate, WKScriptMessageHandler
                     // WebLogs
                     case FlexString.FLEX_DEFINE[0], FlexString.FLEX_DEFINE[1], FlexString.FLEX_DEFINE[2], FlexString.FLEX_DEFINE[3]:
                         FlexMsg.webLog(mName, data["arguments"])
-                        evalJS("$flex.flex.\(fName)()")
+                        evalJS("window.\(fName)()")
                         break;
                     // $flex.web func return
                     case FlexString.FLEX_DEFINE[4]:
-                        let webData = data["arguments"] as! Array<Dictionary<String, Any?>>
+                        let webData = data["arguments"] as! Array<Dictionary<String, Any>>
                         if let TID = webData[0]["TID"] as? Int {
-                            returnFromWeb[TID]?(webData[0]["Value"] as Any?)
+                            returnFromWeb[TID]?(webData[0]["Value"])
                             returnFromWeb[TID] = nil
                         }
-                        evalJS("$flex.flex.\(fName)()")
+                        evalJS("window.\(fName)()")
                         break;
                     default:
                         break;
@@ -228,10 +228,10 @@ open class FlexComponent: NSObject, WKNavigationDelegate, WKScriptMessageHandler
                 queue.async {
                     let value: Any? = self.interfaces[mName]!(data["arguments"] as? Array<Any?>)
                     if value == nil {
-                        self.evalJS("$flex.flex.\(fName)()")
+                        self.evalJS("window.\(fName)()")
                     } else {
                         do {
-                            self.evalJS("$flex.flex.\(fName)(\(try FlexFunc.convertValue(value!)))")
+                            self.evalJS("window.\(fName)(\(try FlexFunc.convertValue(value!)))")
                         } catch FlexError.UnuseableTypeCameIn {
                             FlexMsg.err(FlexString.ERROR3)
                         } catch {
@@ -342,10 +342,10 @@ open class FlexAction {
         }
         isCall = true
         if response == nil {
-            mComponent.evalJS("$flex.flex.\(funcName)()")
+            mComponent.evalJS("window.\(funcName)()")
         } else {
             do {
-                mComponent.evalJS("$flex.flex.\(funcName)(\(try FlexFunc.convertValue(response!)))")
+                mComponent.evalJS("window.\(funcName)(\(try FlexFunc.convertValue(response!)))")
             } catch FlexError.UnuseableTypeCameIn {
                 FlexMsg.err(FlexString.ERROR3)
             } catch {
