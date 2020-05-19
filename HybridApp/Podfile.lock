@@ -1,5 +1,5 @@
 PODS:
-  - FlexHybridApp (0.2)
+  - FlexHybridApp (0.2.2)
 
 DEPENDENCIES:
   - FlexHybridApp
@@ -9,7 +9,7 @@ SPEC REPOS:
     - FlexHybridApp
 
 SPEC CHECKSUMS:
-  FlexHybridApp: 73982a1e319da3bf6001526d7bf5b977a3739be2
+  FlexHybridApp: 6c17f6dc3555fd070114f89bd8c0f3f9118d2ea0
 
 PODFILE CHECKSUM: 9e90ce833f465b72ba66c2f9721371c49f3f94c9
 
