@@ -15,11 +15,11 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     
     var mWebView: FlexWebView!
     var component = FlexComponent()
-    var util : Utils!
+    var util = Utils()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.util = Utils(currentVC : self)
+   
         
         // add js interface
         component.setInterface("test1") { (arguments) -> Any? in
@@ -31,22 +31,14 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             }
         }
         
-        component.setInterface("Camera") { (arguments) -> Any? in
-            if arguments != nil {
-                return self.util.CameraFunction()
-            }else {
-                return nil
-            }
-        }
+        component.setInterface("Camera", CameraPhotos(self).cameraFunction())
+             
+        component.setInterface("Photos", CameraPhotos(self).photosFunction())
+    
+        component.setInterface("Location", Location(self).locationFunction())
         
-        component.setInterface("Photos") { (arguments) -> Any? in
-            if arguments != nil {
-                return self.util.PhotosFunction()
-            }else {
-                return nil
-            }
-        }
-        
+        component.setInterface("Location2", Location(self).locationFunction())
+
         component.setInterface("test2")
         { (arguments) -> Any? in
             // code works in background...
@@ -63,6 +55,9 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             return nil
         }
         
+       
+        
+
         // add FlexAction
         component.setAction("testAction")
         { (action, arguments) -> Void in
@@ -78,8 +73,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             // PromiseReturn can be called at any time.
             action.PromiseReturn(returnValue)
         }
-        
-        
         
         // add user-custom contentController
         component.configration.userContentController.add(self, name: "userCC")
