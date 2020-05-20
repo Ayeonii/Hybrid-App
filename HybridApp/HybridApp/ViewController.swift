@@ -37,7 +37,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     
         component.setInterface("Location", Location(self).locationFunction())
         
-        //component.setInterface("Dialog", Dialog(self).locationFunction())
+        component.setAction("Dialog", Dialog().dialogFunction(self))
 
         component.setInterface("test2")
         { (arguments) -> Any? in

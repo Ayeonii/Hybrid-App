@@ -7,10 +7,14 @@
 //
 
 import UIKit
+import FlexHybridApp
+
 import Photos
 import MobileCoreServices
+
 import CoreLocation
 
+import LocalAuthentication
 
 enum AuthrizeStatus : String {
     case authorized = "Access Authorized."
@@ -18,12 +22,10 @@ enum AuthrizeStatus : String {
     case restricted = "Access Restricted"
 }
 
-
 /*공통 사용 모듈*/
 class Utils: NSObject {
 
     let authDialog = UIAlertController (title : "권한요청", message : "권한을 허용해야만 해당 기능을 사용하실 수 있습니다.", preferredStyle: .alert)
-    let deniedDialog = UIAlertController (title : "알림", message : "권한을 거부하였습니다.", preferredStyle: .alert)
     
     /*
     권한설정 버튼 다이얼로그
@@ -72,6 +74,7 @@ class CameraPhotos : NSObject, UIImagePickerControllerDelegate, UINavigationCont
     private let util = Utils()
     private var flagImageSave = true
     private let currentVC : UIViewController
+    private let dialog = Dialog()
     
     init(_ currentVC : UIViewController){
         self.currentVC = currentVC
@@ -97,13 +100,7 @@ class CameraPhotos : NSObject, UIImagePickerControllerDelegate, UINavigationCont
                     if response {
                         self.cameraPhotosAction(ModuleType.camera.rawValue)
                     }else {
-                        DispatchQueue.main.async {
-                            if self.util.deniedDialog.actions.isEmpty {
-                                self.util.deniedDialog.addAction(UIAlertAction(title : "확인", style: .destructive, handler: nil))
-                            }
-                        }
-                        self.util.alertDialog(currentVC : self.currentVC,
-                                              dialog: self.util.deniedDialog, animated: true, action: nil, completion: nil)
+                        self.dialog.makeDialog(self.currentVC, title : "알림", message : "권한을 거부하였습니다." , btn: ["basic" : "확인"] , type : "alert", animated : true, action : nil)
                         returnStr = AuthrizeStatus.denied.rawValue
                     }
                 }
@@ -139,13 +136,7 @@ class CameraPhotos : NSObject, UIImagePickerControllerDelegate, UINavigationCont
                         returnStr = AuthrizeStatus.authorized.rawValue
                         self.cameraPhotosAction(ModuleType.photos.rawValue)
                     case .denied :
-                        DispatchQueue.main.async {
-                            if self.util.deniedDialog.actions.isEmpty {
-                                self.util.deniedDialog.addAction(UIAlertAction(title : "확인", style: .destructive, handler: nil))
-                            }
-                        }
-                        self.util.alertDialog(currentVC : self.currentVC,
-                        dialog: self.util.deniedDialog, animated: true, action: nil, completion: nil)
+                        self.dialog.makeDialog(self.currentVC, title : "알림", message : "권한을 거부하였습니다." , btn: ["basic" : "확인"] , type : "alert", animated : true, action : nil)
                         returnStr = AuthrizeStatus.denied.rawValue
                     default:
                         break
@@ -221,7 +212,7 @@ class Location: NSObject, CLLocationManagerDelegate {
         self.currentVC = currentVC
     }
     
-    func locationFunction() -> (Array<Any?>?) -> Any? {
+    func locationFunction() -> ((Array<Any?>?) -> Any?) {
         
         locationManager.delegate = self
 
@@ -250,11 +241,7 @@ class Location: NSObject, CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        if status == .denied || status == .restricted {
-            if self.util.deniedDialog.actions.isEmpty {
-                self.util.deniedDialog.addAction(UIAlertAction(title : "확인", style: .destructive, handler: nil))
-            }
-        }else if(status == .authorizedAlways || status == .authorizedWhenInUse){
+        if(status == .authorizedAlways || status == .authorizedWhenInUse){
             locationManager.delegate = self
             print(AuthrizeStatus.authorized.rawValue)
         }
@@ -272,4 +259,74 @@ class Location: NSObject, CLLocationManagerDelegate {
             returnLocation.updateValue(String(describing : lo ), forKey: "longtitude")
         }
      }
+}
+
+class Dialog : NSObject {
+
+    func dialogFunction(_ currentVC : UIViewController) -> (FlexAction, Array<Any?>?) -> Void {
+        return { (action,  arguments) -> Void in
+            let title = arguments?[0] as! String
+            let message = arguments?[1] as! String
+            let btn = arguments?[2] as! Dictionary<String, String>?
+            let type = arguments?[3] as! String
+            let animated = ((arguments?[4]) != nil) as Bool
+    
+            self.makeDialog(currentVC, title : title, message : message , btn: btn , type : type, animated : animated, action : action)
+        }
+    }
+    
+    func makeDialog(_ currentVC : UIViewController, title : String, message : String , btn : Dictionary<String, String>?, type : String?, animated : Bool, action : FlexAction?){
+        
+        DispatchQueue.main.async {
+            var dialog : UIAlertController
+            var btnStyle = [String]()
+            var btnTitle = [String]()
+            var btnAction : UIAlertAction? = nil
+            if type == "alert" {
+                dialog = UIAlertController (title : title, message : message, preferredStyle: .alert)
+                
+                if let alertBtn = btn {
+                    for (key, value) in alertBtn {
+                        btnTitle.append("\(key)")
+                        btnStyle.append("\(value)")
+                    }
+                    for i in 0 ..< alertBtn.count {
+                        switch btnStyle[i] {
+                        case "basic" :
+                            btnAction = UIAlertAction(title : btnTitle[i], style: .default){ alertAction in
+                                if let mAction = action {
+                                    mAction.PromiseReturn(btnTitle[i])
+                                }
+                            }
+                            break
+                        case "cancel" :
+                            btnAction = UIAlertAction(title : btnTitle[i], style: .cancel){ alertAction in
+                                if let mAction = action {
+                                    mAction.PromiseReturn(btnTitle[i])
+                                }
+                            }
+                            break
+                        case "destructive" :
+                            btnAction = UIAlertAction(title : btnTitle[i], style: .destructive){ alertAction in
+                                if let mAction = action {
+                                    mAction.PromiseReturn(btnTitle[i])
+                                }
+                            }
+                            break
+                        default :
+                            break
+                        }
+                        dialog.addAction(btnAction!)
+                    }
+                }
+            }else {
+                dialog = UIAlertController (title : title, message : message, preferredStyle: .alert)
+            }
+            currentVC.present(dialog, animated: animated, completion: nil)
+        }
+    }
+}
+
+class BioAuth : NSObject {
+    
 }
