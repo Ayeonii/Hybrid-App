@@ -291,32 +291,32 @@ class Dialog : NSObject {
                         btnStyle.append("\(value)")
                     }
                     for i in 0 ..< alertBtn.count {
-                        switch btnStyle[i] {
-                        case "basic" :
-                            btnAction = UIAlertAction(title : btnTitle[i], style: .default){ alertAction in
-                                if let mAction = action {
-                                    mAction.PromiseReturn(btnTitle[i])
+                            switch btnStyle[i] {
+                            case "basic" :
+                                btnAction = UIAlertAction(title : btnTitle[i], style: .default){ alertAction in
+                                    if let mAction = action {
+                                        mAction.PromiseReturn(btnTitle[i])
+                                    }
                                 }
-                            }
-                            break
-                        case "cancel" :
-                            btnAction = UIAlertAction(title : btnTitle[i], style: .cancel){ alertAction in
-                                if let mAction = action {
-                                    mAction.PromiseReturn(btnTitle[i])
+                                break
+                            case "cancel" :
+                                btnAction = UIAlertAction(title : btnTitle[i], style: .cancel){ alertAction in
+                                    if let mAction = action {
+                                        mAction.PromiseReturn(btnTitle[i])
+                                    }
                                 }
-                            }
-                            break
-                        case "destructive" :
-                            btnAction = UIAlertAction(title : btnTitle[i], style: .destructive){ alertAction in
-                                if let mAction = action {
-                                    mAction.PromiseReturn(btnTitle[i])
+                                break
+                            case "destructive" :
+                                btnAction = UIAlertAction(title : btnTitle[i], style: .destructive){ alertAction in
+                                    if let mAction = action {
+                                        mAction.PromiseReturn(btnTitle[i])
+                                    }
                                 }
+                                break
+                            default :
+                                break
                             }
-                            break
-                        default :
-                            break
-                        }
-                        dialog.addAction(btnAction!)
+                            dialog.addAction(btnAction!)
                     }
                 }
             }else {
