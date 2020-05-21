@@ -74,19 +74,31 @@ class CameraPhotos : NSObject, UIImagePickerControllerDelegate, UINavigationCont
     
     private let viewController = ViewController()
     private let util = Utils()
-    private var flagImageSave = true
     private let currentVC : UIViewController
     private let dialog = Dialog()
+    private var flagImageSave = false
+    private var imageAction : FlexAction? = nil
+    private var width : Double!
+    private var height : Double!
+    let imagePicker: UIImagePickerController = UIImagePickerController()
+    
     
     init(_ currentVC : UIViewController){
         self.currentVC = currentVC
+        super.init()
+        imagePicker.delegate = self
     }
     
     /*
        카메라 실행 모듈
     */
-    func cameraFunction() -> (Array<Any?>?) -> Any? {
-        return { (arguments) -> String? in
+    func cameraFunction() -> (FlexAction, Array<Any?>?) -> Void? {
+        return { (action, arguments) -> Void in
+            
+            self.imageAction = action
+            self.width = arguments?[0] as? Double
+            self.height = arguments?[1] as? Double
+
             var returnStr : String?
             let cameraAuthorizationsStatus : AVAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
             
@@ -109,9 +121,12 @@ class CameraPhotos : NSObject, UIImagePickerControllerDelegate, UINavigationCont
             case .restricted:
                 returnStr = AuthrizeStatus.restricted.rawValue
             default:
+                returnStr = "default"
                 break
             }
-            return returnStr
+              if let printStr = returnStr {
+                          print(printStr)
+            }
         }
     }
 
@@ -119,11 +134,15 @@ class CameraPhotos : NSObject, UIImagePickerControllerDelegate, UINavigationCont
         Photos를 실행시키는 모듈
         */
     
-    func photosFunction() -> (Array<Any?>?) -> Any?  {
-        return { (arguments) -> String? in
+    func photosFunction() -> (FlexAction, Array<Any?>?) -> Void?  {
+        return { (action, arguments) -> Void in
+            
+            self.imageAction = action
+            self.width = arguments?[0] as? Double
+            self.height = arguments?[1] as? Double
+            
             let photoAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
             var returnStr : String?
-            
             switch photoAuthorizationStatus{
             case .authorized:
                 returnStr = AuthrizeStatus.authorized.rawValue
@@ -147,58 +166,131 @@ class CameraPhotos : NSObject, UIImagePickerControllerDelegate, UINavigationCont
             case .restricted:
                 returnStr = AuthrizeStatus.restricted.rawValue
             default :
+                returnStr = "default"
                 break
             }
-            return returnStr
+            if let printStr = returnStr {
+                print(printStr)
+            }
+            
         }
     }
     
     
-    private func cameraPhotosAction( _ type : String) -> Void {
+    func cameraPhotosAction( _ type : String) -> Void {
         DispatchQueue.main.async {
-            let imagePicker: UIImagePickerController! = UIImagePickerController()
             switch type {
             case "Camera":
-
                 if(UIImagePickerController.isSourceTypeAvailable(.camera)){
-                    self.flagImageSave = false
-                    imagePicker.delegate = self
-                    imagePicker.sourceType = .camera
-                    imagePicker.mediaTypes = [kUTTypeImage as String]
-                    imagePicker.allowsEditing = false
+                    self.flagImageSave = true
+                    
+                    self.imagePicker.allowsEditing = true
+                    self.imagePicker.sourceType = .camera
+                    self.imagePicker.mediaTypes = [kUTTypeImage as String]
+                    self.imagePicker.allowsEditing = false
 
-                    self.currentVC.present(imagePicker, animated: true, completion: nil)
+                    self.currentVC.present(self.imagePicker, animated: true, completion: nil)
                 }else {
-                    let cameraAvailDialog = UIAlertController (title : "경고", message : "카메라를 사용할 수 없습니다.", preferredStyle: .alert)
-                    let confirmAction = UIAlertAction(title : "확인", style: .destructive, handler: nil)
-                    cameraAvailDialog.addAction(confirmAction)
-                    self.currentVC.present(cameraAvailDialog, animated: true, completion: nil)
+                    self.dialog.makeDialog(self.currentVC, title : "경고", message : "카메라에 접근할 수 없습니다" , btn: ["destructive" : "확인"] , type : "alert", animated : true, action : nil)
                 }
-                
+                break
             case "Photos":
                 if (UIImagePickerController.isSourceTypeAvailable(.photoLibrary)) {
                     self.flagImageSave = false
-                    imagePicker.delegate = self
-                    imagePicker.sourceType = .photoLibrary
-                    imagePicker.mediaTypes = [kUTTypeImage as String]
-                    imagePicker.allowsEditing = true
                     
-                    self.currentVC.present(imagePicker, animated: true, completion: nil)
+                    //imagePicker.delegate = self
+                    self.imagePicker.allowsEditing = true
+                    self.imagePicker.sourceType = .photoLibrary
+                    self.imagePicker.mediaTypes = [kUTTypeImage as String]
+                    self.imagePicker.allowsEditing = true
+                    
+                    self.currentVC.present(self.imagePicker, animated: true, completion: nil)
+                }else{
+                    self.dialog.makeDialog(self.currentVC, title : "경고", message : "Photos에 접근할 수 없습니다" , btn: ["destructive" : "확인"] , type : "alert", animated : true, action : nil)
                 }
-                
+                break
             default:
                 break
             }
         }
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]){
-        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
-                    print(image)
-                    print(info)
+    @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        self.currentVC.dismiss( animated: true){
+            let mediaType = info[UIImagePickerController.InfoKey.mediaType] as! NSString
+                  if mediaType.isEqual(to: kUTTypeImage as NSString as String){
+                      
+                      let captureImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
+                      let resizedImage = self.resizeImage(image: captureImage, targetSize: CGSize(width: self.width, height: self.height))
+                    if self.flagImageSave {
+                          UIImageWriteToSavedPhotosAlbum(captureImage, self, nil, nil)
+                      }
+                    
+                      let imageData:NSData = resizedImage.jpegData(compressionQuality: 0.25)! as NSData
+                      let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
+                      let encodedString = strBase64.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? ""
+                      self.imageAction?.PromiseReturn(encodedString)
+            }
         }
-        self.currentVC.dismiss(animated: true, completion: nil)
     }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.currentVC.dismiss(animated: true) {self.imageAction?.PromiseReturn("cancel")}
+        
+    }
+    
+    func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
+        let size = image.size
+
+        let widthRatio  = targetSize.width  / size.width
+        let heightRatio = targetSize.height / size.height
+
+        // Figure out what our orientation is, and use that to form the rectangle
+        var newSize: CGSize
+        if(widthRatio > heightRatio) {
+            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
+        } else {
+            newSize = CGSize(width: size.width * widthRatio,  height: size.height * widthRatio)
+        }
+
+        let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        image.draw(in: rect)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return newImage!
+    }
+
+}
+
+    
+    
+func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
+    let size = image.size
+
+    let widthRatio  = targetSize.width  / image.size.width
+    let heightRatio = targetSize.height / image.size.height
+
+    // Figure out what our orientation is, and use that to form the rectangle
+    var newSize: CGSize
+    if(widthRatio > heightRatio) {
+        newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
+    } else {
+        newSize = CGSize(width: size.width * widthRatio,  height: size.height * widthRatio)
+    }
+
+    // This is the rect that we've calculated out and this is what is actually used below
+    let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
+
+    // Actually do the resizing to the rect using the ImageContext stuff
+    UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+    image.draw(in: rect)
+    let newImage = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+
+    return newImage!
 }
 
 
@@ -283,7 +375,7 @@ class Dialog : NSObject {
             var dialog : UIAlertController
             var btnStyle = [String]()
             var btnTitle = [String]()
-            var btnAction : UIAlertAction? = nil
+            var btnAction : UIAlertAction!
             if type == "alert" {
                 dialog = UIAlertController (title : title, message : message, preferredStyle: .alert)
                 
@@ -318,7 +410,9 @@ class Dialog : NSObject {
                             default :
                                 break
                             }
-                            dialog.addAction(btnAction!)
+                        if let action = btnAction {
+                            dialog.addAction(action)
+                        }
                     }
                 }
             }else {
@@ -407,6 +501,7 @@ class CheckRooting : NSObject {
         return false
         #endif
         
+        //file check
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: "/Applications/Cydia.app") ||
             fileManager.fileExists(atPath: "/Library/MobileSubstrate/MobileSubstrate.dylib") ||
@@ -417,6 +512,8 @@ class CheckRooting : NSObject {
             fileManager.fileExists(atPath: "/private/var/lib/apt") {
             return true
         }
+        
+        //rootAutority check
         if canOpen(path: "/Applications/Cydia.app") ||
             canOpen(path: "/Library/MobileSubstrate/MobileSubstrate.dylib") ||
             canOpen(path: "/bin/bash") ||
@@ -441,10 +538,5 @@ class CheckRooting : NSObject {
         fclose(file)
         return true
     }
-
-    
-    
-    
-    
-    
 }
+

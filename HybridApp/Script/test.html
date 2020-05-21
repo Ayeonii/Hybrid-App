@@ -5,13 +5,9 @@
     <meta charset="UTF-8">
 </head>
 <script type="text/javascript">
+    var imgsrc ;
     let t = 0;
-    const t1 = async () => {
-        console.log('Send to Native --- ' + t);
-        const z = await $flex.test1(t);
-        console.log('Return by Native with t1 --- ' + z);
-        t = z;
-    }
+  
     const t2 = async () => {
        await $flex.test2();
     }
@@ -31,13 +27,16 @@
     }
 
     const Camera = async () => {
-        const result = await $flex.Camera(t);
-        console.log('Return by Native with Camera : ' + result);
+        const result = await $flex.Camera(100, 100);
+        var img = document.getElementById('PickedImage');
+        img.src = 'data:image/png;base64,' + result;
     }
 
     const Photos = async () => {
-        const result = await $flex.Photos();
-        console.log('Return by Native with Photos   : ' + result)
+        const result = await $flex.Photos(80, 80);
+       // console.log('Return by Native with Photos   : ' + result)
+        var img = document.getElementById('PickedImage');
+        img.src = 'data:image/png;base64,' + result;
     }
 
     const Location = async () => {
@@ -81,7 +80,6 @@
 
 </script>
 <body style="width: 100%; height: 450px;">
-<button onclick='t1()' style="width: 100%; height: 150px; font-size : 50px">TEST1</button>
 <button onclick='t2()' style="width: 100%; height: 150px; font-size : 50px">TEST2</button>
 <button onclick='t3()' style="width: 100%; height: 150px; font-size : 50px">TestAction</button>
 <button onclick='Camera()' style="width: 100%; height: 150px; font-size : 50px">Camera</button>
@@ -90,6 +88,7 @@
 <button onclick='Location()' style="width: 100%; height: 150px; font-size : 50px">Location</button>
 <button onclick='BioAuth()' style="width: 100%; height: 150px; font-size : 50px">BioAuth</button>
 <button onclick='CheckRooting()' style="width: 100%; height: 150px; font-size : 50px">CheckRooting</button>
+<img src="" id="PickedImage" >
 </body>
 </html>
 
