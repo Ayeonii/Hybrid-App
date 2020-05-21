@@ -40,6 +40,8 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         component.setAction("Dialog", Dialog().dialogFunction(self))
         
         component.setAction("BioAuth", BioAuth().authFunction())
+        
+        component.setInterface("CheckRooting", CheckRooting().checkRootingFunction(self))
 
         component.setInterface("test2")
         { (arguments) -> Any? in

@@ -31,22 +31,19 @@
     }
 
     const Camera = async () => {
-        const z = await $flex.Camera(t);
-        console.log('Return by Native with Camera : ' + z);
+        const result = await $flex.Camera(t);
+        console.log('Return by Native with Camera : ' + result);
     }
 
     const Photos = async () => {
-        const z = await $flex.Photos();
-        console.log('Return by Native with Photos   : ' + z)
+        const result = await $flex.Photos();
+        console.log('Return by Native with Photos   : ' + result)
     }
 
     const Location = async () => {
-        const z = await $flex.Location();
-        var location = {
-            'latitude' : z['latitude']
-            ,'longtitude' : z['longtitude']
-        }
-        console.log('Return by Native with Location   : ' + location['latitude'] + ':'+ location['longtitude'])
+        const result = await $flex.Location();
+
+        console.log('Return by Native with Location   : ' + result['latitude'] + ':'+ result['longtitude'])
     }
 
     const Dialog = async () => {
@@ -55,16 +52,30 @@
             ,'취소' : 'cancel'
             ,'삭제' : 'destructive'
         }
-        const z = await $flex.Dialog('testTitle', 'testMessage', btn, 'alert',true);
-        console.log('Return by Native with Location   : ' + z)
+        
+        try {
+            const result = await $flex.Dialog('testTitle', 'testMessage', btn, 'alert',true);
+            console.log('Return by Native with Dialog   : ' + result)
+        } catch {
+            console.log('Dialog() error 발생')
+        }
     }
 
     const BioAuth = async () => {
         try {
-            const z = await $flex.BioAuth();
-            console.log('Return by Native with Location   : ' + z)
+            const result = await $flex.BioAuth();
+            console.log('Return by Native with BioAuth   : ' + result)
         } catch {
-            console.log('error 발생')
+            console.log('BioAuth() error 발생')
+        }
+    }
+
+    const CheckRooting = async () => {
+        try {
+            const result = await $flex.CheckRooting();
+            console.log('Return by Native with CheckRooting   : ' + result)
+        } catch {
+            console.log('CheckRooting() error 발생')
         }
     }
 
@@ -78,6 +89,7 @@
 <button onclick='Dialog()' style="width: 100%; height: 150px; font-size : 50px">Dialog</button>
 <button onclick='Location()' style="width: 100%; height: 150px; font-size : 50px">Location</button>
 <button onclick='BioAuth()' style="width: 100%; height: 150px; font-size : 50px">BioAuth</button>
+<button onclick='CheckRooting()' style="width: 100%; height: 150px; font-size : 50px">CheckRooting</button>
 </body>
 </html>
 
