@@ -19,8 +19,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
 
     override func viewDidLoad() {
         super.viewDidLoad()
-   
-        
+  
         // add js interface
         component.setInterface("test1") { (arguments) -> Any? in
             // code works in background...
@@ -33,15 +32,19 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         
         component.setAction("Camera", CameraPhotos(self).cameraFunction())
              
-        component.setAction("Photos", CameraPhotos(self).photosFunction())
+        component.setAction("Gallery", CameraPhotos(self).photosFunction())
     
         component.setInterface("Location", Location(self).locationFunction())
         
         component.setAction("Dialog", Dialog().dialogFunction(self))
         
-        component.setAction("BioAuth", BioAuth().authFunction())
+        component.setAction("BioAuthentication", BioAuth().authFunction())
         
-        component.setInterface("CheckRooting", CheckRooting().checkRootingFunction(self))
+        component.setInterface("RootingCheck", CheckRooting().checkRootingFunction(self))
+        
+        component.setInterface("Network", Reachability().checkNetworkConnect(self))
+        
+        component.setAction("QRCodeScan", CodeScan(self).codeScanFunction())
 
         component.setInterface("test2")
         { (arguments) -> Any? in

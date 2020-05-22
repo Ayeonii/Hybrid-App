@@ -32,8 +32,8 @@
         img.src = 'data:image/png;base64,' + result;
     }
 
-    const Photos = async () => {
-        const result = await $flex.Photos(80, 80);
+    const Gallery = async () => {
+        const result = await $flex.Gallery(80, 80);
        // console.log('Return by Native with Photos   : ' + result)
         var img = document.getElementById('PickedImage');
         img.src = 'data:image/png;base64,' + result;
@@ -46,11 +46,7 @@
     }
 
     const Dialog = async () => {
-        var btn = {
-            '확인' : 'basic'
-            ,'취소' : 'cancel'
-            ,'삭제' : 'destructive'
-        }
+        var btn = [['확인', 'basic'],['취소','cancel'],['삭제','destructive']]
         
         try {
             const result = await $flex.Dialog('testTitle', 'testMessage', btn, 'alert',true);
@@ -60,35 +56,55 @@
         }
     }
 
-    const BioAuth = async () => {
+    const BioAuthentication = async () => {
         try {
-            const result = await $flex.BioAuth();
-            console.log('Return by Native with BioAuth   : ' + result)
+            const result = await $flex.BioAuthentication();
+            console.log('Return by Native with BioAuthentication   : ' + result)
         } catch {
-            console.log('BioAuth() error 발생')
+            console.log('BioAuthentication() error 발생')
         }
     }
 
-    const CheckRooting = async () => {
+    const RootingCheck = async () => {
         try {
-            const result = await $flex.CheckRooting();
-            console.log('Return by Native with CheckRooting   : ' + result)
+            const result = await $flex.RootingCheck();
+            console.log('Return by Native with RootingCheck   : ' + result)
         } catch {
-            console.log('CheckRooting() error 발생')
+            console.log('RootingCheck() error 발생')
+        }
+    }
+
+    const Network = async () => {
+        try {
+            const result = await $flex.Network();
+            console.log('Return by Native with Network   : ' + result)
+        } catch {
+            console.log('Network() error 발생')
+        }
+    }
+
+    const CodeScan = async () => {
+        try {
+            const result = await $flex.QRCodeScan();
+            console.log('Return by Native with QRCodeScan   : ' + result)
+        } catch {
+            console.log('QRCodeScan() error 발생')
         }
     }
 
 </script>
 <body style="width: 100%; height: 450px;">
-<button onclick='t2()' style="width: 100%; height: 150px; font-size : 50px">TEST2</button>
+<img src="" id="PickedImage" >
 <button onclick='t3()' style="width: 100%; height: 150px; font-size : 50px">TestAction</button>
 <button onclick='Camera()' style="width: 100%; height: 150px; font-size : 50px">Camera</button>
-<button onclick='Photos()' style="width: 100%; height: 150px; font-size : 50px">Photos</button>
+<button onclick='Gallery()' style="width: 100%; height: 150px; font-size : 50px">Photos</button>
 <button onclick='Dialog()' style="width: 100%; height: 150px; font-size : 50px">Dialog</button>
 <button onclick='Location()' style="width: 100%; height: 150px; font-size : 50px">Location</button>
-<button onclick='BioAuth()' style="width: 100%; height: 150px; font-size : 50px">BioAuth</button>
-<button onclick='CheckRooting()' style="width: 100%; height: 150px; font-size : 50px">CheckRooting</button>
-<img src="" id="PickedImage" >
+<button onclick='BioAuthentication()' style="width: 100%; height: 150px; font-size : 50px">BioAuthentication</button>
+<button onclick='RootingCheck()' style="width: 100%; height: 150px; font-size : 50px">RootingCheck</button>
+<button onclick='Network()' style="width: 100%; height: 150px; font-size : 50px">Network</button>
+<button onclick='CodeScan()' style="width: 100%; height: 150px; font-size : 50px">QRCodeScan</button>
+
 </body>
 </html>
 
