@@ -566,6 +566,7 @@ class CodeScan : NSObject, AVCaptureMetadataOutputObjectsDelegate {
     private var flexAction : FlexAction?
     private let qrCodeFrameView = UIView()
     private let view : UIView
+    private var previewLayer : CALayer!
     
     init (_ viewController : UIViewController){
         self.currentVC = viewController
@@ -579,10 +580,11 @@ class CodeScan : NSObject, AVCaptureMetadataOutputObjectsDelegate {
                 self.captureSession = captureSession
                 print ("codeScanFunction")
                 DispatchQueue.main.async {
-                    
                     print ("DispatchQueue")
-                    let previewLayer = self.createPreviewLayer(withCaptureSession : captureSession)
-                    self.view.layer.addSublayer(previewLayer)
+                    self.previewLayer = self.createPreviewLayer(withCaptureSession : captureSession)
+                    
+                    self.view.isUserInteractionEnabled = false
+                    self.view.layer.addSublayer(self.previewLayer)
                     
                     self.qrCodeFrameView.layer.borderColor = UIColor.green.cgColor
                     self.qrCodeFrameView.layer.borderWidth = 2
@@ -665,7 +667,10 @@ class CodeScan : NSObject, AVCaptureMetadataOutputObjectsDelegate {
         
         if captureSession.isRunning {
             print ("requestCaptureSessionStopRunning")
-            captureSession.stopRunning()
+            DispatchQueue.main.async {
+                self.previewLayer.removeFromSuperlayer()
+                self.view.isUserInteractionEnabled = true
+            }
         }
     }
     
