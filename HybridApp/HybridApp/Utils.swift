@@ -6,6 +6,7 @@
 //  Copyright © 2020 Ayeon. All rights reserved.
 //
 
+
 //공통
 import UIKit
 import FlexHybridApp
@@ -22,6 +23,8 @@ import AVFoundation    //Network / QR 코드
 import SystemConfiguration
 
 import CoreNFC //NFC
+
+import MessageUI
 
 enum AuthrizeStatus : String {
     case authorized = "Access Authorized."
@@ -735,5 +738,49 @@ class NFC : NSObject, NFCNDEFReaderSessionDelegate{
 
     func readerSession(_ session: NFCNDEFReaderSession, didInvalidateWithError error: Error) {
         print("NFC Reading Error : ", error.localizedDescription)
+    }
+}
+
+
+class Message : NSObject, MFMessageComposeViewControllerDelegate {
+    
+    var returnMsg : String!
+    var flexAction : FlexAction!
+    
+    func sendMessge (_ currentVC : UIViewController)  -> (FlexAction, Array<Any?>?) -> Void? {
+        return { (action, argument) -> Void in
+            let number = argument?[0] as! String
+            let message = argument?[1] as! String
+            self.flexAction = action
+            DispatchQueue.main.async {
+                let messageComposer = MFMessageComposeViewController()
+                messageComposer.messageComposeDelegate = self
+                if MFMessageComposeViewController.canSendText(){
+                    messageComposer.recipients = [number]
+                    messageComposer.body = message
+                    currentVC.present(messageComposer, animated: true, completion: nil)
+                }
+            }
+        }
+    }
+    
+    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+        switch result {
+        case MessageComposeResult.sent:
+            returnMsg = "Complete Sending Msg"
+            break
+        case MessageComposeResult.cancelled:
+            returnMsg = "Sending msg cancelled"
+            break
+        case MessageComposeResult.failed:
+            returnMsg = "fail to send Msg"
+            break
+        default:
+            break
+        }
+        self.flexAction.PromiseReturn(returnMsg)
+        DispatchQueue.main.async {
+            controller.dismiss(animated: true, completion: nil)
+        }
     }
 }

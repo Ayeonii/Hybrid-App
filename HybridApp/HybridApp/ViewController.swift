@@ -47,6 +47,8 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         component.setAction("QRCodeScan", CodeScan(self).codeScanFunction())
         
         component.setAction ("NFCReading", NFC().nfcReadingFunction())
+        
+        component.setAction ("SendMessage", Message().sendMessge(self))
 
         component.setInterface("test2")
         { (arguments) -> Any? in
