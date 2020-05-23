@@ -6,18 +6,22 @@
 //  Copyright © 2020 Ayeon. All rights reserved.
 //
 
+//공통
 import UIKit
 import FlexHybridApp
 
+//카메라/앨범
 import Photos
 import MobileCoreServices
 
-import CoreLocation
+import CoreLocation     //위치
 
-import LocalAuthentication
+import LocalAuthentication //사용자인증
 
 import AVFoundation    //Network / QR 코드
 import SystemConfiguration
+
+import CoreNFC //NFC
 
 enum AuthrizeStatus : String {
     case authorized = "Access Authorized."
@@ -601,7 +605,6 @@ class CodeScan : NSObject, AVCaptureMetadataOutputObjectsDelegate {
 
     private func createCaptureSession() -> AVCaptureSession?{
         let captureSession = AVCaptureSession()
-        print ("createCaptureSession")
         guard let captureDevice = AVCaptureDevice.default(for: .video) else {return nil}
         
         do {
@@ -615,7 +618,6 @@ class CodeScan : NSObject, AVCaptureMetadataOutputObjectsDelegate {
             }
             
             if captureSession.canAddOutput(metaDataOutput){
-                print ("createCaptureSession -> captureSession.canAddOutput")
                 captureSession.addOutput(metaDataOutput)
                 metaDataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
                 metaDataOutput.metadataObjectTypes = self.metaObjectTypes()
@@ -645,7 +647,6 @@ class CodeScan : NSObject, AVCaptureMetadataOutputObjectsDelegate {
     }
     
     private func createPreviewLayer(withCaptureSession captureSession: AVCaptureSession) -> AVCaptureVideoPreviewLayer{
-        print ("createPreviewLayer")
         let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
         previewLayer.frame = self.view.layer.bounds
         previewLayer.videoGravity = .resizeAspectFill
@@ -657,7 +658,6 @@ class CodeScan : NSObject, AVCaptureMetadataOutputObjectsDelegate {
         guard let captureSession = self.captureSession else { return }
         
         if !captureSession.isRunning{
-            print ("requestCaptureSessionStartRunning")
             captureSession.startRunning()
         }
     }
@@ -666,7 +666,6 @@ class CodeScan : NSObject, AVCaptureMetadataOutputObjectsDelegate {
         guard let captureSession = self.captureSession else { return }
         
         if captureSession.isRunning {
-            print ("requestCaptureSessionStopRunning")
             DispatchQueue.main.async {
                 self.previewLayer.removeFromSuperlayer()
                 self.view.isUserInteractionEnabled = true
@@ -704,3 +703,37 @@ class CodeScan : NSObject, AVCaptureMetadataOutputObjectsDelegate {
     }
 }
 
+/*
+    NFC리딩 모듈
+*/
+class NFC : NSObject, NFCNDEFReaderSessionDelegate{
+   
+    private var nfcSession : NFCNDEFReaderSession!
+    private var flexAction : FlexAction!
+    private var nfcString : Array<String>!
+    
+    func nfcReadingFunction () -> (FlexAction, Array<Any?>?)-> Void? {
+        return { (action, argument) -> Void in
+            self.flexAction = action
+            self.nfcSession = NFCNDEFReaderSession(delegate: self, queue: DispatchQueue.main, invalidateAfterFirstRead: false)
+            self.nfcSession.begin()
+        }
+    }
+    
+    func readerSession(_ session: NFCNDEFReaderSession, didDetectNDEFs messages: [NFCNDEFMessage]) {
+           for message in messages {
+               for record in message.records {
+                   if let string = String(data: record.payload, encoding: .ascii) {
+                    self.nfcString.append(string)
+                       print(string)
+                   }
+               }
+           }
+        flexAction.PromiseReturn(self.nfcString)
+       }
+       
+
+    func readerSession(_ session: NFCNDEFReaderSession, didInvalidateWithError error: Error) {
+        print("NFC Reading Error : ", error.localizedDescription)
+    }
+}

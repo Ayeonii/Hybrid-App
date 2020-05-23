@@ -46,6 +46,7 @@
     }
 
     const Dialog = async () => {
+        
         var btn = [['확인', 'basic'],['취소','cancel'],['삭제','destructive']]
         
         try {
@@ -92,6 +93,15 @@
         }
     }
 
+    const NFCReading = async () => {
+        try {
+            const result = await $flex.NFCReading();
+            console.log('Returne by Native with NFCReading    : '+ result)
+        } cathc {
+            console.log('NFCReading() error 발생')
+        }
+    }
+
 </script>
 <body style="width: 100%; height: 450px;">
 <img src="" id="PickedImage" >
@@ -104,6 +114,7 @@
 <button onclick='RootingCheck()' style="width: 100%; height: 150px; font-size : 50px">RootingCheck</button>
 <button onclick='Network()' style="width: 100%; height: 150px; font-size : 50px">Network</button>
 <button onclick='CodeScan()' style="width: 100%; height: 150px; font-size : 50px">QRCodeScan</button>
+<button onclick='NFCReading()' style="width: 100%; height: 150px; font-size : 50px">NFC Reading</button>
 
 </body>
 </html>
