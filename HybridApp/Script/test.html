@@ -5,13 +5,9 @@
     <meta charset="UTF-8">
 </head>
 <script type="text/javascript">
+    var imgsrc ;
     let t = 0;
-    const t1 = async () => {
-        console.log('Send to Native --- ' + t);
-        const z = await $flex.test1(t);
-        console.log('Return by Native with t1 --- ' + z);
-        t = z;
-    }
+  
     const t2 = async () => {
        await $flex.test2();
     }
@@ -31,32 +27,106 @@
     }
 
     const Camera = async () => {
-        const z = await $flex.Camera(t);
-        console.log('Return by Native with Camera : ' + z);
+        const result = await $flex.Camera(100, 100);
+        var img = document.getElementById('PickedImage');
+        img.src = 'data:image/png;base64,' + result;
     }
 
-    const Photos = async () => {
-        const z = await $flex.Photos();
-        console.log('Return by Native with Photos   : ' + z)
+    const Gallery = async () => {
+        const result = await $flex.Gallery(80, 80);
+       // console.log('Return by Native with Photos   : ' + result)
+        var img = document.getElementById('PickedImage');
+        img.src = 'data:image/png;base64,' + result;
     }
 
     const Location = async () => {
-        const z = await $flex.Location();
-        var location = {
-            'latitude' : z['latitude']
-            ,'longtitude' : z['longtitude']
-        }
-        console.log('Return by Native with Location   : ' + location['latitude'] + ':'+ location['longtitude'])
+        const result = await $flex.Location();
+
+        console.log('Return by Native with Location   : ' + result['latitude'] + ':'+ result['longtitude'])
     }
+
+    const Dialog = async () => {
+        
+        var btn = [['확인', 'basic'],['취소','cancel'],['삭제','destructive']]
+        
+        try {
+            const result = await $flex.Dialog('testTitle', 'testMessage', btn, 'alert',true);
+            console.log('Return by Native with Dialog   : ' + result)
+        } catch {
+            console.log('Dialog() error 발생')
+        }
+    }
+
+    const BioAuthentication = async () => {
+        try {
+            const result = await $flex.BioAuthentication();
+            console.log('Return by Native with BioAuthentication   : ' + result)
+        } catch {
+            console.log('BioAuthentication() error 발생')
+        }
+    }
+
+    const RootingCheck = async () => {
+        try {
+            const result = await $flex.RootingCheck();
+            console.log('Return by Native with RootingCheck   : ' + result)
+        } catch {
+            console.log('RootingCheck() error 발생')
+        }
+    }
+
+    const Network = async () => {
+        try {
+            const result = await $flex.Network();
+            console.log('Return by Native with Network   : ' + result)
+        } catch {
+            console.log('Network() error 발생')
+        }
+    }
+
+    const CodeScan = async () => {
+        try {
+            const result = await $flex.QRCodeScan();
+            console.log('Return by Native with QRCodeScan   : ' + result)
+        } catch {
+            console.log('QRCodeScan() error 발생')
+        }
+    }
+
+    const NFCReading = async () => {
+        try {
+            const result = await $flex.NFCReading();
+            console.log('Return by Native with NFCReading    : '+ result)
+        } catch {
+            console.log('NFCReading() error 발생')
+        }
+    }
+
+    const SendMessage = async () => {
+        try {
+            const result = await $flex.SendMessage('01099642514','HybridApp에서 보내는 메세지양');
+            console.log('Return by Native with NFCReading   : '+ result)
+        }catch {
+            consoel.log('SendMessage() error 발생')
+        }
+    }
+
 </script>
 <body style="width: 100%; height: 450px;">
-<button onclick='t1()' style="width: 100%; height: 150px; font-size : 50px">TEST1</button>
-<button onclick='t2()' style="width: 100%; height: 150px; font-size : 50px">TEST2</button>
+<img src="" id="PickedImage" >
 <button onclick='t3()' style="width: 100%; height: 150px; font-size : 50px">TestAction</button>
 <button onclick='Camera()' style="width: 100%; height: 150px; font-size : 50px">Camera</button>
-<button onclick='Photos()' style="width: 100%; height: 150px; font-size : 50px">Photos</button>
+<button onclick='Gallery()' style="width: 100%; height: 150px; font-size : 50px">Photos</button>
 <button onclick='Dialog()' style="width: 100%; height: 150px; font-size : 50px">Dialog</button>
 <button onclick='Location()' style="width: 100%; height: 150px; font-size : 50px">Location</button>
+<button onclick='BioAuthentication()' style="width: 100%; height: 150px; font-size : 50px">BioAuthentication</button>
+<button onclick='RootingCheck()' style="width: 100%; height: 150px; font-size : 50px">RootingCheck</button>
+<button onclick='Network()' style="width: 100%; height: 150px; font-size : 50px">Network</button>
+<button onclick='CodeScan()' style="width: 100%; height: 150px; font-size : 50px">QRCodeScan</button>
+<button onclick='NFCReading()' style="width: 100%; height: 150px; font-size : 50px">NFC Reading</button>
+<button onclick='SendMessage()' style="width: 100%; height: 150px; font-size : 50px">SendMessage</button>
+
+
 </body>
 </html>
 
