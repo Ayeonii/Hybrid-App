@@ -32,7 +32,9 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         
         component.setAction("Camera", CameraPhotos(self).cameraFunction())
              
-        component.setAction("Gallery", CameraPhotos(self).photosFunction())
+        component.setAction("SinglePhoto", CameraPhotos(self).photosFunction())
+        
+        component.setAction("MultiplePhotos", CameraPhotos(self).MultiplePhotosFunction())
     
         component.setInterface("Location", Location(self).locationFunction())
         

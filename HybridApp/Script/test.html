@@ -28,15 +28,42 @@
 
     const Camera = async () => {
         const result = await $flex.Camera(100, 100);
-        var img = document.getElementById('PickedImage');
-        img.src = 'data:image/png;base64,' + result;
+        console.log(result);
+        if(result != 'Cancel'){
+            var imgTag = document.createElement("img")
+            imgTag.src = 'data:image/png;base64,' + result;
+            var imgDiv = document.getElementById('photos');
+            imgDiv.appendChild(imgTag)
+        }else {
+            console.log(result)
+        }
     }
 
-    const Gallery = async () => {
-        const result = await $flex.Gallery(80, 80);
-       // console.log('Return by Native with Photos   : ' + result)
-        var img = document.getElementById('PickedImage');
-        img.src = 'data:image/png;base64,' + result;
+    const SinglePhoto = async () => {
+        const result = await $flex.SinglePhoto(80, 80);
+        if(result != 'Cancel'){
+            var imgTag = document.createElement("img")
+            imgTag.src = 'data:image/png;base64,' + result;
+            var imgDiv = document.getElementById('photos');
+            imgDiv.appendChild(imgTag)
+        }else {
+            console.log(result)
+        }
+    }
+
+    const MultiplePhotos = async () => {
+        const result = await $flex.MultiplePhotos(80, 80);
+        if(result != 'Cancel'){
+            console.log('Return by Native with MultiplePhotos   : ' + result.length)
+            for (var i=0; i<result.length; i++){
+                var imgTag = document.createElement("img")
+                imgTag.src = 'data:image/png;base64,' + result[i];
+                var imgDiv = document.getElementById('photos');
+                imgDiv.appendChild(imgTag)
+            }
+        }else {
+            console.log(result)
+        }
     }
 
     const Location = async () => {
@@ -113,10 +140,11 @@
 
 </script>
 <body style="width: 100%; height: 450px;">
-<img src="" id="PickedImage" >
+<div id = "photos"></div>
 <button onclick='t3()' style="width: 100%; height: 150px; font-size : 50px">TestAction</button>
 <button onclick='Camera()' style="width: 100%; height: 150px; font-size : 50px">Camera</button>
-<button onclick='Gallery()' style="width: 100%; height: 150px; font-size : 50px">Photos</button>
+<button onclick='SinglePhoto()' style="width: 100%; height: 150px; font-size : 50px">SinglePhoto</button>
+<button onclick='MultiplePhotos()' style="width: 100%; height: 150px; font-size : 50px">MultiplePhotos</button>
 <button onclick='Dialog()' style="width: 100%; height: 150px; font-size : 50px">Dialog</button>
 <button onclick='Location()' style="width: 100%; height: 150px; font-size : 50px">Location</button>
 <button onclick='BioAuthentication()' style="width: 100%; height: 150px; font-size : 50px">BioAuthentication</button>

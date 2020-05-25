@@ -7,5 +7,5 @@ target 'HybridApp' do
   
   # Pods for HybridApp
   pod 'FlexHybridApp', '0.2.2-1'
-
+  pod 'DKImagePickerController'
 end
