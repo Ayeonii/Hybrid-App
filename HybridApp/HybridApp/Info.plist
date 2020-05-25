@@ -20,6 +20,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) 는 카메라 권한을 필요로 합니다. 허용 안함 시 일부 기능이 동작하지 않습니다.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>$(PRODUCT_NAME) 는 앨번 접근 권한을 필요로합니다. 허용 안함 시 일부 기능이 동작하지 않습니다.</string>
 	<key>NFCReaderUsageDescription</key>
 	<string>NFC tag to scan it.</string>
 	<key>NSContactsUsageDescription</key>

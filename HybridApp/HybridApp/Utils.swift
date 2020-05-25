@@ -6,6 +6,9 @@
 //  Copyright © 2020 Ayeon. All rights reserved.
 //
 
+#if canImport(CoreNFC)
+import CoreNFC //NFC
+#endif
 
 //공통
 import UIKit
@@ -23,11 +26,10 @@ import LocalAuthentication //사용자인증
 import AVFoundation    //Network / QR 코드
 import SystemConfiguration
 
-#if canImport(CoreNFC)
-import CoreNFC //NFC
-#endif
-
 import MessageUI
+
+import UserNotifications
+
 
 enum AuthrizeStatus : String {
     case authorized = "Access Authorized."
@@ -124,7 +126,7 @@ class CameraPhotos : NSObject, UIImagePickerControllerDelegate, UINavigationCont
                        if response {
                            self.cameraPhotosAction(ModuleType.camera.rawValue)
                        }else {
-                           self.dialog.makeDialog(self.currentVC, title : "알림", message : "권한을 거부하였습니다." , btn: [["확인", "basic"]] , type : "alert", animated : true, promiseAction : nil)
+                           self.dialog.makeDialog(self.currentVC, title : "알림", message : "해당 권한이 거부되었습니다." , btn: [["확인", "basic"]] , type : "alert", animated : true, promiseAction : nil)
                            returnStr = AuthrizeStatus.denied.rawValue
                        }
                    }
@@ -158,13 +160,13 @@ class CameraPhotos : NSObject, UIImagePickerControllerDelegate, UINavigationCont
                    returnStr = AuthrizeStatus.denied.rawValue
                    self.util.setAuthAlertAction(currentVC : self.currentVC,  dialog: self.util.authDialog)
                case .notDetermined:
-                   PHPhotoLibrary.requestAuthorization({ (status) in
+                   PHPhotoLibrary.requestAuthorization({(status) in
                        switch status {
                        case .authorized :
                            returnStr = AuthrizeStatus.authorized.rawValue
                            self.cameraPhotosAction(ModuleType.photos.rawValue)
                        case .denied :
-                           self.dialog.makeDialog(self.currentVC, title : "알림", message : "권한을 거부하였습니다." , btn: [["확인" , "basic"]] , type : "alert", animated : true, promiseAction: nil)
+                           self.dialog.makeDialog(self.currentVC, title : "알림", message : "해당 권한이 거부되었습니다." , btn: [["확인" , "basic"]] , type : "alert", animated : true, promiseAction: nil)
                            returnStr = AuthrizeStatus.denied.rawValue
                        default:
                            break
@@ -179,7 +181,6 @@ class CameraPhotos : NSObject, UIImagePickerControllerDelegate, UINavigationCont
                if let printStr = returnStr {
                    print(printStr)
                }
-               
            }
        }
        
@@ -239,7 +240,7 @@ class CameraPhotos : NSObject, UIImagePickerControllerDelegate, UINavigationCont
        }
        
        
-     //사진 여러장 선택
+       //사진 여러장 선택
        func MultiplePhotosFunction() -> (FlexAction, Array<Any?>?) -> Void?{
            return { (action, arguments) -> Void in
                 self.imageAction = action
@@ -259,12 +260,11 @@ class CameraPhotos : NSObject, UIImagePickerControllerDelegate, UINavigationCont
                     self.currentVC.present(multiPicker, animated : true)
                    
                     multiPicker.didSelectAssets = { (assets : [DKAsset]) in
-                    imageArray.append(contentsOf: assets)
+                        imageArray.append(contentsOf: assets)
                        
-                    multiImageArray = imageArray.map {
+                        multiImageArray = imageArray.map {
                             let captureImage = self.getAsset(asset: $0.originalAsset.self!)
-                            let resizedImage = self.resizeImage(image: captureImage, targetSize: CGSize(width: self.width, height: self.height))
-                            let imageData:NSData = resizedImage.jpegData(compressionQuality: 0.25)! as NSData
+                            let imageData:NSData = captureImage.jpegData(compressionQuality: 0.25)! as NSData
                             let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
                             let encodedString = strBase64.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? ""
                        
@@ -276,7 +276,7 @@ class CameraPhotos : NSObject, UIImagePickerControllerDelegate, UINavigationCont
             }
         }
     
-    //PHAsset -> UIImage 변환
+        //PHAsset -> UIImage 변환
         func getAsset(asset: PHAsset) -> UIImage {
         var image = UIImage()
             let imgManager = PHImageManager.default()
@@ -285,7 +285,7 @@ class CameraPhotos : NSObject, UIImagePickerControllerDelegate, UINavigationCont
             imgManager.requestImage(for: asset, targetSize: CGSize(width: self.width, height: self.height), contentMode: PHImageContentMode.aspectFit, options: requestOptions, resultHandler: { (img, _) in
                            image = img!
                        })
-        return image
+            return image
         }
        
        
@@ -338,20 +338,16 @@ class Location: NSObject, CLLocationManagerDelegate {
             let status = CLLocationManager.authorizationStatus()
             switch status {
             case .authorizedAlways, .authorizedWhenInUse :
-                print("locationFunction : authori")
                 self.getLocation()
                 break
             case .denied, .restricted :
-                print("locationFunction : denied")
                 self.util.setAuthAlertAction(currentVC : self.currentVC, dialog: self.util.authDialog)
                 break
             case .notDetermined :
                 self.returnLocation.removeAll()
-                print("locationFunction : notDetermined")
                 self.locationManager.requestWhenInUseAuthorization()
                 break
             default :
-                print("locationFunction : default")
                 break
             }
             return self.returnLocation
@@ -503,7 +499,7 @@ class CheckRooting {
         return{ (arguments) -> String in
             var returnStr : String = "Not Root Autority"
             DispatchQueue.main.async{
-                if !self.hasJailbreak() {
+                if self.hasJailbreak() {
                     returnStr = "RootAuthority"
                     let dialog = UIAlertController(title: nil, message: "루트권한을 가진 디바이스에서는 실행할 수 없습니다. 앱이 종료됩니다.", preferredStyle: .alert)
                     let action = UIAlertAction(title: "확인", style: .default){
@@ -774,7 +770,6 @@ class NFC : NSObject, NFCNDEFReaderSessionDelegate{
     
     func nfcReadingFunction () -> (FlexAction, Array<Any?>?)-> Void? {
         return { (action, argument) -> Void in
-            print("NFC사용가능1")
             self.flexAction = action
             self.nfcSession = NFCNDEFReaderSession(delegate: self, queue: DispatchQueue.main, invalidateAfterFirstRead: false)
             self.nfcSession.begin()
@@ -842,5 +837,41 @@ class Message : NSObject, MFMessageComposeViewControllerDelegate {
         DispatchQueue.main.async {
             controller.dismiss(animated: true, completion: nil)
         }
+    }
+}
+
+
+class Notification {
+    
+    let currentVC : UIViewController
+    var flexAction : FlexAction!
+    
+    init(_ currentVC : UIViewController){
+        self.currentVC = currentVC
+    }
+    
+    func notifiFunction () -> (FlexAction, Array<Any?>?) -> Void?{
+        return {(action, arguments) -> Void in
+            self.flexAction = action
+            
+            let content = UNMutableNotificationContent()
+            content.title = arguments?[0] as! String
+            content.subtitle = arguments?[1] as! String
+            content.body = arguments?[2] as! String
+            content.badge = NSNumber(value: arguments?[3] as! Int)
+            
+            let identifier = arguments?[4] as! String
+            let isRepeat = arguments?[5] as! Bool
+
+            let sec = arguments?[6] as! Double
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: sec , repeats:isRepeat)
+            let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+            UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+            self.flexAction.PromiseReturn("Notification Activate!")
+        }
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, openSettingsFor notification: UNNotification?) {
+        self.currentVC.present(self.currentVC, animated: true, completion: nil)
     }
 }
