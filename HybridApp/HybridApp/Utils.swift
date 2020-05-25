@@ -22,7 +22,9 @@ import LocalAuthentication //사용자인증
 import AVFoundation    //Network / QR 코드
 import SystemConfiguration
 
+#if canImport(CoreNFC)
 import CoreNFC //NFC
+#endif
 
 import MessageUI
 
@@ -709,6 +711,7 @@ class CodeScan : NSObject, AVCaptureMetadataOutputObjectsDelegate {
 /*
     NFC리딩 모듈
 */
+#if canImport(CoreNFC)
 class NFC : NSObject, NFCNDEFReaderSessionDelegate{
    
     private var nfcSession : NFCNDEFReaderSession!
@@ -717,6 +720,7 @@ class NFC : NSObject, NFCNDEFReaderSessionDelegate{
     
     func nfcReadingFunction () -> (FlexAction, Array<Any?>?)-> Void? {
         return { (action, argument) -> Void in
+            print("NFC사용가능1")
             self.flexAction = action
             self.nfcSession = NFCNDEFReaderSession(delegate: self, queue: DispatchQueue.main, invalidateAfterFirstRead: false)
             self.nfcSession.begin()
@@ -740,6 +744,8 @@ class NFC : NSObject, NFCNDEFReaderSessionDelegate{
         print("NFC Reading Error : ", error.localizedDescription)
     }
 }
+
+#endif
 
 
 class Message : NSObject, MFMessageComposeViewControllerDelegate {

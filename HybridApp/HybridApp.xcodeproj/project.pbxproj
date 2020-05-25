@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		47DE6B731BE4AAA5873A7528 /* Pods_HybridApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E1C673E1C5C46F78C3941C2 /* Pods_HybridApp.framework */; };
+		CC7FE821247B917400ED2455 /* CoreNFC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7FE820247B917400ED2455 /* CoreNFC.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		CC9B341E246CFABC00FD9FCA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9B341D246CFABC00FD9FCA /* AppDelegate.swift */; };
 		CC9B3420246CFABC00FD9FCA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9B341F246CFABC00FD9FCA /* SceneDelegate.swift */; };
 		CC9B3422246CFABC00FD9FCA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9B3421246CFABC00FD9FCA /* ViewController.swift */; };
@@ -15,13 +17,13 @@
 		CC9B342A246CFABE00FD9FCA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC9B3428246CFABE00FD9FCA /* LaunchScreen.storyboard */; };
 		CCAF06902473BCE2002F47AD /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCAF068F2473BCE2002F47AD /* Utils.swift */; };
 		CCAF06922473BD0B002F47AD /* Script in Resources */ = {isa = PBXBuildFile; fileRef = CCAF06912473BD0B002F47AD /* Script */; };
-		FBE2896C51E95E20393F5A1E /* Pods_HybridApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 731392CD847A8C4CC03B12CC /* Pods_HybridApp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0E1C673E1C5C46F78C3941C2 /* Pods_HybridApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HybridApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		284B488D0335B88A34CD9DA7 /* Pods-HybridApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HybridApp.debug.xcconfig"; path = "Target Support Files/Pods-HybridApp/Pods-HybridApp.debug.xcconfig"; sourceTree = "<group>"; };
 		358768DC37C3913A4B4905D3 /* Pods-HybridApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HybridApp.release.xcconfig"; path = "Target Support Files/Pods-HybridApp/Pods-HybridApp.release.xcconfig"; sourceTree = "<group>"; };
-		731392CD847A8C4CC03B12CC /* Pods_HybridApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HybridApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC7FE820247B917400ED2455 /* CoreNFC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreNFC.framework; path = System/Library/Frameworks/CoreNFC.framework; sourceTree = SDKROOT; };
 		CC9B341A246CFABC00FD9FCA /* HybridApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HybridApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC9B341D246CFABC00FD9FCA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CC9B341F246CFABC00FD9FCA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -39,7 +41,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FBE2896C51E95E20393F5A1E /* Pods_HybridApp.framework in Frameworks */,
+				CC7FE821247B917400ED2455 /* CoreNFC.framework in Frameworks */,
+				47DE6B731BE4AAA5873A7528 /* Pods_HybridApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -49,7 +52,8 @@
 		935932ACD711BC46E01D4D84 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				731392CD847A8C4CC03B12CC /* Pods_HybridApp.framework */,
+				CC7FE820247B917400ED2455 /* CoreNFC.framework */,
+				0E1C673E1C5C46F78C3941C2 /* Pods_HybridApp.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -108,7 +112,7 @@
 				CC9B3416246CFABC00FD9FCA /* Sources */,
 				CC9B3417246CFABC00FD9FCA /* Frameworks */,
 				CC9B3418246CFABC00FD9FCA /* Resources */,
-				502900AC26D10C9F0258484B /* [CP] Embed Pods Frameworks */,
+				7497BE8009F09766C989614C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -167,23 +171,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		502900AC26D10C9F0258484B /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HybridApp/Pods-HybridApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HybridApp/Pods-HybridApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HybridApp/Pods-HybridApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		5E177C41CCA5C5E6F2DEF308 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -204,6 +191,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7497BE8009F09766C989614C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HybridApp/Pods-HybridApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HybridApp/Pods-HybridApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HybridApp/Pods-HybridApp-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -362,13 +366,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 653TUFJ9Y7;
+				DEVELOPMENT_TEAM = 4V6SN23KMY;
 				INFOPLIST_FILE = HybridApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "kr.lay.Hybrid-App";
+				PRODUCT_BUNDLE_IDENTIFIER = kr.lay.HybridApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -381,13 +385,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 653TUFJ9Y7;
+				DEVELOPMENT_TEAM = 4V6SN23KMY;
 				INFOPLIST_FILE = HybridApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "kr.lay.Hybrid-App";
+				PRODUCT_BUNDLE_IDENTIFIER = kr.lay.HybridApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
