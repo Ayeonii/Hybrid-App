@@ -10,12 +10,14 @@ import UIKit
 import WebKit
 import FlexHybridApp
 
-
 class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
     
     var mWebView: FlexWebView!
     var component = FlexComponent()
 
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,14 +51,20 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         component.setAction("QRCodeScan", CodeScan(self).codeScanFunction())
         
         #if canImport(CoreNFC)
-        print("NFC사용가능")
         component.setAction ("NFCReading", NFC().nfcReadingFunction())
         #endif
         
         component.setAction ("SendMessage", Message().sendMessge(self))
         
-        component.setAction ("Notification", Notification(self).notifiFunction())
+        component.setInterface ("Notification", Notification(self).notifiFunction())
+        
+        component.setAction ("Attachments", File(self).importFile())
+      
+      //  component.setAction ("VoiceRecord", VoiceRecord(self,true).voiceRecordFunction())
+      //
+      //  component.setAction ("VoicePlay", VoiceRecord(self,false).voiceRecordFunction())
 
+        
         component.setInterface("test2")
         { (arguments) -> Any? in
             // code works in background...
@@ -73,25 +81,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             return nil
         }
         
-       
-        
-
-        // add FlexAction
-        component.setAction("testAction")
-        { (action, arguments) -> Void in
-            // code works in background...
-            var returnValue: [String:Any] = [:]
-            var dictionaryValue: [String:Any] = [:]
-            dictionaryValue["subkey1"] = ["dictionaryValue",0.12]
-            dictionaryValue["subkey2"] = 1000.100
-            returnValue["key1"] = "value1"
-            returnValue["key2"] = dictionaryValue
-            returnValue["key3"] = ["arrayValue1",100]
-            // Promise return to Web
-            // PromiseReturn can be called at any time.
-            action.PromiseReturn(returnValue)
-        }
-        
         // add user-custom contentController
         component.configration.userContentController.add(self, name: "userCC")
         // setBaseUrl
@@ -101,6 +90,8 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         mWebView.translatesAutoresizingMaskIntoConstraints = false
         mWebView.scrollView.bounces = false
         view.addSubview(mWebView)
+        
+        
 
         if #available(iOS 13.0, *) {
             view.backgroundColor = UIColor.systemBackground
@@ -124,8 +115,11 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             mWebView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
             mWebView.bottomAnchor.constraint(equalTo: bottomLayoutGuide.topAnchor).isActive = true
         }
-
+       
+        
         mWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "test", ofType: "html", inDirectory: "Script")!)))
+        
+
     }
 
     override
@@ -141,6 +135,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         print("user contentController")
     }
-
+ 
 }
 

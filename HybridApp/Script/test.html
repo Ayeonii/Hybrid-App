@@ -7,13 +7,16 @@
 <script type="text/javascript">
     var imgsrc ;
     let t = 0;
-  
+
    // when $flex on ready.....
      window.onFlexLoad = function() {
          console.log('Flex Load Success!!');
          $flex.web.help = function(data) {
              console.log('Received by Native ---- ' + data);
              return Promise.resolve('Thanks Flex!')
+         }
+         $flex.web.Timer = function(data) {
+             console.log("time : "+ data)
          }
      }
   
@@ -143,9 +146,6 @@
 const Notification = async () => {
     try {
         var badge = 1
-        //Calendar : 정해진 날짜 ->
-        //FixTime : 정해진 시간 -> {'FixTime' : [11, 30]}
-        //TimeInterval : 정해진 초 간격 -> {'TimeInterval' : [5]}
         const result = await $flex.Notification('testTitle', 'testSubTitle', 'Body임', badge, '식별자이아연',false, 5);
         console.log('Return by Native with Notification   : '+ result)
     }catch {
@@ -153,9 +153,38 @@ const Notification = async () => {
     }
 }
 
+const Attachments = async () => {
+    try {
+        const result = await $flex.Attachments();
+        console.log('Return by Native with Attachments   : name : ' + result['Name'] + ': URL :'+ result['URLString'])
+        
+        document.getElementById("fileName").value = result['Name']
+    }catch {
+        consoel.log('Attachments() error 발생')
+    }
+}
+/*
+const VoiceRecord = async (btnType, fileName) => {
+    try {
+       // console.log('VoiceRecord 시작')
+            const result = await $flex.VoiceRecord(fileName, btnType);
+            console.log('Return by Native with VoiceRecord 이아연  : '+ result)
+        
+    }catch {
+        consoel.log('VoiceRecord() error 발생')
+    }
+}
+
+
+const VoicePlay = async (btnType, fileName, volume) => {
+         const result = await $flex.VoicePlay(fileName, btnType, volume);
+         console.log('Return by Native with VoicePlay   : '+ result)
+}*/
+
 </script>
 <body style="width: 100%; height: 450px;">
 <div id = "photos"></div>
+<button onclick='t2()' style="width: 100%; height: 150px; font-size : 50px">Test2</button>
 <button onclick='t3()' style="width: 100%; height: 150px; font-size : 50px">TestAction</button>
 <button onclick='Camera()' style="width: 100%; height: 150px; font-size : 50px">Camera</button>
 <button onclick='SinglePhoto()' style="width: 100%; height: 150px; font-size : 50px">SinglePhoto</button>
@@ -169,6 +198,16 @@ const Notification = async () => {
 <button onclick='NFCReading()' style="width: 100%; height: 150px; font-size : 50px">NFC Reading</button>
 <button onclick='SendMessage()' style="width: 100%; height: 150px; font-size : 50px">SendMessage</button>
 <button onclick='Notification()' style="width: 100%; height: 150px; font-size : 50px">Notification</button>
+<input type='text' id='fileName' value= '' style="width: 70%; height: 100px; font-size : 30px"/><input type='button' onclick='Attachments()' value='파일첨부'style="width: 20%; height: 100px; font-size : 30px"/>
+
+<!--<button onclick= "VoiceRecord('Play','testVoiceFile')" style="width: 100%; height: 150px; font-size : 50px">녹음시작</button>
+<button onclick= "VoiceRecord('Pause', 'testVoiceFile')" style="width: 100%; height: 150px; font-size : 50px">일시정지</button>
+<button onclick= "VoiceRecord('Stop', 'testVoiceFile')" style="width: 100%; height: 150px; font-size : 50px">정지</button>
+<button onclick= "VoicePlay('Play',  'testVoiceFile', 1)" style="width: 100%; height: 150px; font-size : 50px">녹음재생</button>
+<button onclick= "VoicePlay('Pause',  'testVoiceFile', 1)" style="width: 100%; height: 150px; font-size : 50px">일시정지</button>
+<button onclick= "VoicePlay('Stop',  'testVoiceFile', 1)" style="width: 100%; height: 150px; font-size : 50px">정지</button> -->
+
+
 
 
 </body>

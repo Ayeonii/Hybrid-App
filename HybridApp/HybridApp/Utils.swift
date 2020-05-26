@@ -86,7 +86,7 @@ enum ModuleType : String{
 /*
     카메라 및 앨범 관련 동작 수행
  */
-class CameraPhotos : NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class CameraPhotos : NSObject {
     
    private let viewController = ViewController()
        private let util = Utils()
@@ -142,7 +142,10 @@ class CameraPhotos : NSObject, UIImagePickerControllerDelegate, UINavigationCont
            }
        }
 
-       //Photos를 실행시키는 모듈
+}
+
+extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    //Photos를 실행시키는 모듈
        func photosFunction() -> (FlexAction, Array<Any?>?) -> Void?  {
            return { (action, arguments) -> Void in
                
@@ -315,11 +318,10 @@ class CameraPhotos : NSObject, UIImagePickerControllerDelegate, UINavigationCont
            return newImage!
        }
 }
-
 /*
     위치모듈
 */
-class Location: NSObject, CLLocationManagerDelegate {
+class Location: NSObject{
     
     private let util = Utils()
     private var returnLocation = Dictionary<String,String?> ()
@@ -331,9 +333,6 @@ class Location: NSObject, CLLocationManagerDelegate {
     }
     
     func locationFunction() -> ((Array<Any?>?) -> Any?) {
-        
-        locationManager.delegate = self
-
         return { (arguments) -> Dictionary<String,Any?>  in
             let status = CLLocationManager.authorizationStatus()
             switch status {
@@ -354,13 +353,6 @@ class Location: NSObject, CLLocationManagerDelegate {
         }
     }
     
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        if(status == .authorizedAlways || status == .authorizedWhenInUse){
-            locationManager.delegate = self
-            print(AuthrizeStatus.authorized.rawValue)
-        }
-    }
-    
     private func getLocation() -> Void {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.startUpdatingLocation()
@@ -373,6 +365,15 @@ class Location: NSObject, CLLocationManagerDelegate {
             returnLocation.updateValue(String(describing : lo ), forKey: "longtitude")
         }
      }
+}
+
+extension Location : CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+           if(status == .authorizedAlways || status == .authorizedWhenInUse){
+               locationManager.delegate = self
+               print(AuthrizeStatus.authorized.rawValue)
+           }
+       }
 }
 
 /*
@@ -619,7 +620,7 @@ class Reachability {
 /*
     QR코드스캔 모듈
 */
-class CodeScan : NSObject, AVCaptureMetadataOutputObjectsDelegate {
+class CodeScan : NSObject {
     private var currentVC : UIViewController
     private var captureSession : AVCaptureSession?
     private var flexAction : FlexAction?
@@ -658,6 +659,10 @@ class CodeScan : NSObject, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
 
+    
+}
+
+extension CodeScan : AVCaptureMetadataOutputObjectsDelegate{
     private func createCaptureSession() -> AVCaptureSession?{
         let captureSession = AVCaptureSession()
         guard let captureDevice = AVCaptureDevice.default(for: .video) else {return nil}
@@ -731,7 +736,6 @@ class CodeScan : NSObject, AVCaptureMetadataOutputObjectsDelegate {
     public func metadataOutput(_ output : AVCaptureMetadataOutput,
                                      didOutput metadataObjects : [AVMetadataObject],
                                      from connection : AVCaptureConnection){
-        print ("metadataOutput")
               self.scannerDelegate(output, didOutput: metadataObjects, from: connection)
               
           }
@@ -739,7 +743,6 @@ class CodeScan : NSObject, AVCaptureMetadataOutputObjectsDelegate {
        func scannerDelegate (_ output : AVCaptureMetadataOutput,
                              didOutput metadataObjects: [AVMetadataObject],
                              from connection: AVCaptureConnection){
-        print ("scannerDelegate")
             if metadataObjects.count == 0 {
                 print ("No QR Code is detected")
                   self.requestCaptureSessionStopRunning()
@@ -747,14 +750,11 @@ class CodeScan : NSObject, AVCaptureMetadataOutputObjectsDelegate {
             }
           
            if let metadataObject = metadataObjects.first {
-             print ("scannerDelegate -> metadataObject = metadataObjects.first")
                 guard let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject else { return }
                 guard let stringValue = readableObject.stringValue else { return }
                 flexAction?.PromiseReturn(stringValue)
                 self.requestCaptureSessionStopRunning()
            }
-      
-    
     }
 }
 
@@ -793,9 +793,11 @@ class NFC : NSObject, NFCNDEFReaderSessionDelegate{
         print("NFC Reading Error : ", error.localizedDescription)
     }
 }
-
 #endif
 
+/*
+ 메세지 모듈 (송신)
+ */
 
 class Message : NSObject, MFMessageComposeViewControllerDelegate {
     
@@ -840,19 +842,19 @@ class Message : NSObject, MFMessageComposeViewControllerDelegate {
     }
 }
 
-
+/*
+ 노티피케이션
+ */
 class Notification {
     
     let currentVC : UIViewController
-    var flexAction : FlexAction!
     
     init(_ currentVC : UIViewController){
         self.currentVC = currentVC
     }
     
-    func notifiFunction () -> (FlexAction, Array<Any?>?) -> Void?{
-        return {(action, arguments) -> Void in
-            self.flexAction = action
+    func notifiFunction () -> ( Array<Any?>?) -> Any?{
+        return {(arguments) -> String in
             
             let content = UNMutableNotificationContent()
             content.title = arguments?[0] as! String
@@ -867,7 +869,8 @@ class Notification {
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: sec , repeats:isRepeat)
             let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
             UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-            self.flexAction.PromiseReturn("Notification Activate!")
+            
+            return "Notification Activate!"
         }
     }
     
@@ -875,3 +878,273 @@ class Notification {
         self.currentVC.present(self.currentVC, animated: true, completion: nil)
     }
 }
+
+class File : NSObject, UIDocumentPickerDelegate{
+    
+    let currentVC : UIViewController
+    var flexAction : FlexAction!
+    
+    init(_ currentVC : UIViewController){
+        self.currentVC = currentVC
+    }
+    
+    func importFile () -> (FlexAction, Array<Any?>?) -> Void? {
+        return { (action, argument) -> Void in
+            self.flexAction = action
+            
+            let documentPicker: UIDocumentPickerViewController = UIDocumentPickerViewController(documentTypes: ["com.apple.iwork.pages.pages"
+                                                                                                               , "com.apple.iwork.numbers.numbers"
+                                                                                                               , "com.apple.iwork.keynote.key"
+                                                                                                               , "public.image"
+                                                                                                               , "com.apple.application"
+                                                                                                               , "public.item"
+                                                                                                               , "public.data"
+                                                                                                               , "public.content"
+                                                                                                               , "public.audiovisual-content"
+                                                                                                               , "public.movie"
+                                                                                                               , "public.audiovisual-content"
+                                                                                                               , "public.video"
+                                                                                                               , "public.audio"
+                                                                                                               , "public.text"
+                                                                                                               , "public.data"
+                                                                                                               , "public.zip-archive"
+                                                                                                               , "com.pkware.zip-archive"
+                                                                                                               , "public.composite-content"
+                                                                                                               , "public.text"], in: UIDocumentPickerMode.import)
+            DispatchQueue.main.async {
+                documentPicker.delegate = self
+                documentPicker.modalPresentationStyle = UIModalPresentationStyle.fullScreen
+                self.currentVC.present(documentPicker, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
+        let newUrls = urls.compactMap { (url: URL) -> URL? in
+            // Create file URL to temporary folder
+            var tempURL = URL(fileURLWithPath: NSTemporaryDirectory())
+            // Apend filename (name+extension) to URL
+            tempURL.appendPathComponent(url.lastPathComponent)
+            do {
+                // If file with same name exists remove it (replace file with new one)
+                if FileManager.default.fileExists(atPath: tempURL.path) {
+                    try FileManager.default.removeItem(atPath: tempURL.path)
+                }
+                // Move file from app_id-Inbox to tmp/filename
+                try FileManager.default.moveItem(atPath: url.path, toPath: tempURL.path)
+                return tempURL
+            } catch {
+                print(error.localizedDescription)
+                return nil
+            }
+        }
+
+        var returnDic = Dictionary<String,String>()
+        returnDic.updateValue(newUrls[0].absoluteString, forKey: "URLString")
+        returnDic.updateValue(newUrls[0].lastPathComponent, forKey: "Name")
+        print(returnDic)
+        flexAction.PromiseReturn(returnDic)
+    }
+    
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+        print("close")
+        controller.dismiss(animated: true, completion: nil)
+    }
+}
+
+/*
+ 음성녹음
+ */
+/*
+class VoiceRecord : NSObject{
+    
+    var mWebView : FlexWebView!
+    
+    var audioPlayer : AVAudioPlayer!
+    var audioFile : URL!
+    var progressTimer : Timer!
+    var flexAction : FlexAction!
+    
+    var isRecorderMode : Bool
+    var audioRecorder : AVAudioRecorder!
+    var endTime : String!
+    var currentTime : String!
+    var volume : Float!
+    var fileName : String!
+    var mode : String!
+    var recordTime : String!
+   // let timeRecordSelector:Selector = #selector(ViewController.updateRecordTime)
+
+    
+    init(_ mWebView : FlexWebView, _ isRecordMode : Bool){
+        self.isRecorderMode = isRecordMode
+        self.mWebView = mWebView
+    }
+    
+    func voiceRecordFunction () -> (FlexAction, Array<Any?>?) -> Void? {
+        return { (action, argument) -> Void in
+            print("voidRecordFunction")
+            
+            self.flexAction = action
+            self.fileName = argument?[0] as? String
+            self.mode = argument?[1] as? String
+        
+            self.selectAudioFile()
+            
+            if self.mode == "Play" {
+                if !(self.isRecorderMode) {
+                    print("!!isRecorderMode  Play")
+                    self.volume = argument?[2] as? Float
+                    self.recordTime = self.convertNSTimeInterval2String(0)
+                    
+                    self.initPlay()
+                }else {
+                    print("isRecorderMode  Play")
+                    if let status = self.audioPlayer{
+                        status.stop()
+                        status.currentTime = 0
+                        self.recordTime = self.convertNSTimeInterval2String(0)
+                    }
+                    self.initRecord()
+                    self.progressTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.timerCallback), userInfo: nil, repeats: true)
+
+                }
+            }else if self.mode == "Stop"{
+                print("!!isRecorderMode  Stop")
+                if !(self.isRecorderMode) {
+                    self.btnStopAudio()
+                } else {
+                    print("isRecorderMode  Stop")
+                    self.btnStopRecord()
+                }
+            }else if self.mode == "Pause" {
+                if !(self.isRecorderMode) {
+                    print("!!isRecorderMode  Pause")
+                    self.btnPauseAudio()
+                }else {
+                    print("isRecorderMode  Pause")
+                    self.btnPauseRecord()
+                }
+            }
+        }
+    }
+    
+    @objc func timerCallback(){
+        mWebView.evalFlexFunc("Timer", sendData: currentTime!)
+    }
+
+    func selectAudioFile() -> Void {
+        if !(isRecorderMode) {
+            audioFile = Bundle.main.url(forResource: fileName, withExtension: "mp3")
+        }else{//녹음모드
+            //녹음모드일 때는 새 파일인 recordFile.m4a가 생성 된다.
+            let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            audioFile = documentDirectory.appendingPathComponent("\(fileName!).m4a")
+        }
+    }
+
+    func convertNSTimeInterval2String(_ time:TimeInterval) -> String {
+        let min = Int(time/60)
+        let sec = Int(time.truncatingRemainder(dividingBy: 60))
+        let strTime = String(format: "%02d:%02d",min,sec)
+        
+        return strTime
+    }
+
+    @objc func updatePlayTime() -> Void {
+        currentTime = convertNSTimeInterval2String(audioPlayer.currentTime)
+        print(currentTime!)
+    }
+
+    func btnPauseAudio() {
+        audioPlayer.pause()
+        flexAction.PromiseReturn("Pause Playing")
+    }
+
+    func btnStopAudio() {
+        audioPlayer.stop()
+        audioPlayer.currentTime = 0
+        currentTime = convertNSTimeInterval2String(0)
+        progressTimer.invalidate()
+        flexAction.PromiseReturn("Stop Playing")
+    }
+    
+    func btnPauseRecord() {
+        audioRecorder.pause()
+        flexAction.PromiseReturn("Pause Recording")
+    }
+    
+    func btnStopRecord() {
+        audioRecorder.stop()
+        flexAction.PromiseReturn("Stop Recording \(String(describing: currentTime))")
+        recordTime = convertNSTimeInterval2String(0)
+        progressTimer.invalidate()
+    }
+}
+
+extension VoiceRecord : AVAudioPlayerDelegate, AVAudioRecorderDelegate {
+    //녹음을 위한 초기화 함수 : 음질은 최대, 비트율 320kbps, 오디오 채널은 2, 샘플율은 44,100hz
+    func initRecord() -> Void {
+        let recordSettings = [
+            AVFormatIDKey : NSNumber(value : kAudioFormatAppleLossless as UInt32),
+            AVEncoderAudioQualityKey : AVAudioQuality.max.rawValue,
+            AVEncoderBitRateKey : 320000,
+            AVNumberOfChannelsKey : 2,
+            AVSampleRateKey : 44100.0] as [String : Any]
+
+        do {
+            audioRecorder = try AVAudioRecorder(url: audioFile, settings: recordSettings)
+        } catch let error as NSError {
+            print("error-initRecord:\(error)")
+        }
+        
+        audioRecorder.delegate = self
+        audioRecorder.isMeteringEnabled = true
+        audioRecorder.prepareToRecord()
+        if let volume = volume {
+            audioPlayer.volume = volume
+        }
+        endTime = convertNSTimeInterval2String(0)
+        currentTime = convertNSTimeInterval2String(0)
+        
+        let session = AVAudioSession.sharedInstance()
+
+        do {
+            try session.setCategory(AVAudioSession.Category.playAndRecord)
+        } catch let error as NSError {
+            print("error-setcategory : \(error)")
+        }
+        
+        do {
+            try session.setActive(true)
+        } catch let error as NSError {
+            print("error-setActive : \(error)")
+        }
+    }
+
+    func initPlay(){
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: audioFile)
+        } catch let error as NSError { //오류타입
+            print("error-initplay : 해당 오디오파일이 존재하지 않습니다. \(error) ")
+        }
+
+        audioPlayer.delegate = self
+        audioPlayer.prepareToPlay()
+        if let volume = volume {
+           audioPlayer.volume = volume
+        }
+        endTime = convertNSTimeInterval2String(audioPlayer.duration)
+        currentTime = convertNSTimeInterval2String(0)
+    }
+    
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        progressTimer.invalidate()
+        flexAction.PromiseReturn("Finished Playing")
+    }
+    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+            flexAction.PromiseReturn("Finished Recording")
+    }
+
+}
+*/

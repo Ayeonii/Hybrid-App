@@ -32,6 +32,10 @@
 	<string>앱 실행 중에만 위치 접근을 허용합니다.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>$(PRODUCT_NAME) 는 앨범 접근 권한을 필요로 합니다. 허용 안함 시 일부 기능이 동작하지 않습니다.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>$(PRODUCT_NAME) 는 마이크 접근 권한을 필요로합니다. 허용 안함 시 일부 기능이 동작하지 않습니다.</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>$(PRODUCT_NAME) 는 미디어 접근 권한을 필요로합니다. 허용 안함 시 일부 기능이 동작하지 않습니다.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
