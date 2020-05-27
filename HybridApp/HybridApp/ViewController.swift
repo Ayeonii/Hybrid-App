@@ -15,8 +15,8 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     
     var mWebView: FlexWebView!
     var component = FlexComponent()
-    let keychain = Keychain(service: "com.example.github-token")
     let userDefault = UserDefaults.standard
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -25,7 +25,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        keyChainInit()
+   
         
         component.setAction("Camera", CameraPhotos(self).cameraFunction())
              
@@ -56,6 +56,10 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         component.setAction ("FileDownload", FileDownload(component).startFileDownload() )
         
         component.setInterface ("UserDefault", User().userDefaultFunction())
+        
+        component.setInterface ("AppUUID"){_ in return self.userDefault.object(forKey: "APP_UUID")}
+        
+        component.setInterface ("DeviceUUID", self.keyChainInit())
         
 
         component.setInterface("test2")
@@ -109,17 +113,20 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
 
     }
     
-    func keyChainInit(){
-      //  if keychain has not UUID
-        guard keychain["UUID"] != nil else {
-            do {
-                try keychain
-                    .accessibility(.afterFirstUnlock)
-                    .set(UUID().uuidString, key: "UUID")
-            } catch let error {
-                print("error: \(error)")
+    func keyChainInit() -> (Array<Any?>?) -> Any? {
+        let keychain = Keychain(service: "kr.lay.HybridApp")
+        return {(argument) -> String in
+            guard keychain["UUID"] != nil else {
+                do {
+                    try keychain
+                        .accessibility(.afterFirstUnlock)
+                        .set(UUID().uuidString, key: "UUID")
+                } catch let error {
+                    print("error: \(error)")
+                }
+                return keychain["UUID"]!
             }
-            return
+            return keychain["UUID"]!
         }
     }
 

@@ -1038,7 +1038,9 @@ extension FileDownload : UIDocumentInteractionControllerDelegate {
         interaction = nil
     }
 }
-
+/*
+    UserDefault 기능
+ */
 class User {
 
     func userDefaultFunction () -> (Array<Any?>) -> Any? {
