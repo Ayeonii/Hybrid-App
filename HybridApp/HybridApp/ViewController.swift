@@ -16,36 +16,16 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     var mWebView: FlexWebView!
     var component = FlexComponent()
     let keychain = Keychain(service: "com.example.github-token")
-
+    let userDefault = UserDefaults.standard
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    func keyChainInit(){
-      //  if keychain has not UUID
-        guard keychain["UUID"] != nil else {
-            do {
-                try keychain
-                    .accessibility(.afterFirstUnlock)
-                    .set(UUID().uuidString, key: "UUID")
-            } catch let error {
-                print("error: \(error)")
-            }
-            return
-        }
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
         keyChainInit()
-        
-        // add js interface
-        component.setInterface("test1") { (arguments) -> Any? in
-            // code works in background...
-                return arguments[0] as! Int + 1
-          
-        }
         
         component.setAction("Camera", CameraPhotos(self).cameraFunction())
              
@@ -74,13 +54,12 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         component.setInterface ("Notification", Notification(self).notifiFunction())
         
         component.setAction ("FileDownload", FileDownload(component).startFileDownload() )
+        
+        component.setInterface ("UserDefault", User().userDefaultFunction())
+        
 
         component.setInterface("test2")
         { (arguments) -> Any? in
-            // code works in background...
-            
-            // call $flex.web function
-            // same as $flex.web.help("Help me Flex!") in js
             self.mWebView.evalFlexFunc("help", sendData: "Help me Flex!")
             { (value) -> Void in
                 // Retrun from $flex.web.help func
@@ -100,8 +79,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         mWebView.translatesAutoresizingMaskIntoConstraints = false
         mWebView.scrollView.bounces = false
         view.addSubview(mWebView)
-        
-        
 
         if #available(iOS 13.0, *) {
             view.backgroundColor = UIColor.systemBackground
@@ -130,6 +107,20 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         mWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "test", ofType: "html", inDirectory: "Script")!)))
         
 
+    }
+    
+    func keyChainInit(){
+      //  if keychain has not UUID
+        guard keychain["UUID"] != nil else {
+            do {
+                try keychain
+                    .accessibility(.afterFirstUnlock)
+                    .set(UUID().uuidString, key: "UUID")
+            } catch let error {
+                print("error: \(error)")
+            }
+            return
+        }
     }
 
     override
