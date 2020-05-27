@@ -50,7 +50,8 @@ PODS:
     - SDWebImage
     - SDWebImageFLPlugin
   - FLAnimatedImage (1.0.12)
-  - FlexHybridApp (0.2.2-1)
+  - FlexHybridApp (0.3.0.1)
+  - KeychainAccess (4.2.0)
   - SDWebImage (5.8.0):
     - SDWebImage/Core (= 5.8.0)
   - SDWebImage/Core (5.8.0)
@@ -60,7 +61,8 @@ PODS:
 
 DEPENDENCIES:
   - DKImagePickerController
-  - FlexHybridApp (= 0.2.2-1)
+  - FlexHybridApp
+  - KeychainAccess
 
 SPEC REPOS:
   trunk:
@@ -70,6 +72,7 @@ SPEC REPOS:
     - DKPhotoGallery
     - FLAnimatedImage
     - FlexHybridApp
+    - KeychainAccess
     - SDWebImage
     - SDWebImageFLPlugin
 
@@ -79,10 +82,11 @@ SPEC CHECKSUMS:
   DKImagePickerController: f3d397887f38b98276a506b02ed9c167425f7cf3
   DKPhotoGallery: e880aef16c108333240e1e7327896f2ea380f4f0
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
-  FlexHybridApp: 565482de0b822e5b3ce3c043966dda7c71194ecd
+  FlexHybridApp: de78c2a99b7dd7589afebdee61f2e051734653e7
+  KeychainAccess: 3f760109aa99b05d0f231e28b22642da7153e38a
   SDWebImage: 84000f962cbfa70c07f19d2234cbfcf5d779b5dc
   SDWebImageFLPlugin: 6c2295fb1242d44467c6c87dc5db6b0a13228fd8
 
-PODFILE CHECKSUM: 9d8abb9fdb6a18a34f04500d0bc345da94b39cc0
+PODFILE CHECKSUM: ec5aa0c9941303029f684630f0bf0132421038b6
 
 COCOAPODS: 1.9.1

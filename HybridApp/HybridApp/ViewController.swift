@@ -9,27 +9,42 @@
 import UIKit
 import WebKit
 import FlexHybridApp
+import KeychainAccess
 
 class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
     
     var mWebView: FlexWebView!
     var component = FlexComponent()
+    let keychain = Keychain(service: "com.example.github-token")
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+    
+    func keyChainInit(){
+      //  if keychain has not UUID
+        guard keychain["UUID"] != nil else {
+            do {
+                try keychain
+                    .accessibility(.afterFirstUnlock)
+                    .set(UUID().uuidString, key: "UUID")
+            } catch let error {
+                print("error: \(error)")
+            }
+            return
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-  
+        
+        keyChainInit()
+        
         // add js interface
         component.setInterface("test1") { (arguments) -> Any? in
             // code works in background...
-            if arguments != nil {
-                return arguments![0] as! Int + 1
-            } else {
-                return nil
-            }
+                return arguments[0] as! Int + 1
+          
         }
         
         component.setAction("Camera", CameraPhotos(self).cameraFunction())
@@ -58,13 +73,8 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         
         component.setInterface ("Notification", Notification(self).notifiFunction())
         
-        component.setAction ("Attachments", File(self).importFile())
-      
-      //  component.setAction ("VoiceRecord", VoiceRecord(self,true).voiceRecordFunction())
-      //
-      //  component.setAction ("VoicePlay", VoiceRecord(self,false).voiceRecordFunction())
+        component.setAction ("FileDownload", FileDownload(component).startFileDownload() )
 
-        
         component.setInterface("test2")
         { (arguments) -> Any? in
             // code works in background...

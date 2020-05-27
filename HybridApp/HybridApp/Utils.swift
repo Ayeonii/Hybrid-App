@@ -31,6 +31,9 @@ import MessageUI
 import UserNotifications
 
 
+
+
+
 enum AuthrizeStatus : String {
     case authorized = "Access Authorized."
     case denied = "Access Denied"
@@ -843,7 +846,7 @@ class Message : NSObject, MFMessageComposeViewControllerDelegate {
 }
 
 /*
- 노티피케이션
+    노티피케이션
  */
 class Notification {
     
@@ -879,272 +882,107 @@ class Notification {
     }
 }
 
-class File : NSObject, UIDocumentPickerDelegate{
-    
-    let currentVC : UIViewController
-    var flexAction : FlexAction!
-    
-    init(_ currentVC : UIViewController){
-        self.currentVC = currentVC
-    }
-    
-    func importFile () -> (FlexAction, Array<Any?>?) -> Void? {
-        return { (action, argument) -> Void in
-            self.flexAction = action
-            
-            let documentPicker: UIDocumentPickerViewController = UIDocumentPickerViewController(documentTypes: ["com.apple.iwork.pages.pages"
-                                                                                                               , "com.apple.iwork.numbers.numbers"
-                                                                                                               , "com.apple.iwork.keynote.key"
-                                                                                                               , "public.image"
-                                                                                                               , "com.apple.application"
-                                                                                                               , "public.item"
-                                                                                                               , "public.data"
-                                                                                                               , "public.content"
-                                                                                                               , "public.audiovisual-content"
-                                                                                                               , "public.movie"
-                                                                                                               , "public.audiovisual-content"
-                                                                                                               , "public.video"
-                                                                                                               , "public.audio"
-                                                                                                               , "public.text"
-                                                                                                               , "public.data"
-                                                                                                               , "public.zip-archive"
-                                                                                                               , "com.pkware.zip-archive"
-                                                                                                               , "public.composite-content"
-                                                                                                               , "public.text"], in: UIDocumentPickerMode.import)
-            DispatchQueue.main.async {
-                documentPicker.delegate = self
-                documentPicker.modalPresentationStyle = UIModalPresentationStyle.fullScreen
-                self.currentVC.present(documentPicker, animated: true, completion: nil)
-            }
-        }
-    }
-    
-    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        let newUrls = urls.compactMap { (url: URL) -> URL? in
-            // Create file URL to temporary folder
-            var tempURL = URL(fileURLWithPath: NSTemporaryDirectory())
-            // Apend filename (name+extension) to URL
-            tempURL.appendPathComponent(url.lastPathComponent)
-            do {
-                // If file with same name exists remove it (replace file with new one)
-                if FileManager.default.fileExists(atPath: tempURL.path) {
-                    try FileManager.default.removeItem(atPath: tempURL.path)
-                }
-                // Move file from app_id-Inbox to tmp/filename
-                try FileManager.default.moveItem(atPath: url.path, toPath: tempURL.path)
-                return tempURL
-            } catch {
-                print(error.localizedDescription)
-                return nil
-            }
-        }
-
-        var returnDic = Dictionary<String,String>()
-        returnDic.updateValue(newUrls[0].absoluteString, forKey: "URLString")
-        returnDic.updateValue(newUrls[0].lastPathComponent, forKey: "Name")
-        print(returnDic)
-        flexAction.PromiseReturn(returnDic)
-    }
-    
-    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-        print("close")
-        controller.dismiss(animated: true, completion: nil)
-    }
-}
-
 /*
- 음성녹음
+    파일 다운로드
  */
-/*
-class VoiceRecord : NSObject{
+class FileDownload : NSObject{
     
-    var mWebView : FlexWebView!
-    
-    var audioPlayer : AVAudioPlayer!
-    var audioFile : URL!
-    var progressTimer : Timer!
     var flexAction : FlexAction!
-    
-    var isRecorderMode : Bool
-    var audioRecorder : AVAudioRecorder!
-    var endTime : String!
-    var currentTime : String!
-    var volume : Float!
-    var fileName : String!
-    var mode : String!
-    var recordTime : String!
-   // let timeRecordSelector:Selector = #selector(ViewController.updateRecordTime)
+    var fileURL : String!
+    var interaction:UIDocumentInteractionController?
+    var component : FlexComponent
 
     
-    init(_ mWebView : FlexWebView, _ isRecordMode : Bool){
-        self.isRecorderMode = isRecordMode
-        self.mWebView = mWebView
+    init(_ component : FlexComponent){
+        self.component = component
     }
     
-    func voiceRecordFunction () -> (FlexAction, Array<Any?>?) -> Void? {
+    func startFileDownload () -> (FlexAction, Array<Any?>?) -> Void?{
         return { (action, argument) -> Void in
-            print("voidRecordFunction")
+            self.flexAction  = action
+            self.fileURL = argument![0] as? String
             
-            self.flexAction = action
-            self.fileName = argument?[0] as? String
-            self.mode = argument?[1] as? String
-        
-            self.selectAudioFile()
-            
-            if self.mode == "Play" {
-                if !(self.isRecorderMode) {
-                    print("!!isRecorderMode  Play")
-                    self.volume = argument?[2] as? Float
-                    self.recordTime = self.convertNSTimeInterval2String(0)
-                    
-                    self.initPlay()
-                }else {
-                    print("isRecorderMode  Play")
-                    if let status = self.audioPlayer{
-                        status.stop()
-                        status.currentTime = 0
-                        self.recordTime = self.convertNSTimeInterval2String(0)
-                    }
-                    self.initRecord()
-                    self.progressTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.timerCallback), userInfo: nil, repeats: true)
-
-                }
-            }else if self.mode == "Stop"{
-                print("!!isRecorderMode  Stop")
-                if !(self.isRecorderMode) {
-                    self.btnStopAudio()
-                } else {
-                    print("isRecorderMode  Stop")
-                    self.btnStopRecord()
-                }
-            }else if self.mode == "Pause" {
-                if !(self.isRecorderMode) {
-                    print("!!isRecorderMode  Pause")
-                    self.btnPauseAudio()
-                }else {
-                    print("isRecorderMode  Pause")
-                    self.btnPauseRecord()
-                }
+            self.fileDownload { (success, path) in
+                DispatchQueue.main.async(execute: {
+                    self.openFileWithPath(filePath: path)
+                })
             }
         }
     }
     
-    @objc func timerCallback(){
-        mWebView.evalFlexFunc("Timer", sendData: currentTime!)
-    }
-
-    func selectAudioFile() -> Void {
-        if !(isRecorderMode) {
-            audioFile = Bundle.main.url(forResource: fileName, withExtension: "mp3")
-        }else{//녹음모드
-            //녹음모드일 때는 새 파일인 recordFile.m4a가 생성 된다.
-            let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            audioFile = documentDirectory.appendingPathComponent("\(fileName!).m4a")
-        }
-    }
-
-    func convertNSTimeInterval2String(_ time:TimeInterval) -> String {
-        let min = Int(time/60)
-        let sec = Int(time.truncatingRemainder(dividingBy: 60))
-        let strTime = String(format: "%02d:%02d",min,sec)
+    func fileDownload(completion: @escaping (_ success:Bool, _ filePath:URL) -> ()) {
         
-        return strTime
-    }
-
-    @objc func updatePlayTime() -> Void {
-        currentTime = convertNSTimeInterval2String(audioPlayer.currentTime)
-        print(currentTime!)
-    }
-
-    func btnPauseAudio() {
-        audioPlayer.pause()
-        flexAction.PromiseReturn("Pause Playing")
-    }
-
-    func btnStopAudio() {
-        audioPlayer.stop()
-        audioPlayer.currentTime = 0
-        currentTime = convertNSTimeInterval2String(0)
-        progressTimer.invalidate()
-        flexAction.PromiseReturn("Stop Playing")
+        guard let url = URL(string: fileURL) else {
+            print("Error: cannot create URL")
+            return
+        }
+    
+        let urlRequest = URLRequest(url: url)
+        let config = URLSessionConfiguration.default
+        let session = URLSession(configuration: config)
+        
+        let task = session.dataTask(with: urlRequest) { (data, response, error) in
+            
+            guard error == nil else {
+                debugPrint("Error!!")
+                print(error as Any)
+                return
+            }
+            
+            guard let responseData = data else {
+                print("Error: data empty!!")
+                return
+            }
+            
+            let fileManager = FileManager()
+            
+            let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+            
+            let dataPath = documentsDirectory.appendingPathComponent("Downloads")
+            
+            do {
+                // 디렉토리 생성 -> 이미 있으면 catch로 들어감
+                try fileManager.createDirectory(atPath: dataPath.path, withIntermediateDirectories: false, attributes: nil)
+                
+            } catch let error as NSError {
+                print("Error creating directory: \(error.localizedDescription)")
+                //self.flexAction.PromiseReturn("Error creating directory: \(error.localizedDescription)")
+            }
+            
+            do {
+                let writePath = dataPath.appendingPathComponent(URL(string:self.fileURL)!.lastPathComponent)
+                print(URL(string:self.fileURL)!.lastPathComponent)
+                try responseData.write(to: writePath)
+                completion(true, writePath)
+                self.flexAction.PromiseReturn("Download Complete!")
+                
+            } catch let error as NSError {
+                print("Error Writing File : \(error.localizedDescription)")
+                self.flexAction.PromiseReturn("Error Writing File : \(error.localizedDescription)")
+                return
+            }
+        }
+        task.resume()
     }
     
-    func btnPauseRecord() {
-        audioRecorder.pause()
-        flexAction.PromiseReturn("Pause Recording")
-    }
-    
-    func btnStopRecord() {
-        audioRecorder.stop()
-        flexAction.PromiseReturn("Stop Recording \(String(describing: currentTime))")
-        recordTime = convertNSTimeInterval2String(0)
-        progressTimer.invalidate()
+    func openFileWithPath(filePath : URL) {
+         DispatchQueue.main.async {
+            self.interaction = UIDocumentInteractionController(url: filePath)
+            self.interaction?.delegate = self
+            self.interaction?.presentPreview(animated: true)
+        }
     }
 }
 
-extension VoiceRecord : AVAudioPlayerDelegate, AVAudioRecorderDelegate {
-    //녹음을 위한 초기화 함수 : 음질은 최대, 비트율 320kbps, 오디오 채널은 2, 샘플율은 44,100hz
-    func initRecord() -> Void {
-        let recordSettings = [
-            AVFormatIDKey : NSNumber(value : kAudioFormatAppleLossless as UInt32),
-            AVEncoderAudioQualityKey : AVAudioQuality.max.rawValue,
-            AVEncoderBitRateKey : 320000,
-            AVNumberOfChannelsKey : 2,
-            AVSampleRateKey : 44100.0] as [String : Any]
-
-        do {
-            audioRecorder = try AVAudioRecorder(url: audioFile, settings: recordSettings)
-        } catch let error as NSError {
-            print("error-initRecord:\(error)")
-        }
-        
-        audioRecorder.delegate = self
-        audioRecorder.isMeteringEnabled = true
-        audioRecorder.prepareToRecord()
-        if let volume = volume {
-            audioPlayer.volume = volume
-        }
-        endTime = convertNSTimeInterval2String(0)
-        currentTime = convertNSTimeInterval2String(0)
-        
-        let session = AVAudioSession.sharedInstance()
-
-        do {
-            try session.setCategory(AVAudioSession.Category.playAndRecord)
-        } catch let error as NSError {
-            print("error-setcategory : \(error)")
-        }
-        
-        do {
-            try session.setActive(true)
-        } catch let error as NSError {
-            print("error-setActive : \(error)")
-        }
-    }
-
-    func initPlay(){
-        do {
-            audioPlayer = try AVAudioPlayer(contentsOf: audioFile)
-        } catch let error as NSError { //오류타입
-            print("error-initplay : 해당 오디오파일이 존재하지 않습니다. \(error) ")
-        }
-
-        audioPlayer.delegate = self
-        audioPlayer.prepareToPlay()
-        if let volume = volume {
-           audioPlayer.volume = volume
-        }
-        endTime = convertNSTimeInterval2String(audioPlayer.duration)
-        currentTime = convertNSTimeInterval2String(0)
+extension FileDownload : UIDocumentInteractionControllerDelegate {
+    public func documentInteractionControllerViewControllerForPreview(_ controller: UIDocumentInteractionController) -> UIViewController {
+        return self.component.parentViewController!
     }
     
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        progressTimer.invalidate()
-        flexAction.PromiseReturn("Finished Playing")
+    public func documentInteractionControllerDidEndPreview(_ controller: UIDocumentInteractionController) {
+        
+        controller.dismissPreview(animated: true)
+        interaction = nil
     }
-    func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-            flexAction.PromiseReturn("Finished Recording")
-    }
-
 }
-*/
+

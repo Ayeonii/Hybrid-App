@@ -6,6 +6,7 @@ target 'HybridApp' do
   use_frameworks!
   
   # Pods for HybridApp
-  pod 'FlexHybridApp', '0.2.2-1'
+  pod 'FlexHybridApp'
   pod 'DKImagePickerController'
+  pod 'KeychainAccess'
 end
