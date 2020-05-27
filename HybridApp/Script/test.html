@@ -15,8 +15,8 @@
              console.log('Received by Native ---- ' + data);
              return Promise.resolve('Thanks Flex!')
          }
-         $flex.web.Timer = function(data) {
-             console.log("time : "+ data)
+         $flex.web.result = function(data) {
+             console.log(data)
          }
      }
   
@@ -155,7 +155,7 @@
 
     const FileDownload = async () => {
         try {
-            const result = await $flex.FileDownload("http://www.africau.edu/images/default/sample.pdf");
+            const result = await $flex.FileDownload("http://www.alessioatzeni.com/wp-content/themes/az/_include/metrize/custom/metrize-icons/download/Metrize_Icons.zip");
             console.log('Return by Native with FileDownload   : '+ result)
         }catch {
             consoel.log('FileDownload() error 발생')

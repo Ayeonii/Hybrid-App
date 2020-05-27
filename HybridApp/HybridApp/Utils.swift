@@ -902,6 +902,7 @@ class FileDownload : NSObject{
             self.flexAction  = action
             self.fileURL = argument![0] as? String
             
+            self.component.evalFlexFunc("result", sendData: "Download Start!")
             self.fileDownload { (success, path) in
                 DispatchQueue.main.async(execute: {
                     self.openFileWithPath(filePath: path)
@@ -940,15 +941,13 @@ class FileDownload : NSObject{
             
             let dataPath = documentsDirectory.appendingPathComponent("Downloads")
             
-            do {
-                // 디렉토리 생성 -> 이미 있으면 catch로 들어감
-                try fileManager.createDirectory(atPath: dataPath.path, withIntermediateDirectories: false, attributes: nil)
-                
-            } catch let error as NSError {
-                print("Error creating directory: \(error.localizedDescription)")
-                //self.flexAction.PromiseReturn("Error creating directory: \(error.localizedDescription)")
+         
+            // 디렉토리 생성 -> 디렉토리가 없으면 생성
+            if !documentsDirectory.pathComponents.contains("Downloads") {
+                try? fileManager.createDirectory(atPath: dataPath.path, withIntermediateDirectories: false, attributes: nil)
             }
             
+        
             do {
                 let writePath = dataPath.appendingPathComponent(URL(string:self.fileURL)!.lastPathComponent)
                 print(URL(string:self.fileURL)!.lastPathComponent)
