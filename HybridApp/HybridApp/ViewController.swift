@@ -11,12 +11,13 @@ import WebKit
 import FlexHybridApp
 import KeychainAccess
 
-class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler {
+class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler,WKUIDelegate {
     
     var mWebView: FlexWebView!
     var component = FlexComponent()
     let userDefault = UserDefaults.standard
-    
+
+    var createWebView: WKWebView?
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -25,8 +26,8 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     override func viewDidLoad() {
         super.viewDidLoad()
         
-   
-        
+      
+       
         component.setAction("Camera", CameraPhotos(self).cameraFunction())
              
         component.setAction("SinglePhoto", CameraPhotos(self).photosFunction())
@@ -61,7 +62,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         
         component.setInterface ("DeviceUUID", self.keyChainInit())
         
-
         component.setInterface("test2")
         { (arguments) -> Any? in
             self.mWebView.evalFlexFunc("help", sendData: "Help me Flex!")
@@ -110,7 +110,10 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         
         mWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "test", ofType: "html", inDirectory: "Script")!)))
         
-
+        mWebView.uiDelegate = self
+        mWebView.navigationDelegate = self
+        mWebView.configuration.preferences.javaScriptCanOpenWindowsAutomatically = true
+       
     }
     
     func keyChainInit() -> (Array<Any?>?) -> Any? {
@@ -132,7 +135,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
 
     override
     func viewWillAppear(_ animated: Bool) {
-        // set user-custom navigationDelegate
         mWebView.navigationDelegate = self
     }
 
@@ -143,6 +145,24 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         print("user contentController")
     }
- 
+    
+     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+
+              let frame = UIScreen.main.bounds
+              createWebView = WKWebView(frame: frame, configuration: configuration)
+              createWebView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+              createWebView?.navigationDelegate = self
+              createWebView?.uiDelegate = self
+              self.view.addSubview(createWebView!)
+           
+              return createWebView!
+          }
+          
+          func webViewDidClose(_ webView: WKWebView) {
+              if webView == createWebView {
+                  createWebView?.removeFromSuperview()
+                  createWebView = nil
+              }
+          }
 }
 
