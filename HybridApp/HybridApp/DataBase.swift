@@ -21,8 +21,6 @@ class DataBase: NSObject {
             print("Fail to Open DataBase")
         }
         
-        print(fileURL)
-        
         if sqlite3_exec(db, "CREATE TABLE IF NOT EXISTS VisitLogs (id INTEGER PRIMARY KEY AUTOINCREMENT, URL TEXT, Date DOUBLE)", nil, nil, nil) != SQLITE_OK {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error creating table: \(errmsg)")

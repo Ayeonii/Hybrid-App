@@ -1127,9 +1127,8 @@ class WebPopup : NSObject, WKNavigationDelegate, WKUIDelegate{
 
                 self.db.openDataBase()
                 self.db.createVisitURL(url: self.createWebView.url!, date: Date())
-                self.db.readVisitURL()
-                
-                WKWebView.animate(withDuration: 0.2, animations: {()->Void in
+
+                WKWebView.animate(withDuration: 0.1, animations: {()->Void in
                     let height = self.createWebView!.frame.height
                     let width = self.createWebView!.frame.width
                     let yPos = self.currentVC.view.frame.height / 2 - height / 2
@@ -1150,9 +1149,7 @@ class WebPopup : NSObject, WKNavigationDelegate, WKUIDelegate{
             createWebView = nil
             tempView = nil
             
-            db.openDataBase()
             db.createVisitURL(url: mWebview.url!, date: Date())
-            db.readVisitURL()
         }
     }
         

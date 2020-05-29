@@ -92,7 +92,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         let db = DataBase()
         db.openDataBase()
         db.createVisitURL(url: mWebView.url!, date: Date())
-        db.readVisitURL()
         
         if #available(iOS 13.0, *) {
             view.backgroundColor = UIColor.systemBackground
@@ -101,7 +100,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             mWebView.topAnchor.constraint(equalTo: safeArea.topAnchor).isActive = true
             mWebView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor).isActive = true
             mWebView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor).isActive = true
-            
         }
         else if #available(iOS 11.0, *) {
             view.backgroundColor = UIColor.white
