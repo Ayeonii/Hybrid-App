@@ -267,7 +267,6 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
         }
     }
     
-    
     //사진 여러장 선택
     func MultiplePhotosFunction() -> (FlexAction, Array<Any?>?) -> Void?{
         return { (action, arguments) -> Void in
@@ -317,7 +316,6 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
         })
         return image
     }
-    
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.currentVC.dismiss(animated: true) {self.imageAction?.PromiseReturn("Cancel")}
@@ -704,7 +702,6 @@ class CodeScan : NSObject {
                     
                 }
                 self.requestCaptureSessionStartRunning()
-                
             }
         }
     }
@@ -1086,19 +1083,20 @@ class User {
 class WebPopup : NSObject, WKNavigationDelegate, WKUIDelegate{
     
     private var currentVC : UIViewController!
-    var createWebView: WKWebView!
-    var tempView : UIView!
-    var mWebview : FlexWebView!
-    var flexAction : FlexAction!
+    private var createWebView: WKWebView!
+    private var tempView : UIView!
+    private var mWebview : FlexWebView!
+    private var flexAction : FlexAction!
+    private  let db = DataBase()
     
     func popupFunction(_ component : FlexComponent) -> (FlexAction, Array<Any?>?) -> Void?
-    { return { (action, argument) -> Void in
+    {
+        return { (action, argument) -> Void in
             DispatchQueue.main.async {
 
                 self.currentVC  = component.parentViewController!
                 self.mWebview = component.FlexWebView!
                 self.mWebview.uiDelegate = self
-                
                 self.flexAction = action
                 
                 let urlName = argument?[0] as! String
@@ -1107,13 +1105,8 @@ class WebPopup : NSObject, WKNavigationDelegate, WKUIDelegate{
                 var x = argument?[2]
                 var y = argument?[3]
                 
-                if x == nil{
-                    x = 1.0
-                }
-                
-                if y == nil{
-                    y = 1.0
-                }
+                if x == nil{ x = 1.0 }
+                if y == nil{ y = 1.0 }
                 
                 self.tempView = UIView(frame: self.currentVC.view.bounds)
                 self.tempView?.backgroundColor = UIColor.black.withAlphaComponent(0.7)
@@ -1132,10 +1125,9 @@ class WebPopup : NSObject, WKNavigationDelegate, WKUIDelegate{
                 
                 self.createWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: urlName, ofType: type, inDirectory: "Script")!)))
 
-                let db = DataBase()
-                db.openDataBase()
-                db.createVisitURL(url: self.createWebView.url!, date: Date())
-                db.readVisitURL()
+                self.db.openDataBase()
+                self.db.createVisitURL(url: self.createWebView.url!, date: Date())
+                self.db.readVisitURL()
                 
                 WKWebView.animate(withDuration: 0.2, animations: {()->Void in
                     let height = self.createWebView!.frame.height
@@ -1146,16 +1138,21 @@ class WebPopup : NSObject, WKNavigationDelegate, WKUIDelegate{
                                                        width: width,
                                                        height: height)
                 })
-                self.flexAction.PromiseReturn("dddd")
+                self.flexAction.PromiseReturn("Popup Open")
             }
        }
     }
+    
     func webViewDidClose(_ webView: WKWebView) {
         if webView == createWebView {
             tempView?.removeFromSuperview()
             createWebView?.removeFromSuperview()
             createWebView = nil
             tempView = nil
+            
+            db.openDataBase()
+            db.createVisitURL(url: mWebview.url!, date: Date())
+            db.readVisitURL()
         }
     }
         

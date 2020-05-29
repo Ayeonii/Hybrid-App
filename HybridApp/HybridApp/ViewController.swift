@@ -55,7 +55,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         
         component.setInterface ("Notification", Notification(self).notifiFunction())
         
-        component.setAction ("FileDownload", FileDownload(component).startFileDownload() )
+        component.setAction ("FileDownload", FileDownload(component).startFileDownload())
         
         component.setInterface ("UserDefault", User().userDefaultFunction())
         
