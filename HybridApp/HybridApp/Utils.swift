@@ -689,9 +689,8 @@ class CodeScan : NSObject {
             self.flexAction = action
             if let captureSession = self.createCaptureSession(){
                 self.captureSession = captureSession
-                print ("codeScanFunction")
+
                 DispatchQueue.main.async {
-                    print ("DispatchQueue")
                     self.previewLayer = self.createPreviewLayer(withCaptureSession : captureSession)
                     
                     self.view.isUserInteractionEnabled = false
@@ -1082,4 +1081,82 @@ class User {
             return returnValue
         }
     }
+}
+
+class WebPopup : NSObject, WKNavigationDelegate, WKUIDelegate{
+    
+    private var currentVC : UIViewController!
+    var createWebView: WKWebView!
+    var tempView : UIView!
+    var mWebview : FlexWebView!
+    var flexAction : FlexAction!
+    
+    func popupFunction(_ component : FlexComponent) -> (FlexAction, Array<Any?>?) -> Void?
+    { return { (action, argument) -> Void in
+            DispatchQueue.main.async {
+
+                self.currentVC  = component.parentViewController!
+                self.mWebview = component.FlexWebView!
+                self.mWebview.uiDelegate = self
+                
+                self.flexAction = action
+                
+                let urlName = argument?[0] as! String
+                let type = argument?[1] as! String
+                
+                var x = argument?[2]
+                var y = argument?[3]
+                
+                if x == nil{
+                    x = 1.0
+                }
+                
+                if y == nil{
+                    y = 1.0
+                }
+                
+                self.tempView = UIView(frame: self.currentVC.view.bounds)
+                self.tempView?.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+                self.currentVC.view.addSubview(self.tempView!)
+                
+                let sizeX = self.tempView!.frame.width * (x as! CGFloat)
+                let sizeY = self.tempView!.frame.height * (y as! CGFloat)
+                
+                let startX = self.tempView!.frame.width / 2 - sizeX / 2
+                let startY = self.tempView!.frame.height
+            
+                self.createWebView = WKWebView(frame: CGRect(x: startX, y: startY , width: sizeX , height: sizeY), configuration: WKWebViewConfiguration())
+                self.createWebView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                self.createWebView?.uiDelegate = self
+                self.tempView?.addSubview(self.createWebView!)
+                
+                self.createWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: urlName, ofType: type, inDirectory: "Script")!)))
+
+                let db = DataBase()
+                db.openDataBase()
+                db.createVisitURL(url: self.createWebView.url!, date: Date())
+                db.readVisitURL()
+                
+                WKWebView.animate(withDuration: 0.2, animations: {()->Void in
+                    let height = self.createWebView!.frame.height
+                    let width = self.createWebView!.frame.width
+                    let yPos = self.currentVC.view.frame.height / 2 - height / 2
+                    let xPos = self.currentVC.view.frame.width / 2 - width / 2
+                    self.createWebView!.frame = CGRect(x: xPos, y: yPos,
+                                                       width: width,
+                                                       height: height)
+                })
+                self.flexAction.PromiseReturn("dddd")
+            }
+       }
+    }
+    func webViewDidClose(_ webView: WKWebView) {
+        if webView == createWebView {
+            tempView?.removeFromSuperview()
+            createWebView?.removeFromSuperview()
+            createWebView = nil
+            tempView = nil
+        }
+    }
+        
 }

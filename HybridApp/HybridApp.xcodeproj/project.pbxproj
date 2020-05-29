@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		47DE6B731BE4AAA5873A7528 /* Pods_HybridApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E1C673E1C5C46F78C3941C2 /* Pods_HybridApp.framework */; };
 		CC7FE821247B917400ED2455 /* CoreNFC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7FE820247B917400ED2455 /* CoreNFC.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		CC8A52A82480DEC0005E9387 /* DataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52A72480DEC0005E9387 /* DataBase.swift */; };
 		CC9B341E246CFABC00FD9FCA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9B341D246CFABC00FD9FCA /* AppDelegate.swift */; };
 		CC9B3420246CFABC00FD9FCA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9B341F246CFABC00FD9FCA /* SceneDelegate.swift */; };
 		CC9B3422246CFABC00FD9FCA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9B3421246CFABC00FD9FCA /* ViewController.swift */; };
@@ -26,6 +27,7 @@
 		CC2A99C9247DE88900C521E1 /* HybridApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HybridApp.entitlements; sourceTree = "<group>"; };
 		CC2A99CA247DF35A00C521E1 /* HybridApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HybridApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		CC7FE820247B917400ED2455 /* CoreNFC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreNFC.framework; path = System/Library/Frameworks/CoreNFC.framework; sourceTree = SDKROOT; };
+		CC8A52A72480DEC0005E9387 /* DataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBase.swift; sourceTree = "<group>"; };
 		CC9B341A246CFABC00FD9FCA /* HybridApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HybridApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC9B341D246CFABC00FD9FCA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CC9B341F246CFABC00FD9FCA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 				CC9B342B246CFABE00FD9FCA /* Info.plist */,
 				CCAF068F2473BCE2002F47AD /* Utils.swift */,
 				CC2A99CA247DF35A00C521E1 /* HybridApp-Bridging-Header.h */,
+				CC8A52A72480DEC0005E9387 /* DataBase.swift */,
 			);
 			path = HybridApp;
 			sourceTree = "<group>";
@@ -222,6 +225,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC8A52A82480DEC0005E9387 /* DataBase.swift in Sources */,
 				CC9B3422246CFABC00FD9FCA /* ViewController.swift in Sources */,
 				CC9B341E246CFABC00FD9FCA /* AppDelegate.swift in Sources */,
 				CC9B3420246CFABC00FD9FCA /* SceneDelegate.swift in Sources */,

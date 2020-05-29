@@ -10,14 +10,17 @@ import UIKit
 import WebKit
 import FlexHybridApp
 import KeychainAccess
+import SQLite3
 
-class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler,WKUIDelegate {
+class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler{
     
     var mWebView: FlexWebView!
     var component = FlexComponent()
     let userDefault = UserDefaults.standard
-
-    var createWebView: WKWebView?
+    var createWebView: WKWebView!
+    var tempView : UIView!
+    
+    var currentURL : URL!
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -26,8 +29,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     override func viewDidLoad() {
         super.viewDidLoad()
         
-      
-       
         component.setAction("Camera", CameraPhotos(self).cameraFunction())
              
         component.setAction("SinglePhoto", CameraPhotos(self).photosFunction())
@@ -62,6 +63,8 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         
         component.setInterface ("DeviceUUID", self.keyChainInit())
         
+        component.setAction ("WebPopup", WebPopup().popupFunction(component))
+        
         component.setInterface("test2")
         { (arguments) -> Any? in
             self.mWebView.evalFlexFunc("help", sendData: "Help me Flex!")
@@ -83,7 +86,14 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         mWebView.translatesAutoresizingMaskIntoConstraints = false
         mWebView.scrollView.bounces = false
         view.addSubview(mWebView)
+        
+        mWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "test", ofType: "html", inDirectory: "Script")!)))
 
+        let db = DataBase()
+        db.openDataBase()
+        db.createVisitURL(url: mWebView.url!, date: Date())
+        db.readVisitURL()
+        
         if #available(iOS 13.0, *) {
             view.backgroundColor = UIColor.systemBackground
             let safeArea = self.view.safeAreaLayoutGuide
@@ -91,6 +101,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             mWebView.topAnchor.constraint(equalTo: safeArea.topAnchor).isActive = true
             mWebView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor).isActive = true
             mWebView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor).isActive = true
+            
         }
         else if #available(iOS 11.0, *) {
             view.backgroundColor = UIColor.white
@@ -106,16 +117,8 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
             mWebView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
             mWebView.bottomAnchor.constraint(equalTo: bottomLayoutGuide.topAnchor).isActive = true
         }
-       
-        
-        mWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "test", ofType: "html", inDirectory: "Script")!)))
-        
-        mWebView.uiDelegate = self
-        mWebView.navigationDelegate = self
-        mWebView.configuration.preferences.javaScriptCanOpenWindowsAutomatically = true
-       
     }
-    
+
     func keyChainInit() -> (Array<Any?>?) -> Any? {
         let keychain = Keychain(service: "kr.lay.HybridApp")
         return {(argument) -> String in
@@ -136,33 +139,16 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     override
     func viewWillAppear(_ animated: Bool) {
         mWebView.navigationDelegate = self
+        mWebView.configuration.preferences.javaScriptCanOpenWindowsAutomatically = true
     }
 
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         print("user navigationDelegate")
+        mWebView.evaluateJavaScript("let a = window.open .....",completionHandler: nil)
     }
     
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         print("user contentController")
     }
     
-     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-
-              let frame = UIScreen.main.bounds
-              createWebView = WKWebView(frame: frame, configuration: configuration)
-              createWebView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-              createWebView?.navigationDelegate = self
-              createWebView?.uiDelegate = self
-              self.view.addSubview(createWebView!)
-           
-              return createWebView!
-          }
-          
-          func webViewDidClose(_ webView: WKWebView) {
-              if webView == createWebView {
-                  createWebView?.removeFromSuperview()
-                  createWebView = nil
-              }
-          }
 }
-
