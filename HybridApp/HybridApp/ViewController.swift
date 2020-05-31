@@ -43,7 +43,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         
         component.setInterface("RootingCheck", CheckRooting().checkRootingFunction(self))
         
-        component.setInterface("Network", Reachability().checkNetworkConnect(self))
+        component.setAction("Network", CheckNetwork(self).checkNetworkConnect())
         
         component.setAction("QRCodeScan", CodeScan(self).codeScanFunction())
         

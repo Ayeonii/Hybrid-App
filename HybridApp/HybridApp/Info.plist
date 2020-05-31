@@ -2,13 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
-	<key>UISupportsDocumentBrowser</key>
-	<true/>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -21,28 +14,46 @@
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>HybridApp</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>flexHybrid</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME) 는 카메라 권한을 필요로 합니다. 허용 안함 시 일부 기능이 동작하지 않습니다.</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>$(PRODUCT_NAME) 는 앨번 접근 권한을 필요로합니다. 허용 안함 시 일부 기능이 동작하지 않습니다.</string>
 	<key>NFCReaderUsageDescription</key>
 	<string>NFC tag to scan it.</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>$(PRODUCT_NAME) 는 미디어 접근 권한을 필요로합니다. 허용 안함 시 일부 기능이 동작하지 않습니다.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) 는 카메라 권한을 필요로 합니다. 허용 안함 시 일부 기능이 동작하지 않습니다.</string>
 	<key>NSContactsUsageDescription</key>
 	<string>$(DEVELOPMENT_LANGUAGE) 는 연락처 접근 권한을 필요로 합니다. 허용 안함 시 일부 기능이 동작하지 않습니다. </string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>항상 위치 접근을 허용합니다.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>앱 실행 중에만 위치 접근을 허용합니다.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>$(PRODUCT_NAME) 는 앨범 접근 권한을 필요로 합니다. 허용 안함 시 일부 기능이 동작하지 않습니다.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>$(PRODUCT_NAME) 는 마이크 접근 권한을 필요로합니다. 허용 안함 시 일부 기능이 동작하지 않습니다.</string>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>$(PRODUCT_NAME) 는 미디어 접근 권한을 필요로합니다. 허용 안함 시 일부 기능이 동작하지 않습니다.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>$(PRODUCT_NAME) 는 앨번 접근 권한을 필요로합니다. 허용 안함 시 일부 기능이 동작하지 않습니다.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) 는 앨범 접근 권한을 필요로 합니다. 허용 안함 시 일부 기능이 동작하지 않습니다.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -83,5 +94,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UISupportsDocumentBrowser</key>
+	<true/>
 </dict>
 </plist>
