@@ -65,6 +65,8 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         
         component.setAction ("WebPopup", WebPopup().popupFunction(component))
         
+        component.setInterface("Record", openVoice().openVoiceScheme())
+        
         component.setInterface("test2")
         { (arguments) -> Any? in
             self.mWebView.evalFlexFunc("help", sendData: "Help me Flex!")

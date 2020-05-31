@@ -1283,4 +1283,208 @@ class WebPopup : NSObject, WKNavigationDelegate, WKUIDelegate{
         }
     }
 }
+/*
+class Record : NSObject,AVAudioPlayerDelegate, AVAudioRecorderDelegate{
+    
+    var audioPlayer : AVAudioPlayer!    //avaudioplayer인스턴스 변수
+    var audioFile : URL!                // 재생할 오디오의 파일명 변수
+    let MAX_VOLUME : Float = 10.0       //최대 불륨, 실수형 상수
+    var progressTimer : Timer!          //타이머를 위한 변수
+    var flexActin : FlexAction!
+    
+    var recordingTime : String = "0"
+    var currentTime : String!
+    var endTime : String!
+        //let timePlayerSelector:Selector = #selector(ViewController.updatePlayTime)
+        //let timeRecordSelector:Selector = #selector(ViewController.updateRecordTime)
+    private var component : FlexComponent!
+    private var mWebview : FlexWebView!
+    
+    var audioRecorder : AVAudioRecorder!
+    var isRecorderMode = false //현재는 재생 모드
+    
+    var isRecording : Bool? = nil
+    var isPlaying : Bool? = nil
 
+    func startRecordingFunction (_ component : FlexComponent, _ isRecorderMode : Bool) -> (FlexAction, Array<Any?>) -> Void {
+        return { (action, argument) -> Void in
+            
+            self.component = component
+            self.flexActin = action
+            self.mWebview = component.FlexWebView!
+            self.isRecorderMode = isRecorderMode
+            self.selectAudioFile()
+            
+            if (!self.isRecorderMode) {
+                if self.isPlaying != nil{
+                    self.btnPlayAudio()
+                }else {
+                    self.initPlay()
+                }
+            }else{
+                if self.isRecording != nil{
+                      self.btnRecord()
+                }else{
+                    self.initRecord()
+                }
+            }
+            self.flexActin.PromiseReturn("Start Record")
+        }
+    }
+    
+    //녹음기능 초기화 함수
+    func selectAudioFile() -> Void {
+        //재생모드
+        if !isRecorderMode {
+            audioFile = Bundle.main.url(forResource: "testRecordfile", withExtension: "mp3")
+        }else{//녹음모드
+            let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            audioFile = documentDirectory.appendingPathComponent("testRecordfile.m4a")
+        }
+    }
+
+    func initRecord() -> Void {
+        let recordSettings = [
+            AVFormatIDKey : NSNumber(value : kAudioFormatAppleLossless as UInt32),
+            AVEncoderAudioQualityKey : AVAudioQuality.max.rawValue,
+            AVEncoderBitRateKey : 320000,
+            AVNumberOfChannelsKey : 2,
+            AVSampleRateKey : 44100.0] as [String : Any]
+        do {
+            // selectAudioFile 함수에서 저장한 audioFile을 url로 하는 audioRecorder 인스턴스를 생성
+            audioRecorder = try AVAudioRecorder(url: audioFile, settings: recordSettings)
+        } catch let error as NSError {
+            print("error-initRecord:\(error)")
+        }
+        audioRecorder.delegate = self
+        audioRecorder.isMeteringEnabled = true
+        audioRecorder.prepareToRecord()
+
+        endTime = convertNSTimeInterval2String(0)
+        currentTime = convertNSTimeInterval2String(0)
+
+        let session = AVAudioSession.sharedInstance()
+        
+        do {
+            try session.setCategory(AVAudioSession.Category.playAndRecord)
+        } catch let error as NSError {
+            print("error-setcategory : \(error)")
+        }
+        
+        do {
+            try session.setActive(true)
+        } catch let error as NSError {
+            print("error-setActive : \(error)")
+        }
+    }
+
+    func initPlay(){
+
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: audioFile) //오류발생 가능 함수
+        } catch let error as NSError { //오류타입
+            print("해당 오디오파일이 존재하지 않습니다. error-initplay : \(error)")  //오류타입에 대한 처리 구문
+        }
+        
+        audioPlayer.delegate = self
+        audioPlayer.prepareToPlay()
+    
+        endTime = convertNSTimeInterval2String(audioPlayer.duration)
+        currentTime = convertNSTimeInterval2String(0)
+    }
+    
+   
+    
+    //재생버튼
+    func btnPlayAudio() {
+        self.isPlaying = true
+        audioPlayer.play()
+        progressTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(sendPlayProgress), userInfo: nil, repeats: true)
+    }
+
+    
+    func swRecordMode() {
+        
+        if self.isPlaying! == true {
+            //스위치가 녹음 모드일 때
+                //오디오 재생 중지, 현재시간 00:00으로 설정, record값 참으로 설정 녹음 버튼과 시간 활성화
+            audioPlayer.stop()
+            audioPlayer.currentTime = 0
+            recordingTime = convertNSTimeInterval2String(0)
+            isRecorderMode = true
+            self.isPlaying = false
+        }else if self.isRecording! == true {
+                //재생모드일 때, 레코드모드 값을 거짓으로 바꾸고, 녹음 버튼과 시간을 비활성화, 녹음 시간 0
+                isRecorderMode = false
+                isRecording = false
+                recordingTime = convertNSTimeInterval2String(0)
+        }
+
+        selectAudioFile()
+        if !isRecorderMode {
+            initPlay()
+        }else {
+            initRecord()
+        }
+    }
+
+ 
+ 
+    //녹음하기 버튼 함수
+        func btnRecord() {
+            if(!isRecording!){
+                    audioRecorder.record()
+                    progressTimer=Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(sendRecordingProgress), userInfo: nil, repeats: true)
+                self.isRecording = true
+            }else {
+                audioRecorder.stop()
+                progressTimer.invalidate() //녹음이 정지되면 타이머 무효화
+                self.isRecording = false
+                initPlay()
+            }
+        }
+    //현재진행시간 전송
+    @objc func sendPlayProgress(){
+        currentTime = convertNSTimeInterval2String(audioPlayer.currentTime)
+        self.mWebview.evalFlexFunc("result", sendData : currentTime!)
+    }
+    
+    //현재시간 전송
+    @objc func sendRecordingProgress(){
+        currentTime = convertNSTimeInterval2String(audioRecorder.currentTime)
+        self.mWebview.evalFlexFunc("result", sendData : currentTime!)
+    }
+    
+    func convertNSTimeInterval2String(_ time:TimeInterval) -> String {
+
+               let min = Int(time/60)
+               let sec = Int(time.truncatingRemainder(dividingBy: 60))
+               let strTime = String(format: "%02d:%02d",min,sec)
+           
+               return strTime
+       }
+
+}
+
+*/
+
+class openVoice {
+    
+    func openVoiceScheme() -> (Array<Any?>?) -> Any {
+        return { (argumnet) -> String in
+        guard let schemeURL = URL(string: "voicememos://") else{
+            return "Cannot Open"
+        }
+            DispatchQueue.main.async {
+                if UIApplication.shared.canOpenURL(schemeURL){
+                    print(schemeURL)
+                    UIApplication.shared.open(schemeURL, options: [:], completionHandler: {
+                        (bool) -> Void in
+                        print(bool)
+                    })
+                }
+            }
+            return "VoiceApp"
+        }
+    }
+}
