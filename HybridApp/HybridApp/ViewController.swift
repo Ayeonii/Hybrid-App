@@ -45,7 +45,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         
         component.setAction("Network", CheckNetwork(self).checkNetworkConnect())
         
-        component.setAction("QRCodeScan", CodeScan(self).codeScanFunction())
+        component.setAction("QRCodeScan", QRCodeScan(self).codeScanFunction())
         
         #if canImport(CoreNFC)
         component.setAction ("NFCReading", NFC().nfcReadingFunction())
@@ -94,7 +94,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         let db = DataBase()
         db.openDataBase()
         db.createVisitURL(url: mWebView.url!, date: Date())
-        
+        db.readVisitURL()
         if #available(iOS 13.0, *) {
             view.backgroundColor = UIColor.systemBackground
             let safeArea = self.view.safeAreaLayoutGuide
