@@ -93,7 +93,7 @@ class DataBase: NSObject {
 
         if sqlite3_prepare_v2(db, deleteStatementStirng, -1, &deleteStatement, nil) == SQLITE_OK {
             if sqlite3_step(deleteStatement) == SQLITE_DONE {
-                print("Deleted")
+                print("Data inserted in 3Days ago is Deleted")
             } else {
                 print("Delete Fail")
             }

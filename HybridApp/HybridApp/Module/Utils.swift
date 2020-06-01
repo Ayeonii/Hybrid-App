@@ -6,9 +6,6 @@
 //  Copyright © 2020 Ayeon. All rights reserved.
 //
 
-
-
-//공통
 import UIKit
 import FlexHybridApp
 
@@ -20,8 +17,6 @@ enum AuthrizeStatus : String {
     case error = "Error"
 }
 
-
-
 /*
   모듈공통사용기능
  */
@@ -30,7 +25,6 @@ class Utils: NSObject {
     let authDialog = UIAlertController (title : "권한요청", message : "권한을 허용해야만 해당 기능을 사용하실 수 있습니다.", preferredStyle: .alert)
     let userDefault = UserDefaults.standard
     var history = Array<Any?>()
-    
     
     func setUserHistory(forKey : String){
         
@@ -41,12 +35,11 @@ class Utils: NSObject {
             self.history.append(Date())
         }
 
-        self.userDefault.set(self.history,forKey: "CameraBtn")
-        print(self.userDefault.array(forKey: "CameraBtn") as Any)
+        self.userDefault.set(self.history,forKey: forKey)
+   //     print(self.userDefault.array(forKey: forKey) as Any)
     }
     
     func getUserHistory(forKey : String) -> Array<Any?>? {
-        
         return self.userDefault.array(forKey: forKey)
     }
     

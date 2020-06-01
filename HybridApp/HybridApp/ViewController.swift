@@ -20,8 +20,7 @@ class ViewController: UIViewController {
     var tempView : UIView!
     var currentURL : URL!
     let urlObserver = URLObserver()
-   
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -30,34 +29,12 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         let _ = ListeningObserver(self.urlObserver)
-        
-        component.setAction("Camera", CameraPhotos(self).cameraFunction())
-             
-        component.setAction("SinglePhoto", CameraPhotos(self).photosFunction())
-        
-        component.setAction("MultiplePhotos", CameraPhotos(self).MultiplePhotosFunction())
-    
+ 
         component.setInterface("Location", Location(self).locationFunction())
-        
-        component.setAction("Dialog", Dialog().dialogFunction(self))
-        
-        component.setAction("BioAuthentication", BioAuth().authFunction())
-        
+         
         component.setInterface("RootingCheck", CheckRooting().checkRootingFunction(self))
         
-        component.setAction("Network", CheckNetwork(self).checkNetworkConnect())
-        
-        component.setAction("QRCodeScan", QRCodeScan(self).codeScanFunction())
-        
-        #if canImport(CoreNFC)
-        component.setAction ("NFCReading", NFC().nfcReadingFunction())
-        #endif
-        
-        component.setAction ("SendMessage", Message().sendMessge(self))
-        
         component.setInterface ("Notification", Notification(self).notifiFunction())
-        
-        component.setAction ("FileDownload", FileDownload(component).startFileDownload())
         
         component.setInterface ("UserDefault", User().userDefaultFunction())
         
@@ -67,6 +44,28 @@ class ViewController: UIViewController {
         
         component.setInterface ("WebPopup", WebPopup().popupFunction(component))
         
+        component.setAction("Camera", CameraPhotos(self).cameraFunction())
+             
+        component.setAction("SinglePhoto", CameraPhotos(self).photosFunction())
+        
+        component.setAction("MultiplePhotos", CameraPhotos(self).MultiplePhotosFunction())
+    
+        component.setAction("Dialog", Dialog().dialogFunction(self))
+        
+        component.setAction("BioAuthentication", BioAuth().authFunction())
+        
+        component.setAction("Network", CheckNetwork(self).checkNetworkConnect())
+        
+        component.setAction("QRCodeScan", QRCodeScan(self).codeScanFunction())
+        
+        component.setAction ("SendMessage", Message().sendMessge(self))
+        
+        component.setAction ("FileDownload", FileDownload(component).startFileDownload())
+                
+        #if canImport(CoreNFC)
+        component.setAction ("NFCReading", NFC().nfcReadingFunction())
+        #endif
+
         component.setBaseUrl("file://")
         
         mWebView = FlexWebView(frame: self.view.frame, component: component)

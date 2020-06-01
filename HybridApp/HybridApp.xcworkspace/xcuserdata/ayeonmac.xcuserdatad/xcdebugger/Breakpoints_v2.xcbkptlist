@@ -39,64 +39,96 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "9B555FAB-93B1-4D0F-A3D3-CF44DE1610EC"
+            uuid = "27B78F08-357D-4C7D-B99A-9572A651E046"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "HybridApp/Module/Functions/FileDownload.swift"
+            filePath = "HybridApp/Module/Photos/QRCodeScan.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
-            landmarkName = "startFileDownload()"
+            startingLineNumber = "143"
+            endingLineNumber = "143"
+            landmarkName = "createPreviewLayer(withCaptureSession:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "9B555FAB-93B1-4D0F-A3D3-CF44DE1610EC - 80475fd4ff82bcf8"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Bool, Foundation.URL) -&gt; () in closure #1 (FlexHybridApp.FlexAction, Swift.Array&lt;Swift.Optional&lt;Any&gt;&gt;) -&gt; () in HybridApp.FileDownload.startFileDownload() -&gt; (FlexHybridApp.FlexAction, Swift.Array&lt;Swift.Optional&lt;Any&gt;&gt;) -&gt; Swift.Optional&lt;()&gt;"
-                  moduleName = "HybridApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/ayeonmac/Documents/Hybrid/Hybrid-App/HybridApp/HybridApp/Module/Functions/FileDownload.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "37"
-                  endingLineNumber = "37"
-                  offsetFromSymbolStart = "204">
-               </Location>
-               <Location
-                  uuid = "9B555FAB-93B1-4D0F-A3D3-CF44DE1610EC - 4e91d127b77f2ea3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in closure #1 (Swift.Bool, Foundation.URL) -&gt; () in closure #1 (FlexHybridApp.FlexAction, Swift.Array&lt;Swift.Optional&lt;Any&gt;&gt;) -&gt; () in HybridApp.FileDownload.startFileDownload() -&gt; (FlexHybridApp.FlexAction, Swift.Array&lt;Swift.Optional&lt;Any&gt;&gt;) -&gt; Swift.Optional&lt;()&gt;"
-                  moduleName = "HybridApp"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/ayeonmac/Documents/Hybrid/Hybrid-App/HybridApp/HybridApp/Module/Functions/FileDownload.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "36"
-                  endingLineNumber = "36"
-                  offsetFromSymbolStart = "100">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "CC7A9DFC-8225-4870-B428-CB26E7D0A68A"
+            uuid = "6BE4B4DA-F622-4F70-9D0D-5B27B4685765"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "HybridApp/Module/Functions/FileDownload.swift"
+            filePath = "HybridApp/Module/Photos/QRCodeScan.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "38"
-            endingLineNumber = "38"
-            landmarkName = "startFileDownload()"
+            startingLineNumber = "144"
+            endingLineNumber = "144"
+            landmarkName = "createPreviewLayer(withCaptureSession:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "003399E9-AA06-475E-A258-6793C4A4FF46"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "HybridApp/Module/Photos/QRCodeScan.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
+            landmarkName = "createPreviewLayer(withCaptureSession:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A3F3F5CD-C64E-4CFD-88B9-3688B6728DE6"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "HybridApp/Module/Photos/QRCodeScan.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "95"
+            endingLineNumber = "95"
+            landmarkName = "createCaptureSession()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6A6BE80D-BFA5-47BE-84E7-E7DE9E68BA2D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "HybridApp/Module/Photos/QRCodeScan.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "132"
+            endingLineNumber = "132"
+            landmarkName = "requestCaptureSessionStopRunning(sender:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "ADE0A8CB-A381-41D1-B628-7D6C6DEEDA99"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "HybridApp/Module/Photos/QRCodeScan.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "141"
+            endingLineNumber = "141"
+            landmarkName = "createPreviewLayer(withCaptureSession:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

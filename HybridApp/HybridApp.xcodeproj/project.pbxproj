@@ -171,8 +171,8 @@
 				CC9B3426246CFABE00FD9FCA /* Assets.xcassets */,
 				CC9B3428246CFABE00FD9FCA /* LaunchScreen.storyboard */,
 				CC9B342B246CFABE00FD9FCA /* Info.plist */,
-				CC2A99CA247DF35A00C521E1 /* HybridApp-Bridging-Header.h */,
 				CC8A52A72480DEC0005E9387 /* DataBase.swift */,
+				CC2A99CA247DF35A00C521E1 /* HybridApp-Bridging-Header.h */,
 			);
 			path = HybridApp;
 			sourceTree = "<group>";

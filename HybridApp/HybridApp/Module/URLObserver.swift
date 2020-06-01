@@ -19,7 +19,6 @@ class URLObserver {
     var url : URL {
         set {
             updateURL = newValue
-           // urlLogSave(updateURL)
             notify()
         }
         get {
@@ -50,9 +49,8 @@ class ListeningObserver : Observer {
     }
     
     func urlLogSaveUpdate(_ updateURL: URL) {
-            let threeDaysAgo = Date(timeIntervalSinceNow: (-86400 * 3))
-            db.deleteVisitURL(to : threeDaysAgo)
-            db.createVisitURL(url: updateURL, date: Date())
-            db.readVisitURL()
+        let threeDaysAgo = Date(timeIntervalSinceNow: (-86400 * 3))
+        db.deleteVisitURL(to : threeDaysAgo)
+        db.createVisitURL(url: updateURL, date: Date())
     }
 }

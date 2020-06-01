@@ -19,12 +19,10 @@ class WebPopup : NSObject, WKUIDelegate{
     private let urlObserver = URLObserver()
     private var dbsave: Observer!
     
-    func popupFunction(_ component : FlexComponent) -> (Array<Any?>) -> Any?
-    {
-        dbsave = ListeningObserver(urlObserver)
+    func popupFunction(_ component : FlexComponent) -> (Array<Any?>) -> Any?{
         return { (argument) -> Any? in
             DispatchQueue.main.async {
-
+                self.dbsave = ListeningObserver(self.urlObserver)
                 let currentVC  = component.parentViewController!
                 self.mWebview = component.FlexWebView!
                 
@@ -47,7 +45,6 @@ class WebPopup : NSObject, WKUIDelegate{
                 let startX = self.tempView!.frame.width / 2 - sizeX / 2
                 let startY = self.tempView!.frame.height
             
-                
                 self.createWebView = WKWebView(frame: CGRect(x: startX, y: startY , width: sizeX , height: sizeY), configuration: WKWebViewConfiguration())
                 self.createWebView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 self.createWebView?.uiDelegate = self
