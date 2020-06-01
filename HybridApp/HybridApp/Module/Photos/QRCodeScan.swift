@@ -55,6 +55,7 @@ class QRCodeScan : NSObject {
 }
 
 extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate{
+    
     private func createCaptureSession() -> AVCaptureSession?{
         let captureSession = AVCaptureSession()
         guard let captureDevice = AVCaptureDevice.default(for: .video) else {return nil}
@@ -72,8 +73,17 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate{
             if captureSession.canAddOutput(metaDataOutput){
                 captureSession.addOutput(metaDataOutput)
                 metaDataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
-                metaDataOutput.metadataObjectTypes = self.metaObjectTypes()
-                
+                metaDataOutput.metadataObjectTypes = [.qr,
+                                                      .code128,
+                                                      .code39,
+                                                      .code39Mod43,
+                                                      .code93,
+                                                      .ean8,
+                                                      .ean13,
+                                                      .interleaved2of5,
+                                                      .itf14,
+                                                      .pdf417,
+                                                      .upce]
             }else {
                 return nil
             }
@@ -81,48 +91,6 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate{
             return nil
         }
         return captureSession
-    }
-    
-    func metaObjectTypes() -> [AVMetadataObject.ObjectType]{
-        return [.qr,
-                .code128,
-                .code39,
-                .code39Mod43,
-                .code93,
-                .ean8,
-                .ean13,
-                .interleaved2of5,
-                .itf14,
-                .pdf417,
-                .upce
-        ]
-    }
-    
-    private func createPreviewLayer(withCaptureSession captureSession: AVCaptureSession) -> AVCaptureVideoPreviewLayer{
-        let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        previewLayer.frame = self.view.layer.bounds
-        previewLayer.videoGravity = .resizeAspectFill
-        
-        return previewLayer
-    }
-    
-    func requestCaptureSessionStartRunning() {
-        guard let captureSession = self.captureSession else { return }
-        
-        if !captureSession.isRunning{
-            captureSession.startRunning()
-        }
-    }
-    
-    func requestCaptureSessionStopRunning() {
-        guard let captureSession = self.captureSession else { return }
-        
-        if captureSession.isRunning {
-            DispatchQueue.main.async {
-                self.previewLayer.removeFromSuperlayer()
-                self.view.isUserInteractionEnabled = true
-            }
-        }
     }
     
     public func metadataOutput(_ output : AVCaptureMetadataOutput,
@@ -147,5 +115,33 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate{
             flexAction?.PromiseReturn(stringValue)
             self.requestCaptureSessionStopRunning()
         }
+    }
+    
+    func requestCaptureSessionStartRunning() {
+        guard let captureSession = self.captureSession else { return }
+        
+        if !captureSession.isRunning{
+            captureSession.startRunning()
+        }
+    }
+       
+    func requestCaptureSessionStopRunning() {
+        guard let captureSession = self.captureSession else { return }
+        
+        if captureSession.isRunning {
+            DispatchQueue.main.async {
+                self.previewLayer.removeFromSuperlayer()
+                self.view.isUserInteractionEnabled = true
+            }
+        }
+        self.flexAction?.PromiseReturn("Stop QR Code")
+    }
+    
+    private func createPreviewLayer(withCaptureSession captureSession: AVCaptureSession) -> AVCaptureVideoPreviewLayer{
+        let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
+        previewLayer.frame = self.view.layer.bounds
+        previewLayer.videoGravity = .resizeAspectFill
+        
+        return previewLayer
     }
 }

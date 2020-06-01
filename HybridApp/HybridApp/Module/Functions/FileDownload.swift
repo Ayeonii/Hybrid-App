@@ -44,7 +44,7 @@ class FileDownload : NSObject{
     func fileDownload(completion: @escaping (_ success:Bool, _ filePath:URL) -> ()) {
         
         guard let url = URL(string: fileURL) else {
-            print("Error: cannot create URL")
+            self.flexAction.PromiseReturn("Error: cannot create URL")
             return
         }
         
@@ -57,11 +57,13 @@ class FileDownload : NSObject{
             guard error == nil else {
                 debugPrint("Error!!")
                 print(error as Any)
+                self.flexAction.PromiseReturn(error as Any)
                 return
             }
             
             guard let responseData = data else {
                 print("Error: data empty!!")
+                self.flexAction.PromiseReturn("Error: data empty!!")
                 return
             }
             

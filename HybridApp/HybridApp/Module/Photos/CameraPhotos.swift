@@ -22,7 +22,6 @@ enum ModuleType : String{
  */
 class CameraPhotos : NSObject {
     
-    private let viewController = ViewController()
     private let util = Utils()
     private let currentVC : UIViewController
     private let dialog = Dialog()
@@ -40,15 +39,18 @@ class CameraPhotos : NSObject {
         return { (action, arguments) -> Void in
             
             self.util.setUserHistory(forKey: "CameraBtn")
-            self.imageAction = action
             self.width = arguments?[0] as? Double
             self.height = arguments?[1] as? Double
+            
+            var auth = false
             
             var returnStr : String?
             let cameraAuthorizationsStatus : AVAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
             
             switch cameraAuthorizationsStatus {
             case .authorized :
+                auth = true
+                self.imageAction = action
                 returnStr = AuthrizeStatus.authorized.rawValue
                 self.cameraPhotosAction(ModuleType.camera.rawValue)
             case .denied :
@@ -57,6 +59,8 @@ class CameraPhotos : NSObject {
             case .notDetermined:
                 AVCaptureDevice.requestAccess(for: AVMediaType.video) { (response) in
                     if response {
+                        auth = true
+                        self.imageAction = action
                         self.cameraPhotosAction(ModuleType.camera.rawValue)
                     }else {
                         self.dialog.makeDialog(self.currentVC, title : "알림", message : "해당 권한이 거부되었습니다." , btn: [["확인", "basic"]] , type : "alert", animated : true, promiseAction : nil)
@@ -69,28 +73,32 @@ class CameraPhotos : NSObject {
                 returnStr = "default"
                 break
             }
+            if !auth {
+                action.PromiseReturn(nil)
+            }
             if let printStr = returnStr {
                 print(printStr)
             }
         }
     }
-}
-
-extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
     //Photos를 실행시키는 모듈
     func photosFunction() -> (FlexAction, Array<Any?>?) -> Void?  {
         return { (action, arguments) -> Void in
             
             self.util.setUserHistory(forKey: "PhotoBtn")
-            self.imageAction = action
             self.width = arguments?[0] as? Double
             self.height = arguments?[1] as? Double
             
+            var auth = false
+
             let photoAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
             var returnStr : String?
             switch photoAuthorizationStatus{
             case .authorized:
                 returnStr = AuthrizeStatus.authorized.rawValue
+                auth = true
+                self.imageAction = action
                 self.cameraPhotosAction(ModuleType.photos.rawValue)
             case .denied:
                 returnStr = AuthrizeStatus.denied.rawValue
@@ -100,6 +108,8 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
                     switch status {
                     case .authorized :
                         returnStr = AuthrizeStatus.authorized.rawValue
+                        auth = true
+                        self.imageAction = action
                         self.cameraPhotosAction(ModuleType.photos.rawValue)
                     case .denied :
                         self.dialog.makeDialog(self.currentVC, title : "알림", message : "해당 권한이 거부되었습니다." , btn: [["확인" , "basic"]] , type : "alert", animated : true, promiseAction: nil)
@@ -114,63 +124,11 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
                 returnStr = "default"
                 break
             }
+            if !auth {
+                action.PromiseReturn(nil)
+            }
             if let printStr = returnStr {
                 print(printStr)
-            }
-        }
-    }
-    
-    func cameraPhotosAction( _ type : String) -> Void {
-        self.imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        DispatchQueue.main.async {
-            switch type {
-            case "Camera":
-                if(UIImagePickerController.isSourceTypeAvailable(.camera)){
-                    self.flagImageSave = true
-                    self.imagePicker.allowsEditing = true
-                    self.imagePicker.sourceType = .camera
-                    self.imagePicker.mediaTypes = [kUTTypeImage as String]
-                    self.imagePicker.allowsEditing = false
-                    
-                    self.currentVC.present(self.imagePicker, animated: true, completion: nil)
-                }else {
-                    self.dialog.makeDialog(self.currentVC, title : "경고", message : "카메라에 접근할 수 없습니다" , btn: [["destructive" , "확인"]] , type : "alert", animated : true, promiseAction: nil)
-                }
-                break
-            case "Photos":
-                if (UIImagePickerController.isSourceTypeAvailable(.photoLibrary)) {
-                    self.flagImageSave = false
-                    self.imagePicker.allowsEditing = true
-                    self.imagePicker.sourceType = .photoLibrary
-                    self.imagePicker.mediaTypes = [kUTTypeImage as String]
-                    self.imagePicker.allowsEditing = true
-                    
-                    self.currentVC.present(self.imagePicker, animated: true, completion: nil)
-                }else{
-                    self.dialog.makeDialog(self.currentVC, title : "경고", message : "Photos에 접근할 수 없습니다" , btn: [["destructive" , "확인"]] , type : "alert", animated : true, promiseAction: nil)
-                }
-                break
-            default:
-                break
-            }
-        }
-    }
-    
-    // 사진 한장 선택
-    @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        self.currentVC.dismiss( animated: true){
-            let mediaType = info[UIImagePickerController.InfoKey.mediaType] as! NSString
-            if mediaType.isEqual(to: kUTTypeImage as NSString as String){
-                let captureImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
-                let resizedImage = self.resizeImage(image: captureImage, targetSize: CGSize(width: self.width, height: self.height))
-                if self.flagImageSave {
-                    UIImageWriteToSavedPhotosAlbum(captureImage, self, nil, nil)
-                }
-                let imageData:NSData = resizedImage.jpegData(compressionQuality: 0.25)! as NSData
-                let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
-                let encodedString = strBase64.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? ""
-                self.imageAction?.PromiseReturn(encodedString)
             }
         }
     }
@@ -193,9 +151,6 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
                 multiPicker.showsCancelButton = true
                 multiPicker.allowsLandscape = false
                 multiPicker.assetType = .allPhotos
-                
-                self.currentVC.present(multiPicker, animated : true)
-                
                 multiPicker.didSelectAssets = { (assets : [DKAsset]) in
                     imageArray.append(contentsOf: assets)
                     
@@ -209,9 +164,76 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
                     }
                     self.imageAction!.PromiseReturn(multiImageArray)
                 }
+                
+                self.currentVC.present(multiPicker, animated : true)
             }
         }
     }
+}
+
+extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    func cameraPhotosAction( _ type : String) -> Void {
+        self.imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        DispatchQueue.main.async {
+            switch type {
+            case "Camera":
+                if(UIImagePickerController.isSourceTypeAvailable(.camera)){
+                    self.flagImageSave = true
+                    self.imagePicker.allowsEditing = true
+                    self.imagePicker.sourceType = .camera
+                    self.imagePicker.mediaTypes = [kUTTypeImage as String]
+                    self.imagePicker.allowsEditing = false
+                    
+                    self.currentVC.present(self.imagePicker, animated: true, completion: nil)
+                } else {
+                    self.imageAction?.PromiseReturn(nil)
+                    self.dialog.makeDialog(self.currentVC, title : "경고", message : "카메라에 접근할 수 없습니다" , btn: [["destructive" , "확인"]] , type : "alert", animated : true, promiseAction: nil)
+                }
+                break
+            case "Photos":
+                if (UIImagePickerController.isSourceTypeAvailable(.photoLibrary)) {
+                    self.flagImageSave = false
+                    self.imagePicker.allowsEditing = true
+                    self.imagePicker.sourceType = .photoLibrary
+                    self.imagePicker.mediaTypes = [kUTTypeImage as String]
+                    self.imagePicker.allowsEditing = true
+                    
+                    self.currentVC.present(self.imagePicker, animated: true, completion: nil)
+                }else{
+                    self.imageAction?.PromiseReturn(nil)
+                    self.dialog.makeDialog(self.currentVC, title : "경고", message : "Photos에 접근할 수 없습니다" , btn: [["destructive" , "확인"]] , type : "alert", animated : true, promiseAction: nil)
+                }
+                break
+            default:
+                break
+            }
+        }
+    }
+    
+    // 사진 한장 선택
+    @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        self.currentVC.dismiss( animated: true){
+            let captureImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
+            let resizedImage = self.resizeImage(image: captureImage, targetSize: CGSize(width: self.width, height: self.height))
+            if self.flagImageSave {
+                UIImageWriteToSavedPhotosAlbum(captureImage, self, nil, nil)
+            }
+            let imageData:NSData = resizedImage.jpegData(compressionQuality: 0.25)! as NSData
+            let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
+            let encodedString = strBase64.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? ""
+            self.imageAction?.PromiseReturn(encodedString)
+        }
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.currentVC.dismiss(animated: true) {
+            self.imageAction?.PromiseReturn("Cancel")
+        }
+    }
+    
+    
     
     //PHAsset -> UIImage 변환
     func getAsset(asset: PHAsset) -> UIImage {
@@ -225,9 +247,6 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
         return image
     }
     
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        self.currentVC.dismiss(animated: true) {self.imageAction?.PromiseReturn("Cancel")}
-    }
     
     func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
         let size = image.size

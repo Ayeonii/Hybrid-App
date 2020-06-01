@@ -53,6 +53,7 @@ class Message : NSObject, MFMessageComposeViewControllerDelegate {
             returnMsg = "fail to send Msg"
             break
         default:
+            returnMsg = "default"
             break
         }
         self.flexAction.PromiseReturn(returnMsg)

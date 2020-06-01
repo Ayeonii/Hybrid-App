@@ -43,6 +43,7 @@ class NFC : NSObject, NFCNDEFReaderSessionDelegate{
     
     func readerSession(_ session: NFCNDEFReaderSession, didInvalidateWithError error: Error) {
         print("NFC Reading Error : ", error.localizedDescription)
+        flexAction.PromiseReturn( error.localizedDescription)
     }
 }
 #endif

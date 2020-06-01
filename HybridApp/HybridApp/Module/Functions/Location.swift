@@ -31,7 +31,16 @@ class Location: NSObject{
             let status = CLLocationManager.authorizationStatus()
             switch status {
             case .authorizedAlways, .authorizedWhenInUse :
-                self.getLocation()
+                self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+                self.locationManager.startUpdatingLocation()
+                print ("getlocation")
+                let coor = self.locationManager.location?.coordinate
+                let latitude = coor?.latitude
+                let longtitude = coor?.longitude
+                if let la = latitude , let lo = longtitude {
+                    self.returnLocation.updateValue(String(describing : la ), forKey: "latitude")
+                    self.returnLocation.updateValue(String(describing : lo ), forKey: "longtitude")
+                }
                 break
             case .denied, .restricted :
                 self.util.setAuthAlertAction(currentVC : self.currentVC, dialog: self.util.authDialog)
@@ -44,19 +53,6 @@ class Location: NSObject{
                 break
             }
             return self.returnLocation
-        }
-    }
-    
-    private func getLocation() -> Void {
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.startUpdatingLocation()
-        print ("getlocation")
-        let coor = locationManager.location?.coordinate
-        let latitude = coor?.latitude
-        let longtitude = coor?.longitude
-        if let la = latitude , let lo = longtitude {
-            returnLocation.updateValue(String(describing : la ), forKey: "latitude")
-            returnLocation.updateValue(String(describing : lo ), forKey: "longtitude")
         }
     }
 }

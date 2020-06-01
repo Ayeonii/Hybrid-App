@@ -14,8 +14,8 @@ import FlexHybridApp
 class User {
 
     func userDefaultFunction () -> (Array<Any?>) -> Any? {
-                
         return { (argument) -> Any? in
+            
             var returnValue : Any?
 
             let mode = argument[0] as! String

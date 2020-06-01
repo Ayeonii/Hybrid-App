@@ -12,7 +12,7 @@ import FlexHybridApp
 import KeychainAccess
 import SQLite3
 
-class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHandler{
+class ViewController: UIViewController, WKNavigationDelegate {
     
     var mWebView: FlexWebView!
     var component = FlexComponent()
@@ -65,23 +65,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         
         component.setAction ("WebPopup", WebPopup().popupFunction(component))
         
-        component.setInterface("Record", openVoice().openVoiceScheme())
-        
-        component.setInterface("test2")
-        { (arguments) -> Any? in
-            self.mWebView.evalFlexFunc("help", sendData: "Help me Flex!")
-            { (value) -> Void in
-                // Retrun from $flex.web.help func
-                print("Web Func Retrun ---------------")
-                print(value!)
-                print("-------------------------------")
-            }
-            return nil
-        }
-        
-        // add user-custom contentController
-        component.configration.userContentController.add(self, name: "userCC")
-        // setBaseUrl
         component.setBaseUrl("file://")
         
         mWebView = FlexWebView(frame: self.view.frame, component: component)
@@ -94,7 +77,7 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
         let db = DataBase()
         db.openDataBase()
         db.createVisitURL(url: mWebView.url!, date: Date())
-        db.readVisitURL()
+
         if #available(iOS 13.0, *) {
             view.backgroundColor = UIColor.systemBackground
             let safeArea = self.view.safeAreaLayoutGuide
@@ -145,10 +128,6 @@ class ViewController: UIViewController, WKNavigationDelegate, WKScriptMessageHan
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         print("user navigationDelegate")
         mWebView.evaluateJavaScript("let a = window.open .....",completionHandler: nil)
-    }
-    
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        print("user contentController")
     }
     
 }

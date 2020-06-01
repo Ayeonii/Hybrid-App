@@ -20,7 +20,6 @@ class BioAuth {
             self.util.setUserHistory(forKey: "BioAuthBtn")
             
             let authContext = LAContext()
-            
             var error : NSError?
             
             guard authContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) else {
@@ -44,7 +43,7 @@ class BioAuth {
             
             authContext.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: self.authDescriptions){ (success, error) in
                 if success {
-                    print("지문인식 성공")
+                    print("인식 성공")
                     action.PromiseReturn(AuthrizeStatus.authorized.rawValue)
                 }
                 else {
