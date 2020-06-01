@@ -14,7 +14,7 @@ class BioAuth {
     var authDescriptions : String!
     let util = Utils()
     
-    func authFunction() -> (FlexAction, Array<Any?>?) -> Void {
+    func authFunction() -> (FlexAction, Array<Any?>) -> Void {
         return { (action,  arguments) -> Void in
             
             self.util.setUserHistory(forKey: "BioAuthBtn")
@@ -49,10 +49,9 @@ class BioAuth {
                 else {
                     if let error = error {
                         print(error.localizedDescription)
-                        print("에러발생")
-                        action.PromiseReturn(AuthrizeStatus.error.rawValue)
+                        action.PromiseReturn(error.localizedDescription)
                     }
-                    action.PromiseReturn("cancel")
+                    action.PromiseReturn(AuthrizeStatus.authorized.rawValue)
                 }
             }
         }

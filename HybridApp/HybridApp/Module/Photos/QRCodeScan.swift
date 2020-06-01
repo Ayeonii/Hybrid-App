@@ -16,7 +16,6 @@ class QRCodeScan : NSObject {
     private var currentVC : UIViewController
     private var captureSession : AVCaptureSession?
     private var flexAction : FlexAction?
-    private let qrCodeFrameView = UIView()
     private let view : UIView
     private var previewLayer : CALayer!
     private var util = Utils()
@@ -26,37 +25,32 @@ class QRCodeScan : NSObject {
         self.view = viewController.view
     }
     
-    func codeScanFunction() -> (FlexAction, Array<Any?>?) ->Void? {
+    func codeScanFunction() -> (FlexAction, Array<Any?>) ->Void? {
         return { (action, argument) -> Void in
             
             self.util.setUserHistory(forKey: "QRCodeScanBtn")
             
-            self.flexAction = action
-            if let captureSession = self.createCaptureSession(){
+            if let captureSession = self.createCaptureSession() {
                 self.captureSession = captureSession
-
+                self.flexAction = action
+                
                 DispatchQueue.main.async {
                     self.previewLayer = self.createPreviewLayer(withCaptureSession : captureSession)
                     
                     self.view.isUserInteractionEnabled = false
                     self.view.layer.addSublayer(self.previewLayer)
-                    
-                    self.qrCodeFrameView.layer.borderColor = UIColor.green.cgColor
-                    self.qrCodeFrameView.layer.borderWidth = 2
-                    
-                    self.view.addSubview(self.qrCodeFrameView)
-                    self.view.bringSubviewToFront(self.qrCodeFrameView)
-                    
                 }
                 self.requestCaptureSessionStartRunning()
+            } else {
+                action.PromiseReturn(nil)
             }
         }
     }
 }
 
-extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate{
+extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate {
     
-    private func createCaptureSession() -> AVCaptureSession?{
+    private func createCaptureSession() -> AVCaptureSession? {
         let captureSession = AVCaptureSession()
         guard let captureDevice = AVCaptureDevice.default(for: .video) else {return nil}
         
@@ -96,13 +90,6 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate{
     public func metadataOutput(_ output : AVCaptureMetadataOutput,
                                didOutput metadataObjects : [AVMetadataObject],
                                from connection : AVCaptureConnection){
-        self.scannerDelegate(output, didOutput: metadataObjects, from: connection)
-        
-    }
-    
-    func scannerDelegate (_ output : AVCaptureMetadataOutput,
-                          didOutput metadataObjects: [AVMetadataObject],
-                          from connection: AVCaptureConnection){
         if metadataObjects.count == 0 {
             print ("No QR Code is detected")
             self.requestCaptureSessionStopRunning()
@@ -115,10 +102,15 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate{
             flexAction?.PromiseReturn(stringValue)
             self.requestCaptureSessionStopRunning()
         }
+        
     }
+
     
     func requestCaptureSessionStartRunning() {
-        guard let captureSession = self.captureSession else { return }
+        guard let captureSession = self.captureSession else {
+            self.flexAction?.PromiseReturn("captureSession is null")
+            return
+        }
         
         if !captureSession.isRunning{
             captureSession.startRunning()
@@ -134,7 +126,7 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate{
                 self.view.isUserInteractionEnabled = true
             }
         }
-        self.flexAction?.PromiseReturn("Stop QR Code")
+        self.flexAction?.PromiseReturn("Stopped QR Code")
     }
     
     private func createPreviewLayer(withCaptureSession captureSession: AVCaptureSession) -> AVCaptureVideoPreviewLayer{

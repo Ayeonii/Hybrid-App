@@ -20,22 +20,24 @@ class Message : NSObject, MFMessageComposeViewControllerDelegate {
     private var flexAction : FlexAction!
     private let util = Utils()
     
-    func sendMessge (_ currentVC : UIViewController)  -> (FlexAction, Array<Any?>?) -> Void? {
+    func sendMessge (_ currentVC : UIViewController)  -> (FlexAction, Array<Any?>) -> Void? {
         return { (action, argument) -> Void in
             
             self.util.setUserHistory(forKey: "SendMessageBtn")
-            self.flexAction = action
             
-            let number = argument?[0] as! String
-            let message = argument?[1] as! String
+            let number = argument[0] as! String
+            let message = argument[1] as! String
             
             DispatchQueue.main.async {
                 let messageComposer = MFMessageComposeViewController()
                 messageComposer.messageComposeDelegate = self
                 if MFMessageComposeViewController.canSendText(){
+                    self.flexAction = action
                     messageComposer.recipients = [number]
                     messageComposer.body = message
                     currentVC.present(messageComposer, animated: true, completion: nil)
+                } else {
+                    action.PromiseReturn(nil)
                 }
             }
         }

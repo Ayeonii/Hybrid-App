@@ -21,7 +21,7 @@ class DataBase: NSObject {
             print("DB Open")
         }
         
-        if sqlite3_exec(db, "CREATE TABLE IF NOT EXISTS VisitLogs (id INTEGER PRIMARY KEY AUTOINCREMENT, URL TEXT, Date DOUBLE)", nil, nil, nil) != SQLITE_OK {
+        if sqlite3_exec(db, "CREATE TABLE IF NOT EXISTS VisitLogs (id INTEGER PRIMARY KEY AUTOINCREMENT, URL TEXT, Date TEXT)", nil, nil, nil) != SQLITE_OK {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error creating table: \(errmsg)")
         }
@@ -32,10 +32,11 @@ class DataBase: NSObject {
         let insertStatementString = "INSERT INTO VisitLogs (URL, Date) VALUES (?, ?);"
         let urlString = url.absoluteString
         let df = DateFormatter()
+        
         df.dateFormat = "yyyy-MM-dd hh:mm:ss"
         let now = df.string(from: Date())
         let SQLITE_TRANSIENT = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
-        
+      
         if sqlite3_prepare_v2(db, insertStatementString, -1, &insertStatement,nil)
             == SQLITE_OK{
             if sqlite3_bind_text(insertStatement, 1, urlString, -1, SQLITE_TRANSIENT) != SQLITE_OK {
@@ -66,13 +67,15 @@ class DataBase: NSObject {
         if sqlite3_prepare_v2(db, queryStatementString, -1, &queryStatement, nil) == SQLITE_OK {
             while sqlite3_step(queryStatement) == SQLITE_ROW {
                 let id = sqlite3_column_int(queryStatement, 0)
-                guard let queryResultCol1 = sqlite3_column_text(queryStatement, 1) else { print ("Query result is nil"); return  }
-                guard let queryResultCol2 = sqlite3_column_text(queryStatement, 2) else { print ("Query result is nil"); return  }
-
-                let url = String(cString : queryResultCol1)
-                let dateTime = String(cString : queryResultCol2)
                 
-                print("\(id) | \(url) | \(dateTime)")
+                if let queryResultCol1 = sqlite3_column_text(queryStatement, 1), let queryResultCol2 = sqlite3_column_text(queryStatement, 2) {
+                    let url = String(cString : queryResultCol1)
+                    let dateTime = String(cString : queryResultCol2)
+                   
+                    print("\(id) | \(url) | \(dateTime)")
+                } else {
+                    print ("Query result is nil"); return
+                }
             }
         } else {
             print("Fail to Read Table")
@@ -80,8 +83,12 @@ class DataBase: NSObject {
         sqlite3_finalize(queryStatement)
     }
     
-    func deleteVisitURL (id : Int) {
-        let deleteStatementStirng = "DELETE FROM VisitLogs WHERE id = " + String(id)
+    func deleteVisitURL (to : Date) {
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd hh:mm:ss"
+        let toDt = df.string(from: to)
+        
+        let deleteStatementStirng = "DELETE FROM VisitLogs WHERE Date < '" + toDt + "' "
         var deleteStatement: OpaquePointer? = nil
 
         if sqlite3_prepare_v2(db, deleteStatementStirng, -1, &deleteStatement, nil) == SQLITE_OK {
@@ -95,5 +102,4 @@ class DataBase: NSObject {
         }
         sqlite3_finalize(deleteStatement)
     }
-
 }

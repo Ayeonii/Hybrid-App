@@ -12,7 +12,7 @@ import CoreLocation
 /*
  위치모듈
  */
-class Location: NSObject{
+class Location: NSObject, CLLocationManagerDelegate{
     
     private let util = Utils()
     private var returnLocation = Dictionary<String,String?> ()
@@ -21,12 +21,15 @@ class Location: NSObject{
     
     init(_ currentVC : UIViewController){
         self.currentVC = currentVC
+        super.init()
+        locationManager.delegate = self
     }
     
     func locationFunction() -> ((Array<Any?>?) -> Any?) {
         return { (arguments) -> Dictionary<String,Any?>  in
             
             self.util.setUserHistory(forKey: "LocationBtn")
+            self.returnLocation.removeAll()
             
             let status = CLLocationManager.authorizationStatus()
             switch status {
@@ -46,7 +49,6 @@ class Location: NSObject{
                 self.util.setAuthAlertAction(currentVC : self.currentVC, dialog: self.util.authDialog)
                 break
             case .notDetermined :
-                self.returnLocation.removeAll()
                 self.locationManager.requestWhenInUseAuthorization()
                 break
             default :
@@ -55,12 +57,9 @@ class Location: NSObject{
             return self.returnLocation
         }
     }
-}
-
-extension Location : CLLocationManagerDelegate {
+    
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if(status == .authorizedAlways || status == .authorizedWhenInUse){
-            locationManager.delegate = self
             print(AuthrizeStatus.authorized.rawValue)
         }
     }

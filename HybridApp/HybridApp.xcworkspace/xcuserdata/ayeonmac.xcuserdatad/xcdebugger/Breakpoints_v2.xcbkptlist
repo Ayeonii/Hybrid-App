@@ -3,4 +3,102 @@
    uuid = "B0652CE7-E69D-4FA3-B433-779088E8199E"
    type = "0"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "230D8A04-1BBB-4CA0-9EF8-0FA7E665628D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "HybridApp/Module/Functions/Location.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "locationManager(_:didChangeAuthorization:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F6C73A5D-6E6F-4619-83CA-E1CA4C9834A3"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "HybridApp/Module/Functions/Notification.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
+            landmarkName = "userNotificationCenter(_:openSettingsFor:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9B555FAB-93B1-4D0F-A3D3-CF44DE1610EC"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "HybridApp/Module/Functions/FileDownload.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "37"
+            endingLineNumber = "37"
+            landmarkName = "startFileDownload()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "9B555FAB-93B1-4D0F-A3D3-CF44DE1610EC - 80475fd4ff82bcf8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Bool, Foundation.URL) -&gt; () in closure #1 (FlexHybridApp.FlexAction, Swift.Array&lt;Swift.Optional&lt;Any&gt;&gt;) -&gt; () in HybridApp.FileDownload.startFileDownload() -&gt; (FlexHybridApp.FlexAction, Swift.Array&lt;Swift.Optional&lt;Any&gt;&gt;) -&gt; Swift.Optional&lt;()&gt;"
+                  moduleName = "HybridApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ayeonmac/Documents/Hybrid/Hybrid-App/HybridApp/HybridApp/Module/Functions/FileDownload.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "37"
+                  endingLineNumber = "37"
+                  offsetFromSymbolStart = "204">
+               </Location>
+               <Location
+                  uuid = "9B555FAB-93B1-4D0F-A3D3-CF44DE1610EC - 4e91d127b77f2ea3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in closure #1 (Swift.Bool, Foundation.URL) -&gt; () in closure #1 (FlexHybridApp.FlexAction, Swift.Array&lt;Swift.Optional&lt;Any&gt;&gt;) -&gt; () in HybridApp.FileDownload.startFileDownload() -&gt; (FlexHybridApp.FlexAction, Swift.Array&lt;Swift.Optional&lt;Any&gt;&gt;) -&gt; Swift.Optional&lt;()&gt;"
+                  moduleName = "HybridApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/ayeonmac/Documents/Hybrid/Hybrid-App/HybridApp/HybridApp/Module/Functions/FileDownload.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "36"
+                  endingLineNumber = "36"
+                  offsetFromSymbolStart = "100">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CC7A9DFC-8225-4870-B428-CB26E7D0A68A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "HybridApp/Module/Functions/FileDownload.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "38"
+            endingLineNumber = "38"
+            landmarkName = "startFileDownload()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

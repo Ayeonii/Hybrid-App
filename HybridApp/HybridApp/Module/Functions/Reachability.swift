@@ -15,49 +15,49 @@ import FlexHybridApp
  네트워크 체크 클래스
  */
 class Reachability {
-     var hostname: String?
-       var isRunning = false
-       var isReachableOnWWAN: Bool
-       var reachability: SCNetworkReachability?
-       var reachabilityFlags = SCNetworkReachabilityFlags()
-       let reachabilitySerialQueue = DispatchQueue(label: "ReachabilityQueue")
-       init?(hostname: String) throws {
-           guard let reachability = SCNetworkReachabilityCreateWithName(nil, hostname) else {
-               throw Network.Error.failedToCreateWith(hostname)
-           }
-           self.reachability = reachability
-           self.hostname = hostname
-           isReachableOnWWAN = true
+    var hostname: String?
+    var isRunning = false
+    var isReachableOnWWAN: Bool
+    var reachability: SCNetworkReachability?
+    var reachabilityFlags = SCNetworkReachabilityFlags()
+    let reachabilitySerialQueue = DispatchQueue(label: "ReachabilityQueue")
+    init?(hostname: String) throws {
+       guard let reachability = SCNetworkReachabilityCreateWithName(nil, hostname) else {
+           throw Network.Error.failedToCreateWith(hostname)
        }
-       init?() throws {
-           var zeroAddress = sockaddr_in()
-           zeroAddress.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
-           zeroAddress.sin_family = sa_family_t(AF_INET)
-           guard let reachability = withUnsafePointer(to: &zeroAddress, {
-               $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
-                   SCNetworkReachabilityCreateWithAddress(nil, $0)
-               }}) else {
-                   throw Network.Error.failedToInitializeWith(zeroAddress)
-           }
-           self.reachability = reachability
-           isReachableOnWWAN = true
+       self.reachability = reachability
+       self.hostname = hostname
+       isReachableOnWWAN = true
+    }
+    init?() throws {
+       var zeroAddress = sockaddr_in()
+       zeroAddress.sin_len = UInt8(MemoryLayout<sockaddr_in>.size)
+       zeroAddress.sin_family = sa_family_t(AF_INET)
+       guard let reachability = withUnsafePointer(to: &zeroAddress, {
+           $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+               SCNetworkReachabilityCreateWithAddress(nil, $0)
+           }}) else {
+               throw Network.Error.failedToInitializeWith(zeroAddress)
        }
-       var status: Network.Status {
-           return  !isConnectedToNetwork ? .unreachable :
-               isReachableViaWiFi    ? .wifi :
-               isRunningOnDevice     ? .wwan : .unreachable
-       }
-       var isRunningOnDevice: Bool = {
-        /*
-        #if (arch(i386) || arch(x86_64)) && os(iOS)
-               return false
-           #else
-               return true
-           #endif
- */
-         return true  //Only in Simulator
-       }()
-       deinit { stop() }
+       self.reachability = reachability
+       isReachableOnWWAN = true
+    }
+    var status: Network.Status {
+       return  !isConnectedToNetwork ? .unreachable :
+           isReachableViaWiFi    ? .wifi :
+           isRunningOnDevice     ? .wwan : .unreachable
+    }
+    var isRunningOnDevice: Bool = {
+    /*
+    #if (arch(i386) || arch(x86_64)) && os(iOS)
+           return false
+       #else
+           return true
+       #endif
+    */
+     return true  //Only in Simulator
+    }()
+    deinit { stop() }
 }
 
 extension Reachability {
@@ -160,9 +160,9 @@ class CheckNetwork{
         self.currentVC = currentVC
     }
     
-    func checkNetworkConnect () -> (FlexAction, Array<Any?>?) -> Void? {
+    func checkNetworkConnect () -> (FlexAction, Array<Any?>) -> Void? {
         return{ (action, argumnet) -> Void in
-        self.flexAction = action
+            self.flexAction = action
             NotificationCenter.default
             .addObserver(self.currentVC,
                             selector: #selector(self.statusManager),
@@ -173,8 +173,8 @@ class CheckNetwork{
     }
     
     func updateUserInterface() {
-        DispatchQueue.main.async{
-            switch Network.reachability?.status {
+        
+        switch Network.reachability?.status {
             case .unreachable:
                 self.flexAction.PromiseReturn("UnReachable!")
             case .wwan:
@@ -184,13 +184,14 @@ class CheckNetwork{
             default :
                 self.flexAction.PromiseReturn("Network Default")
                 break
-            }
-            print("Status:", Network.reachability!.status)
-            print("HostName:", Network.reachability!.hostname ?? "nil")
-            print("Reachable:", Network.reachability!.isReachable)
-            print("Wifi:", Network.reachability!.isReachableViaWiFi)
         }
+        print("Status:", Network.reachability!.status)
+        print("HostName:", Network.reachability!.hostname ?? "nil")
+        print("Reachable:", Network.reachability!.isReachable)
+        print("Wifi:", Network.reachability!.isReachableViaWiFi)
+
     }
+    
     @objc func statusManager(_ notification: NSNotification) {
         updateUserInterface()
     }

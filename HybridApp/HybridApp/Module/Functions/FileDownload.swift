@@ -16,7 +16,7 @@ class FileDownload : NSObject{
     
     private var flexAction : FlexAction!
     private var fileURL : String!
-    private var interaction:UIDocumentInteractionController?
+    private var interaction: UIDocumentInteractionController?
     private var component : FlexComponent
     private let util = Utils()
     
@@ -24,13 +24,13 @@ class FileDownload : NSObject{
         self.component = component
     }
     
-    func startFileDownload () -> (FlexAction, Array<Any?>?) -> Void?{
+    func startFileDownload () -> (FlexAction, Array<Any?>) -> Void?{
         return { (action, argument) -> Void in
             
             self.util.setUserHistory(forKey: "FileDownloadBtn")
             
             self.flexAction  = action
-            self.fileURL = argument![0] as? String
+            self.fileURL = argument[0] as? String
             
             self.component.evalFlexFunc("result", sendData: "Download Start!")
             self.fileDownload { (success, path) in

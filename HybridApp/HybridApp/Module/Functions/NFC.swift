@@ -20,7 +20,7 @@ class NFC : NSObject, NFCNDEFReaderSessionDelegate{
     private var nfcString : Array<String>!
     private let util = Utils()
     
-    func nfcReadingFunction () -> (FlexAction, Array<Any?>?)-> Void? {
+    func nfcReadingFunction () -> (FlexAction, Array<Any?>)-> Void? {
         return { (action, argument) -> Void in
             self.util.setUserHistory(forKey: "NFCBtn")
             self.flexAction = action

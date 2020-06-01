@@ -9,18 +9,18 @@
 import UIKit
 import WebKit
 import FlexHybridApp
-import KeychainAccess
 import SQLite3
 
-class ViewController: UIViewController, WKNavigationDelegate {
+class ViewController: UIViewController {
     
     var mWebView: FlexWebView!
     var component = FlexComponent()
     let userDefault = UserDefaults.standard
     var createWebView: WKWebView!
     var tempView : UIView!
-    
     var currentURL : URL!
+    let urlObserver = URLObserver()
+   
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -28,6 +28,8 @@ class ViewController: UIViewController, WKNavigationDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let _ = ListeningObserver(self.urlObserver)
         
         component.setAction("Camera", CameraPhotos(self).cameraFunction())
              
@@ -61,9 +63,9 @@ class ViewController: UIViewController, WKNavigationDelegate {
         
         component.setInterface ("AppUUID"){_ in return self.userDefault.object(forKey: "APP_UUID")}
         
-        component.setInterface ("DeviceUUID", self.keyChainInit())
+        component.setInterface ("DeviceUUID", KeyChain().keyChainInit())
         
-        component.setAction ("WebPopup", WebPopup().popupFunction(component))
+        component.setInterface ("WebPopup", WebPopup().popupFunction(component))
         
         component.setBaseUrl("file://")
         
@@ -74,10 +76,8 @@ class ViewController: UIViewController, WKNavigationDelegate {
         
         mWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "test", ofType: "html", inDirectory: "Script")!)))
 
-        let db = DataBase()
-        db.openDataBase()
-        db.createVisitURL(url: mWebView.url!, date: Date())
-
+        urlObserver.url = mWebView.url!
+        
         if #available(iOS 13.0, *) {
             view.backgroundColor = UIColor.systemBackground
             let safeArea = self.view.safeAreaLayoutGuide
@@ -102,32 +102,4 @@ class ViewController: UIViewController, WKNavigationDelegate {
         }
     }
 
-    func keyChainInit() -> (Array<Any?>?) -> Any? {
-        let keychain = Keychain(service: "kr.lay.HybridApp")
-        return {(argument) -> String in
-            guard keychain["UUID"] != nil else {
-                do {
-                    try keychain
-                        .accessibility(.afterFirstUnlock)
-                        .set(UUID().uuidString, key: "UUID")
-                } catch let error {
-                    print("error: \(error)")
-                }
-                return keychain["UUID"]!
-            }
-            return keychain["UUID"]!
-        }
-    }
-
-    override
-    func viewWillAppear(_ animated: Bool) {
-        mWebView.navigationDelegate = self
-        mWebView.configuration.preferences.javaScriptCanOpenWindowsAutomatically = true
-    }
-
-    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
-        print("user navigationDelegate")
-        mWebView.evaluateJavaScript("let a = window.open .....",completionHandler: nil)
-    }
-    
 }
