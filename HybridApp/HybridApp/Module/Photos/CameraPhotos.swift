@@ -189,7 +189,7 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
                     self.currentVC.present(self.imagePicker, animated: true, completion: nil)
                 } else {
                     self.imageAction?.PromiseReturn(nil)
-                    self.dialog.makeDialog(self.currentVC, title : "경고", message : "카메라에 접근할 수 없습니다" , btn: [["destructive" , "확인"]] , type : "alert", animated : true, promiseAction: nil)
+                    self.dialog.makeDialog(self.currentVC, title : "경고", message : "카메라에 접근할 수 없습니다" , btn: [["확인","destructive"]] , type : "alert", animated : true, promiseAction: nil)
                 }
                 break
             case "Photos":
@@ -203,7 +203,7 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
                     self.currentVC.present(self.imagePicker, animated: true, completion: nil)
                 }else{
                     self.imageAction?.PromiseReturn(nil)
-                    self.dialog.makeDialog(self.currentVC, title : "경고", message : "Photos에 접근할 수 없습니다" , btn: [["destructive" , "확인"]] , type : "alert", animated : true, promiseAction: nil)
+                    self.dialog.makeDialog(self.currentVC, title : "경고", message : "Photos에 접근할 수 없습니다" , btn: [["확인","destructive"]] , type : "alert", animated : true, promiseAction: nil)
                 }
                 break
             default:
@@ -214,16 +214,16 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
     
     // 사진 한장 선택
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        self.currentVC.dismiss( animated: true){
-            let captureImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
-            let resizedImage = self.resizeImage(image: captureImage, targetSize: CGSize(width: self.width, height: self.height))
-            if self.flagImageSave {
-                UIImageWriteToSavedPhotosAlbum(captureImage, self, nil, nil)
-            }
-            let imageData:NSData = resizedImage.jpegData(compressionQuality: 0.25)! as NSData
-            let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
-            let encodedString = strBase64.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? ""
-            self.imageAction?.PromiseReturn(encodedString)
+        self.currentVC.dismiss(animated: true){
+                let captureImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
+                let resizedImage = self.resizeImage(image: captureImage, targetSize: CGSize(width: self.width, height: self.height))
+                if self.flagImageSave {
+                    UIImageWriteToSavedPhotosAlbum(captureImage, self, nil, nil)
+                }
+                let imageData:NSData = resizedImage.jpegData(compressionQuality: 0.25)! as NSData
+                let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
+                let encodedString = strBase64.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? ""
+                self.imageAction?.PromiseReturn(encodedString)
         }
     }
     

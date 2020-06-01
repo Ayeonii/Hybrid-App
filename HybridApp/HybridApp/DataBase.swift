@@ -18,14 +18,13 @@ class DataBase: NSObject {
         let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("TestDB.sqlite")
         
         if sqlite3_open(fileURL.path, &db) == SQLITE_OK {
-            print("Fail to Open DataBase")
+            print("DB Open")
         }
         
         if sqlite3_exec(db, "CREATE TABLE IF NOT EXISTS VisitLogs (id INTEGER PRIMARY KEY AUTOINCREMENT, URL TEXT, Date DOUBLE)", nil, nil, nil) != SQLITE_OK {
             let errmsg = String(cString: sqlite3_errmsg(db)!)
             print("error creating table: \(errmsg)")
         }
-    
     }
     
     func createVisitURL (url : URL, date : Date){
