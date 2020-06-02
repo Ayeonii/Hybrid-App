@@ -23,30 +23,30 @@ class User {
             let value =  argument[2]
            
             switch mode {
-            case 0 :
-                UserDefaults.standard.set(value!, forKey: forkey)
-                if let returnVal =  UserDefaults.standard.object(forKey: forkey) {
-                    returnValue = returnVal
-                }
-                break
-            case 1 :
-                if let returnVal =  (UserDefaults.standard.object(forKey: forkey) as Any?) {
-                    returnValue = returnVal
-                }else{
-                    returnValue = nil
-                }
-                break
-            case 2 :
-                UserDefaults.standard.removeObject(forKey: forkey)
-                if (UserDefaults.standard.object(forKey: forkey) as Any?) != nil {
-                    returnValue = "Delete Failed"
-                }else {
-                    returnValue = "Delete Completely"
-                }
-                break
-            default:
-                returnValue = "Error in Input Parameter. Confirm your <mode> Parameter."
-                break
+                case 0 :
+                    UserDefaults.standard.set(value!, forKey: forkey)
+                    if let returnVal =  UserDefaults.standard.object(forKey: forkey) {
+                        returnValue = returnVal
+                    }
+                    break
+                case 1 :
+                    if let returnVal =  (UserDefaults.standard.object(forKey: forkey) as Any?) {
+                        returnValue = returnVal
+                    }else{
+                        returnValue = nil
+                    }
+                    break
+                case 2 :
+                    UserDefaults.standard.removeObject(forKey: forkey)
+                    if (UserDefaults.standard.object(forKey: forkey) as Any?) != nil {
+                        returnValue = "Delete Failed"
+                    }else {
+                        returnValue = "Delete Completely"
+                    }
+                    break
+                default:
+                    returnValue = "Error in Input Parameter. Confirm your <mode> Parameter."
+                    break
             }
             return returnValue
         }

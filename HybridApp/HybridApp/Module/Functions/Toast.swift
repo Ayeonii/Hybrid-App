@@ -24,7 +24,7 @@ class Toast: NSObject {
             }
 
             DispatchQueue.main.async {
-                let alert = UIAlertController (title : nil, message: message, preferredStyle: .actionSheet)
+                let alert = UIAlertController (title : nil, message: message, preferredStyle: .alert)
             
                 alert.view.backgroundColor = .black
                 alert.view.alpha = 0.9

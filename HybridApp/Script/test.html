@@ -6,7 +6,6 @@
 </head>
 <script type="text/javascript">
     var imgsrc ;
-    let t = 0;
 
    // when $flex on ready.....
      window.onFlexLoad = function() {
@@ -66,11 +65,12 @@
     }
 
     const Dialog = async () => {
-        
-        var btn = [['확인', 'basic'],['취소','cancel'],['삭제','destructive']]
-        
+        var btn = {'basic': '확인'
+                    ,'destructive' : '삭제'
+                    ,'cancel':'취소'}
+
         try {
-            const result = await $flex.Dialog('testTitle', 'testMessage', btn, true ,true);
+            const result = await $flex.Dialog('testTitle', 'testMessage', btn, false ,true);
             console.log('Return by Native with Dialog   : ' + result)
         } catch {
             console.log('Dialog() error 발생')
@@ -99,6 +99,7 @@
         try {
             const result = await $flex.Network();
             console.log('Return by Native with Network   : ' + result)
+
         } catch {
             console.log('Network() error 발생')
         }
@@ -134,7 +135,7 @@
     const Notification = async () => {
         try {
             var badge = 1
-            const result = await $flex.Notification('testTitle', null, 'Body임', badge, '식별자이아연',false, 5);
+            const result = await $flex.Notification('testTitle', '', 'Body임', badge, '식별자이아연',false, 5);
             console.log('Return by Native with Notification   : '+ result)
         }catch {
             consoel.log('Notification() error 발생')
@@ -179,7 +180,7 @@
 
     const WebPopup = async () => {
         try {
-            const result = await $flex.WebPopup( false, "popup", 0.5, 0.5);
+            const result = await $flex.WebPopup( true, "https://www.naver.com", 0.5, 0.5);
                console.log('Return by Native with WebPopup   : '+ result)
            }catch {
                consoel.log('WebPopup() error 발생')
@@ -197,7 +198,7 @@
 
 const Toast = async (message, isShort) => {
     try {
-        const result = await $flex.Toast(message, isShort);
+        const result = await $flex.Toast(message, true);
         console.log('Return by Native with Toast   : '+ result)
     }catch {
         consoel.log('Toast() error 발생')
@@ -209,7 +210,7 @@ const Toast = async (message, isShort) => {
 <body style="width: 100%; height: 450px;">
     <div id = "photos"></div>
     <div id = 'attachFile' style = "backrground-color : blue;">
-        <input type='file' id = 'fileName' style="width: 100%; height: 200px; font-size : 50px; align-text : center; background-color : pink"/>
+        <input type='file' id = 'fileName' style="width: 100%; height: 200px; font-size : 50px; align-text : center;"/>
     </div>
     <button onclick="Toast('짧은토스트', true)" style="font-size: 50px; width: 100%; height: 150px;"> ShortToast</button>
     <button onclick="Toast('긴토스트', false)" style="font-size: 50px; width: 100%; height: 150px;"> LongToast</button>

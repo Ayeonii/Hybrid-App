@@ -68,7 +68,7 @@ class ViewController: UIViewController {
         mWebView.scrollView.bounces = false
         view.addSubview(mWebView)
         
-        mWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html", inDirectory: "demo")!)))
+        mWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "test", ofType: "html", inDirectory: "Script")!)))
 
         urlObserver.url = mWebView.url!
         

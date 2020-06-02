@@ -49,11 +49,14 @@ class WebPopup : NSObject, WKUIDelegate{
                 self.createWebView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 self.createWebView?.uiDelegate = self
                 
+                print("urlname ",urlName)
                 if !type{
                     self.createWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: urlName, ofType: "html", inDirectory: "Script")!)))
                 }else {
                     self.createWebView.load(URLRequest(url: URL(string : urlName)!))
                 }
+                
+                
                 self.tempView?.addSubview(self.createWebView!)
                 
                 self.urlObserver.url = self.createWebView.url!

@@ -63,7 +63,7 @@ class CameraPhotos : NSObject {
                         self.imageAction = action
                         self.cameraPhotosAction(ModuleType.camera.rawValue)
                     }else {
-                        self.dialog.makeDialog(self.currentVC, title : "알림", message : "해당 권한이 거부되었습니다." , btn: [["확인", "basic"]] , type : true, animated : true, promiseAction : nil)
+                        self.dialog.makeDialog(self.currentVC, title : "알림", message : "해당 권한이 거부되었습니다." , btn: ["basic": "확인"] , type : true, animated : true, promiseAction : nil)
                         returnStr = AuthrizeStatus.denied.rawValue
                     }
                 }
@@ -112,7 +112,7 @@ class CameraPhotos : NSObject {
                         self.imageAction = action
                         self.cameraPhotosAction(ModuleType.photos.rawValue)
                     case .denied :
-                        self.dialog.makeDialog(self.currentVC, title : "알림", message : "해당 권한이 거부되었습니다." , btn: [["확인" , "basic"]] , type : true, animated : true, promiseAction: nil)
+                        self.dialog.makeDialog(self.currentVC, title : "알림", message : "해당 권한이 거부되었습니다." , btn: ["basic": "확인"] , type : true, animated : true, promiseAction: nil)
                         returnStr = AuthrizeStatus.denied.rawValue
                     default:
                         break
@@ -189,7 +189,7 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
                     self.currentVC.present(self.imagePicker, animated: true, completion: nil)
                 } else {
                     self.imageAction?.PromiseReturn(nil)
-                    self.dialog.makeDialog(self.currentVC, title : "경고", message : "카메라에 접근할 수 없습니다" , btn: [["확인","destructive"]] , type : true, animated : true, promiseAction: nil)
+                    self.dialog.makeDialog(self.currentVC, title : "경고", message : "카메라에 접근할 수 없습니다" , btn: ["basic": "확인"] , type : true, animated : true, promiseAction: nil)
                 }
                 break
             case "Photos":
@@ -203,7 +203,7 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
                     self.currentVC.present(self.imagePicker, animated: true, completion: nil)
                 }else{
                     self.imageAction?.PromiseReturn(nil)
-                    self.dialog.makeDialog(self.currentVC, title : "경고", message : "Photos에 접근할 수 없습니다" , btn: [["확인","destructive"]] , type :true, animated : true, promiseAction: nil)
+                    self.dialog.makeDialog(self.currentVC, title : "경고", message : "Photos에 접근할 수 없습니다" , btn: ["basic": "확인"] , type :true, animated : true, promiseAction: nil)
                 }
                 break
             default:
