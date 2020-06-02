@@ -20,7 +20,6 @@ class QRCodeScan : NSObject {
     private var util = Utils()
     private var tempView : UIView!
 
-    
     init (_ viewController : UIViewController){
         self.currentVC = viewController
     }
@@ -30,9 +29,8 @@ class QRCodeScan : NSObject {
         return { (action, argument) -> Void in
             
             self.util.setUserHistory(forKey: "QRCodeScanBtn")
-          //  DispatchQueue.main.async {
-                loadingView.showActivityIndicator(text: "로딩 중")
-         //   }
+            loadingView.showActivityIndicator(text: "로딩 중")
+           
             if let captureSession = self.createCaptureSession() {
                 self.captureSession = captureSession
                 self.flexAction = action
@@ -44,9 +42,15 @@ class QRCodeScan : NSObject {
                     self.previewLayer = self.createPreviewLayer(withCaptureSession : captureSession)
                     self.tempView.layer.addSublayer(self.previewLayer)
                     
-                    let cancelBtn = UIButton(frame: CGRect(x: 0, y: self.currentVC.view.frame.height - 60, width: self.currentVC.view.frame.width, height: 60))
-                    cancelBtn.backgroundColor = UIColor.lightGray
+                    let cancelBtn = UIButton(frame: CGRect(x: 0, y: self.currentVC.view.frame.height - 60, width: self.currentVC.view.frame.width / 3.0 , height: 60))
+                    cancelBtn.center = CGPoint(x: self.currentVC.view.frame.size.width / 2.0, y : self.currentVC.view.frame.height - 60)
+                    cancelBtn.layer.borderColor = #colorLiteral(red: 0.1019607857, green: 0.2784313858, blue: 0.400000006, alpha: 1)
+                    cancelBtn.layer.borderWidth = 6
+                    cancelBtn.backgroundColor =  #colorLiteral(red: 0.578004143, green: 0.8483221003, blue: 1, alpha: 1)
+                    cancelBtn.layer.cornerRadius = 28
                     cancelBtn.setTitle("취소", for: .normal)
+                    cancelBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+                    cancelBtn.setTitleColor(#colorLiteral(red: 0.1019607857, green: 0.2784313858, blue: 0.400000006, alpha: 1), for: .normal)
                     cancelBtn.addTarget(self, action: #selector(self.requestCaptureSessionStopRunning(sender:)), for: .touchUpInside)
                     self.tempView.addSubview(cancelBtn)
                     self.tempView.bringSubviewToFront(cancelBtn)  ///요기요기요기

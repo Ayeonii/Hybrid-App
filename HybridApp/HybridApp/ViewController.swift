@@ -68,7 +68,7 @@ class ViewController: UIViewController {
         mWebView.scrollView.bounces = false
         view.addSubview(mWebView)
         
-        mWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "test", ofType: "html", inDirectory: "Script")!)))
+        mWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html", inDirectory: "demo")!)))
 
         urlObserver.url = mWebView.url!
         
@@ -86,7 +86,7 @@ class ViewController: UIViewController {
             mWebView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor).isActive = true
             mWebView.topAnchor.constraint(equalTo: safeArea.topAnchor).isActive = true
             mWebView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor).isActive = true
-            mWebView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor).isActive = true
+            mWebView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         } else {
             view.backgroundColor = UIColor.white
             mWebView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true

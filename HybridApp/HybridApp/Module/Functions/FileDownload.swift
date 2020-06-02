@@ -26,17 +26,18 @@ class FileDownload : NSObject{
     }
     
     func startFileDownload () -> (FlexAction, Array<Any?>) -> Void?{
+        
         return { (action, argument) -> Void in
+            
             self.util.setUserHistory(forKey: "FileDownloadBtn")
             
-            self.loadingView = LoadingView(self.component.parentViewController!.view)
-            self.loadingView.showActivityIndicator(text: "다운로드 중")
-        
+            DispatchQueue.main.async {
+                self.loadingView = LoadingView(self.component.parentViewController!.view)
+                self.loadingView.showActivityIndicator(text: "다운로드 중")
+            }
             self.flexAction  = action
             self.fileURL = argument[0] as? String
-            
             self.component.evalFlexFunc("result", sendData: "Download Start!")
-            
             self.fileDownload { (success, path) in
                 DispatchQueue.main.async(execute: {
                     self.openFileWithPath(filePath: path)
@@ -91,8 +92,8 @@ class FileDownload : NSObject{
                 self.flexAction.PromiseReturn("Error Writing File : \(error.localizedDescription)")
                 return
             }
+            self.loadingView.stopActivityIndicator()
         }
-        self.loadingView.stopActivityIndicator()
         task.resume()
     }
     
