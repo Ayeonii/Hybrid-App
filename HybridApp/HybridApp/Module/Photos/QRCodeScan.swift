@@ -19,7 +19,7 @@ class QRCodeScan : NSObject {
     private var previewLayer : CALayer!
     private var util = Utils()
     private var tempView : UIView!
-
+    private var loadingView : UIView!
     init (_ viewController : UIViewController){
         self.currentVC = viewController
     }
@@ -28,14 +28,12 @@ class QRCodeScan : NSObject {
         return { (action, argument) -> Void in
             
             self.util.setUserHistory(forKey: "QRCodeScanBtn")
-            
+            self.startLoading()
             if let captureSession = self.createCaptureSession() {
                 self.captureSession = captureSession
                 self.flexAction = action
                 self.requestCaptureSessionStartRunning()
-                
                 DispatchQueue.main.async {
-                    
                     self.tempView = UIView(frame: self.currentVC.view.bounds)
                     self.tempView?.backgroundColor = UIColor.black.withAlphaComponent(0.7)
                     self.currentVC.view.addSubview(self.tempView!)
@@ -43,15 +41,22 @@ class QRCodeScan : NSObject {
                     self.tempView.layer.addSublayer(self.previewLayer)
                     
                     let cancelBtn = UIButton(frame: CGRect(x: 0, y: self.currentVC.view.frame.height - 60, width: self.currentVC.view.frame.width, height: 60))
-                    cancelBtn.backgroundColor = .blue
+                    cancelBtn.backgroundColor = UIColor.lightGray
                     cancelBtn.setTitle("취소", for: .normal)
                     cancelBtn.addTarget(self, action: #selector(self.requestCaptureSessionStopRunning(sender:)), for: .touchUpInside)
                     self.tempView.addSubview(cancelBtn)
                 }
-                
             } else {
                 action.PromiseReturn(nil)
             }
+            LoadingView().removeSpinner(spinner: self.loadingView)
+        }
+    }
+    
+    func startLoading() {
+        DispatchQueue.main.async {
+            self.loadingView = LoadingView().displaySpinner(onView: self.currentVC.view)
+            self.currentVC.view.addSubview(self.loadingView)
         }
     }
 }

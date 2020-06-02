@@ -63,7 +63,7 @@ class ViewController: UIViewController {
         component.setAction ("FileDownload", FileDownload(component).startFileDownload())
                 
         #if canImport(CoreNFC)
-        component.setAction ("NFCReading", NFC().nfcReadingFunction())
+        component.setAction ("NFCReading", NFC(self).nfcReadingFunction())
         #endif
 
         component.setBaseUrl("file://")
