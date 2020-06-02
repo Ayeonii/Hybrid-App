@@ -117,9 +117,9 @@
 			children = (
 				CCAF068F2473BCE2002F47AD /* Utils.swift */,
 				CC8A52D42484E14A005E9387 /* URLObserver.swift */,
+				CC93996A2485DA4A0004AD4F /* LoadingView.swift */,
 				CC8A52B9248393CB005E9387 /* Functions */,
 				CC8A52B324839291005E9387 /* Photos */,
-				CC93996A2485DA4A0004AD4F /* LoadingView.swift */,
 			);
 			path = Module;
 			sourceTree = "<group>";

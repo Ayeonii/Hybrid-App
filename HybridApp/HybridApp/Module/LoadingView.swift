@@ -15,12 +15,11 @@ class LoadingView: NSObject {
         
         DispatchQueue.main.async {
             spinnerView.backgroundColor = UIColor(white: 1, alpha: 0)
-            let ai = UIActivityIndicatorView(style: .gray)
-            ai.startAnimating()
-            ai.center = spinnerView.center
-            spinnerView.addSubview(ai)
+            let loadingCircle = UIActivityIndicatorView(style: .gray)
+            loadingCircle.startAnimating()
+            loadingCircle.center = spinnerView.center
+            spinnerView.addSubview(loadingCircle)
         }
-        
         return spinnerView
     }
     

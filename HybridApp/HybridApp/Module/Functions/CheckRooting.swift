@@ -21,7 +21,7 @@ class CheckRooting {
             
             self.util.setUserHistory(forKey: "RootingCheckBtn")
             
-            var returnStr : String = "Not Root Autority"
+            var returnStr : String = "Not Root Authority"
             DispatchQueue.main.async{
                 if !self.hasJailbreak() {
                     returnStr = "RootAuthority"

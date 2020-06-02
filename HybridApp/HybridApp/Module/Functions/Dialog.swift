@@ -31,16 +31,20 @@ class Dialog {
     }
     
     func makeDialog(_ currentVC : UIViewController, title : String, message : String , btn : [[String]]?, type : String?, animated : Bool, promiseAction : FlexAction?){
-        
+
         DispatchQueue.main.async {
             var dialog : UIAlertController
             var btnAction : UIAlertAction!
-            if type == "alert" {
+            
+            if type == "action" {
+                dialog = UIAlertController (title : title, message : message, preferredStyle: .actionSheet)
+            } else {
                 dialog = UIAlertController (title : title, message : message, preferredStyle: .alert)
-                
-                if let alertBtn = btn {
-                    for i in 0 ..< alertBtn.count {
-                        switch alertBtn[i][1] {
+            }
+            
+            if let alertBtn = btn {
+                for i in 0 ..< alertBtn.count {
+                    switch alertBtn[i][1] {
                         case "basic" :
                             btnAction = UIAlertAction(title : alertBtn[i][0], style: .default){ alertAction in
                                 promiseAction?.PromiseReturn(alertBtn[i][0])
@@ -59,9 +63,8 @@ class Dialog {
                         default :
                             promiseAction?.PromiseReturn(nil)
                             break
-                        }
-                        dialog.addAction(btnAction)
                     }
+                    dialog.addAction(btnAction)
                 }
             } else {
                 promiseAction?.PromiseReturn(nil)

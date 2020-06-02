@@ -36,7 +36,7 @@ class Utils: NSObject {
         }
 
         self.userDefault.set(self.history,forKey: forKey)
-   //     print(self.userDefault.array(forKey: forKey) as Any)
+
     }
     
     func getUserHistory(forKey : String) -> Array<Any?>? {

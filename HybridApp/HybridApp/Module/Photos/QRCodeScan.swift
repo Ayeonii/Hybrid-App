@@ -19,16 +19,21 @@ class QRCodeScan : NSObject {
     private var previewLayer : CALayer!
     private var util = Utils()
     private var tempView : UIView!
-    private var loadingView : UIView!
+
+    
     init (_ viewController : UIViewController){
         self.currentVC = viewController
     }
     
     func codeScanFunction() -> (FlexAction, Array<Any?>) ->Void? {
+        var loadingView : UIView!
         return { (action, argument) -> Void in
             
             self.util.setUserHistory(forKey: "QRCodeScanBtn")
-            self.startLoading()
+            DispatchQueue.main.async {
+                loadingView = LoadingView().displaySpinner(onView: self.currentVC.view)
+                self.currentVC.view.addSubview(loadingView)
+            }
             if let captureSession = self.createCaptureSession() {
                 self.captureSession = captureSession
                 self.flexAction = action
@@ -49,14 +54,7 @@ class QRCodeScan : NSObject {
             } else {
                 action.PromiseReturn(nil)
             }
-            LoadingView().removeSpinner(spinner: self.loadingView)
-        }
-    }
-    
-    func startLoading() {
-        DispatchQueue.main.async {
-            self.loadingView = LoadingView().displaySpinner(onView: self.currentVC.view)
-            self.currentVC.view.addSubview(self.loadingView)
+            LoadingView().removeSpinner(spinner: loadingView)
         }
     }
 }

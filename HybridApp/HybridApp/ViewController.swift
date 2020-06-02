@@ -15,15 +15,8 @@ class ViewController: UIViewController {
     
     var mWebView: FlexWebView!
     var component = FlexComponent()
-    let userDefault = UserDefaults.standard
-    var createWebView: WKWebView!
-    var tempView : UIView!
-    var currentURL : URL!
     let urlObserver = URLObserver()
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
+    var indicator : UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,7 +31,7 @@ class ViewController: UIViewController {
         
         component.setInterface ("UserDefault", User().userDefaultFunction())
         
-        component.setInterface ("AppUUID"){_ in return self.userDefault.object(forKey: "APP_UUID")}
+        component.setInterface ("AppUUID"){_ in return UserDefaults.standard.object(forKey: "APP_UUID")}
         
         component.setInterface ("DeviceUUID", KeyChain().keyChainInit())
         
@@ -99,6 +92,15 @@ class ViewController: UIViewController {
             mWebView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
             mWebView.bottomAnchor.constraint(equalTo: bottomLayoutGuide.topAnchor).isActive = true
         }
+    }
+    
+    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!){
+        indicator = LoadingView().displaySpinner(onView: view)
+        view.addSubview(indicator)
+    }
+ 
+    func webView(_ webView: WKWebView, didFinish navigation : WKNavigation!){
+        LoadingView().removeSpinner(spinner : indicator)
     }
 
 }
