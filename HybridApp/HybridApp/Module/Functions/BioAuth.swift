@@ -51,7 +51,7 @@ class BioAuth {
                         print(error.localizedDescription)
                         action.PromiseReturn(error.localizedDescription)
                     }
-                    action.PromiseReturn(AuthrizeStatus.authorized.rawValue)
+                    action.PromiseReturn(AuthrizeStatus.denied.rawValue)
                 }
             }
         }

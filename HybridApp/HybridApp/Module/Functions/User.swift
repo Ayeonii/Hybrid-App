@@ -18,29 +18,28 @@ class User {
             
             var returnValue : Any?
 
-            let mode = argument[0] as! String
+            let mode = argument[0] as! Int
             let forkey = argument[1] as! String
             let value =  argument[2]
            
             switch mode {
-            case "SET" :
-                UserDefaults.standard.set(value, forKey: forkey)
+            case 0 :
+                UserDefaults.standard.set(value!, forKey: forkey)
                 if let returnVal =  UserDefaults.standard.object(forKey: forkey) {
                     returnValue = returnVal
                 }
                 break
-            case "GET" :
+            case 1 :
                 if let returnVal =  (UserDefaults.standard.object(forKey: forkey) as Any?) {
                     returnValue = returnVal
                 }else{
                     returnValue = nil
                 }
                 break
-            case "DELETE" :
+            case 2 :
                 UserDefaults.standard.removeObject(forKey: forkey)
                 if (UserDefaults.standard.object(forKey: forkey) as Any?) != nil {
                     returnValue = "Delete Failed"
-                    
                 }else {
                     returnValue = "Delete Completely"
                 }

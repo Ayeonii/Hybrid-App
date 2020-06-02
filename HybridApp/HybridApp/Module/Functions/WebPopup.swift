@@ -26,9 +26,9 @@ class WebPopup : NSObject, WKUIDelegate{
                 let currentVC  = component.parentViewController!
                 self.mWebview = component.FlexWebView!
                 
-                let urlName = argument[0] as! String
-                let type = argument[1] as! String
-                
+                let type = argument[0] as! Bool
+                let urlName = argument[1] as! String
+            
                 var x = argument[2]
                 var y = argument[3]
                 
@@ -48,7 +48,12 @@ class WebPopup : NSObject, WKUIDelegate{
                 self.createWebView = WKWebView(frame: CGRect(x: startX, y: startY , width: sizeX , height: sizeY), configuration: WKWebViewConfiguration())
                 self.createWebView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 self.createWebView?.uiDelegate = self
-                self.createWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: urlName, ofType: type, inDirectory: "Script")!)))
+                
+                if !type{
+                    self.createWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: urlName, ofType: "html", inDirectory: "Script")!)))
+                }else {
+                    self.createWebView.load(URLRequest(url: URL(string : urlName)!))
+                }
                 self.tempView?.addSubview(self.createWebView!)
                 
                 self.urlObserver.url = self.createWebView.url!

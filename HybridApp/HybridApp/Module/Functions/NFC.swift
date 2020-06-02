@@ -127,13 +127,6 @@ extension NFC : NFCNDEFReaderSessionDelegate {
         }
         self.session = nil
     }
-    
-    //readerSession시작 전
-    func readerSessionDidBecomeActive(_ session: NFCNDEFReaderSession) {
-        
-    }
-    
-
 }
 
 

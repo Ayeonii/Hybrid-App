@@ -26,14 +26,13 @@ class QRCodeScan : NSObject {
     }
     
     func codeScanFunction() -> (FlexAction, Array<Any?>) ->Void? {
-        var loadingView : UIView!
+        let loadingView = LoadingView(currentVC.view)
         return { (action, argument) -> Void in
             
             self.util.setUserHistory(forKey: "QRCodeScanBtn")
-            DispatchQueue.main.async {
-                loadingView = LoadingView().displaySpinner(onView: self.currentVC.view)
-                self.currentVC.view.addSubview(loadingView)
-            }
+          //  DispatchQueue.main.async {
+                loadingView.showActivityIndicator(text: "로딩 중")
+         //   }
             if let captureSession = self.createCaptureSession() {
                 self.captureSession = captureSession
                 self.flexAction = action
@@ -50,11 +49,12 @@ class QRCodeScan : NSObject {
                     cancelBtn.setTitle("취소", for: .normal)
                     cancelBtn.addTarget(self, action: #selector(self.requestCaptureSessionStopRunning(sender:)), for: .touchUpInside)
                     self.tempView.addSubview(cancelBtn)
+                    self.tempView.bringSubviewToFront(cancelBtn)  ///요기요기요기
                 }
             } else {
                 action.PromiseReturn(nil)
             }
-            LoadingView().removeSpinner(spinner: loadingView)
+            loadingView.stopActivityIndicator()
         }
     }
 }
@@ -143,7 +143,8 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate {
     private func createPreviewLayer(withCaptureSession captureSession: AVCaptureSession) -> AVCaptureVideoPreviewLayer{
         let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
     
-        previewLayer.frame = CGRect(x:0, y:0, width:self.currentVC.view.frame.width, height: self.currentVC.view.frame.height - 60)
+      //  previewLayer.frame = CGRect(x:0, y:0, width:self.currentVC.view.frame.width, height: self.currentVC.view.frame.height - 60)
+        previewLayer.frame = self.currentVC.view.bounds
         previewLayer.videoGravity = .resizeAspectFill
         
         return previewLayer

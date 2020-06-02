@@ -16,27 +16,27 @@ class Dialog {
     
     let util = Utils()
     
-    func dialogFunction(_ currentVC : UIViewController) -> (FlexAction, Array<Any?>?) -> Void {
+    func dialogFunction(_ currentVC : UIViewController) -> (FlexAction, Array<Any?>) -> Void {
         return { (action,  arguments) -> Void in
             
             self.util.setUserHistory(forKey: "DialogBtn")
-            let title = arguments?[0] as! String
-            let message = arguments?[1] as! String
-            let btn = arguments?[2] as! [[String]]
-            let type = arguments?[3] as! String
-            let animated = ((arguments?[4]) != nil) as Bool
+            let title = arguments[0] as! String
+            let message = arguments[1] as! String
+            let btn = arguments[2] as! [[String]]
+            let type = arguments[3] as! Bool
+            let animated = ((arguments[4]) != nil) as Bool
             
             self.makeDialog(currentVC, title : title, message : message , btn: btn , type : type, animated : animated, promiseAction : action)
         }
     }
     
-    func makeDialog(_ currentVC : UIViewController, title : String, message : String , btn : [[String]]?, type : String?, animated : Bool, promiseAction : FlexAction?){
+    func makeDialog(_ currentVC : UIViewController, title : String, message : String , btn : [[String]]?, type : Bool?, animated : Bool, promiseAction : FlexAction?){
 
         DispatchQueue.main.async {
             var dialog : UIAlertController
             var btnAction : UIAlertAction!
             
-            if type == "action" {
+            if !(type!) {
                 dialog = UIAlertController (title : title, message : message, preferredStyle: .actionSheet)
             } else {
                 dialog = UIAlertController (title : title, message : message, preferredStyle: .alert)

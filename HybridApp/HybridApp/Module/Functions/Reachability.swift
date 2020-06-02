@@ -163,11 +163,11 @@ class CheckNetwork{
     func checkNetworkConnect () -> (FlexAction, Array<Any?>) -> Void? {
         return{ (action, argumnet) -> Void in
             self.flexAction = action
-            NotificationCenter.default
-            .addObserver(self.currentVC,
-                            selector: #selector(self.statusManager),
-                            name: NSNotification.Name(rawValue: "FlagsChanged"),
-                            object: nil)
+//            NotificationCenter.default
+//            .addObserver(self.currentVC,
+//                            selector: #selector(self.statusManager),
+//                            name: NSNotification.Name(rawValue: "FlagsChanged"),
+//                            object: nil)
             self.updateUserInterface()
         }
     }
@@ -182,7 +182,7 @@ class CheckNetwork{
             case .wifi:
                 self.flexAction.PromiseReturn("WIFI Connection")
             default :
-                self.flexAction.PromiseReturn("Network Default")
+                self.flexAction.PromiseReturn("No Connection!")
                 break
         }
         print("Status:", Network.reachability!.status)

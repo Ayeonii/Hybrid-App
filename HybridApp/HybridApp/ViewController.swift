@@ -16,7 +16,7 @@ class ViewController: UIViewController {
     var mWebView: FlexWebView!
     var component = FlexComponent()
     let urlObserver = URLObserver()
-    var indicator : UIView!
+    var indicator : LoadingView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,11 +29,13 @@ class ViewController: UIViewController {
         
         component.setInterface ("Notification", Notification(self).notifiFunction())
         
-        component.setInterface ("UserDefault", User().userDefaultFunction())
+        component.setInterface ("LocalRepository", User().userDefaultFunction())
         
-        component.setInterface ("AppUUID"){_ in return UserDefaults.standard.object(forKey: "APP_UUID")}
+        component.setInterface ("UniqueAppID"){_ in return UserDefaults.standard.string(forKey: "APP_UUID")}
         
-        component.setInterface ("DeviceUUID", KeyChain().keyChainInit())
+        component.setInterface ("Toast",Toast().toastFunction(self))
+        
+        component.setInterface ("UniqueDeviceID", KeyChain().keyChainInit())
         
         component.setInterface ("WebPopup", WebPopup().popupFunction(component))
         
@@ -45,13 +47,13 @@ class ViewController: UIViewController {
     
         component.setAction("Dialog", Dialog().dialogFunction(self))
         
-        component.setAction("BioAuthentication", BioAuth().authFunction())
+        component.setAction("Authentication", BioAuth().authFunction())
         
         component.setAction("Network", CheckNetwork(self).checkNetworkConnect())
         
         component.setAction("QRCodeScan", QRCodeScan(self).codeScanFunction())
         
-        component.setAction ("SendMessage", Message().sendMessge(self))
+        component.setAction ("SendSMS", Message().sendMessge(self))
         
         component.setAction ("FileDownload", FileDownload(component).startFileDownload())
                 
@@ -76,7 +78,7 @@ class ViewController: UIViewController {
             mWebView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor).isActive = true
             mWebView.topAnchor.constraint(equalTo: safeArea.topAnchor).isActive = true
             mWebView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor).isActive = true
-            mWebView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor).isActive = true
+            mWebView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         }
         else if #available(iOS 11.0, *) {
             view.backgroundColor = UIColor.white
@@ -95,12 +97,12 @@ class ViewController: UIViewController {
     }
     
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!){
-        indicator = LoadingView().displaySpinner(onView: view)
-        view.addSubview(indicator)
+        indicator = LoadingView(view)
+        indicator.showActivityIndicator(text: "로딩 중")
     }
  
     func webView(_ webView: WKWebView, didFinish navigation : WKNavigation!){
-        LoadingView().removeSpinner(spinner : indicator)
+        indicator.stopActivityIndicator()
     }
 
 }

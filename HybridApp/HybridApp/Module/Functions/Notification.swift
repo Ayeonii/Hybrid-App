@@ -30,7 +30,7 @@ class Notification: NSObject, UNUserNotificationCenterDelegate {
             print(data)
             let content = UNMutableNotificationContent()
             content.title = arguments[0] as! String
-            content.subtitle = arguments[1] as! String
+            content.subtitle = arguments[1] as? String ?? ""
             content.body = arguments[2] as! String
             content.badge = NSNumber(value: arguments[3] as! Int)
             

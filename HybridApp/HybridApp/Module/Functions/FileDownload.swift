@@ -19,6 +19,7 @@ class FileDownload : NSObject{
     private var interaction: UIDocumentInteractionController?
     private var component : FlexComponent
     private let util = Utils()
+    private var loadingView : LoadingView!
     
     init(_ component : FlexComponent){
         self.component = component
@@ -26,13 +27,16 @@ class FileDownload : NSObject{
     
     func startFileDownload () -> (FlexAction, Array<Any?>) -> Void?{
         return { (action, argument) -> Void in
-            
             self.util.setUserHistory(forKey: "FileDownloadBtn")
             
+            self.loadingView = LoadingView(self.component.parentViewController!.view)
+            self.loadingView.showActivityIndicator(text: "다운로드 중")
+        
             self.flexAction  = action
             self.fileURL = argument[0] as? String
             
             self.component.evalFlexFunc("result", sendData: "Download Start!")
+            
             self.fileDownload { (success, path) in
                 DispatchQueue.main.async(execute: {
                     self.openFileWithPath(filePath: path)
@@ -88,6 +92,7 @@ class FileDownload : NSObject{
                 return
             }
         }
+        self.loadingView.stopActivityIndicator()
         task.resume()
     }
     

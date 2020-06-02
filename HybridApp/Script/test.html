@@ -70,19 +70,19 @@
         var btn = [['확인', 'basic'],['취소','cancel'],['삭제','destructive']]
         
         try {
-            const result = await $flex.Dialog('testTitle', 'testMessage', btn, 'alert',true);
+            const result = await $flex.Dialog('testTitle', 'testMessage', btn, true ,true);
             console.log('Return by Native with Dialog   : ' + result)
         } catch {
             console.log('Dialog() error 발생')
         }
     }
 
-    const BioAuthentication = async () => {
+    const Authentication = async () => {
         try {
-            const result = await $flex.BioAuthentication();
-            console.log('Return by Native with BioAuthentication   : ' + result)
+            const result = await $flex.Authentication();
+            console.log('Return by Native with Authentication   : ' + result)
         } catch {
-            console.log('BioAuthentication() error 발생')
+            console.log('Authentication() error 발생')
         }
     }
 
@@ -104,7 +104,7 @@
         }
     }
 
-    const CodeScan = async () => {
+    const QRCodeScan = async () => {
         try {
             const result = await $flex.QRCodeScan();
             console.log('Return by Native with QRCodeScan   : ' + result)
@@ -122,9 +122,9 @@
         }
     }
 
-    const SendMessage = async () => {
+    const SendSMS = async () => {
         try {
-            const result = await $flex.SendMessage('01099642514','HybridApp에서 보내는 메세지양');
+            const result = await $flex.SendSMS('01099642514','HybridApp에서 보내는 메세지양');
             console.log('Return by Native with NFCReading   : '+ result)
         }catch {
             consoel.log('SendMessage() error 발생')
@@ -134,7 +134,7 @@
     const Notification = async () => {
         try {
             var badge = 1
-            const result = await $flex.Notification('testTitle', 'testSubTitle', 'Body임', badge,    '식별자이아연',false, 5);
+            const result = await $flex.Notification('testTitle', null, 'Body임', badge, '식별자이아연',false, 5);
             console.log('Return by Native with Notification   : '+ result)
         }catch {
             consoel.log('Notification() error 발생')
@@ -150,36 +150,36 @@
         }
     }
 
-    const UserDefault = async (mode, forKey, value) => {
+    const LocalRepository = async (mode, forKey, value) => {
         try {
-            const result = await $flex.UserDefault(mode, forKey, value);
+            const result = await $flex.LocalRepository(mode, forKey, value);
             console.log('Return by Native with UserDefault   : '+ result)
         }catch {
             consoel.log('UserDefault() error 발생')
         }
     }
 
-    const AppUUID = async () => {
+    const UniqueAppID = async () => {
         try {
-            const result = await $flex.AppUUID();
-            console.log('Return by Native with AppUUID   : '+ result)
+            const result = await $flex.UniqueAppID();
+            console.log('Return by Native with UniqueAppID   : '+ result)
         }catch {
-            consoel.log('AppUUID() error 발생')
+            consoel.log('UniqueAppID() error 발생')
         }
     }
 
-    const DeviceUUID = async () => {
+    const UniqueDeviceID = async () => {
         try {
-            const result = await $flex.DeviceUUID();
-            console.log('Return by Native with DeviceUUID   : '+ result)
+            const result = await $flex.UniqueDeviceID();
+            console.log('Return by Native with UniqueDeviceID   : '+ result)
         }catch {
-            consoel.log('DeviceUUID() error 발생')
+            consoel.log('UniqueDeviceID() error 발생')
         }
     }
 
     const WebPopup = async () => {
         try {
-            const result = await $flex.WebPopup("popup","html", 0.5, 0.5);
+            const result = await $flex.WebPopup( false, "popup", 0.5, 0.5);
                console.log('Return by Native with WebPopup   : '+ result)
            }catch {
                consoel.log('WebPopup() error 발생')
@@ -195,6 +195,15 @@
         }
     }
 
+const Toast = async (message, isShort) => {
+    try {
+        const result = await $flex.Toast(message, isShort);
+        console.log('Return by Native with Toast   : '+ result)
+    }catch {
+        consoel.log('Toast() error 발생')
+    }
+}
+
 
 </script>
 <body style="width: 100%; height: 450px;">
@@ -202,25 +211,27 @@
     <div id = 'attachFile' style = "backrground-color : blue;">
         <input type='file' id = 'fileName' style="width: 100%; height: 200px; font-size : 50px; align-text : center; background-color : pink"/>
     </div>
+    <button onclick="Toast('짧은토스트', true)" style="font-size: 50px; width: 100%; height: 150px;"> ShortToast</button>
+    <button onclick="Toast('긴토스트', false)" style="font-size: 50px; width: 100%; height: 150px;"> LongToast</button>
     <button onclick="WebPopup()" style="font-size: 50px; width: 100%; height: 150px;"> Popup</button>
     <button onclick='Camera()' style="width: 100%; height: 150px; font-size : 50px">Camera</button>
     <button onclick='SinglePhoto()' style="width: 100%; height: 150px; font-size : 50px">SinglePhoto</button>
     <button onclick='MultiplePhotos()' style="width: 100%; height: 150px; font-size : 50px">MultiplePhotos</button>
     <button onclick='Dialog()' style="width: 100%; height: 150px; font-size : 50px">Dialog</button>
     <button onclick='Location()' style="width: 100%; height: 150px; font-size : 50px">Location</button>
-    <button onclick='BioAuthentication()' style="width: 100%; height: 150px; font-size : 50px">BioAuthentication</button>
+    <button onclick='Authentication()' style="width: 100%; height: 150px; font-size : 50px">Authentication</button>
     <button onclick='RootingCheck()' style="width: 100%; height: 150px; font-size : 50px">RootingCheck</button>
     <button onclick='Network()' style="width: 100%; height: 150px; font-size : 50px">Network</button>
-    <button onclick='CodeScan()' style="width: 100%; height: 150px; font-size : 50px">QRCodeScan</button>
+    <button onclick='QRCodeScan()' style="width: 100%; height: 150px; font-size : 50px">QRCodeScan</button>
     <button onclick='NFCReading()' style="width: 100%; height: 150px; font-size : 50px">NFC Reading</button>
-    <button onclick='SendMessage()' style="width: 100%; height: 150px; font-size : 50px">SendMessage</button>
+    <button onclick='SendSMS()' style="width: 100%; height: 150px; font-size : 50px">SendSMS</button>
     <button onclick='Notification()' style="width: 100%; height: 150px; font-size : 50px">Notification</button>
     <button onclick='FileDownload()' style="font-size: 50px; width: 100%; height: 150px;">FileDownload</button>
     <button onclick="UserDefault('SET', 'TEST2', ['LeeAyeon' , 'she is so Lovely!', 'Ayeon' , 'she is so Bright!'])" style="font-size: 50px; width: 100%; height: 150px;">UserSet</button>
     <button onclick="UserDefault('GET', 'TEST2', null)" style="font-size: 50px; width: 100%; height: 150px;">UserGet</button>
     <button onclick="UserDefault('DELETE', 'TEST2', null)" style="font-size: 50px; width: 100%; height: 150px;">UserDelete</button>
-    <button onclick="AppUUID()" style="font-size: 50px; width: 100%; height: 150px;"> AppUUID</button>
-    <button onclick="DeviceUUID()" style="font-size: 50px; width: 100%; height: 150px;"> DeviceUUID</button>
+    <button onclick="UniqueAppID()" style="font-size: 50px; width: 100%; height: 150px;"> AppUUID</button>
+    <button onclick="UniqueDeviceID()" style="font-size: 50px; width: 100%; height: 150px;"> UniqueDeviceID</button>
 </body>
 </html>
 
