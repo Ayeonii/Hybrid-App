@@ -108,6 +108,7 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate {
         if metadataObjects.count == 0 {
             print ("No QR Code is detected")
             self.requestCaptureSessionStopRunning(sender: nil)
+            self.flexAction?.PromiseReturn("Stopped QR Code")
             return
         }
         
@@ -141,13 +142,11 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate {
                 self.currentVC.view.isUserInteractionEnabled = true
             }
         }
-        self.flexAction?.PromiseReturn("Stopped QR Code")
     }
     
     private func createPreviewLayer(withCaptureSession captureSession: AVCaptureSession) -> AVCaptureVideoPreviewLayer{
         let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
     
-      //  previewLayer.frame = CGRect(x:0, y:0, width:self.currentVC.view.frame.width, height: self.currentVC.view.frame.height - 60)
         previewLayer.frame = self.currentVC.view.bounds
         previewLayer.videoGravity = .resizeAspectFill
         

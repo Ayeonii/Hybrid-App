@@ -3,6 +3,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 </head>
 <script type="text/javascript">
     var imgsrc ;
@@ -19,40 +20,80 @@
          }
      }
 
-    const Camera = async () => {
-        const result = await $flex.Camera(100, 100);
+    const CameraByDeviceRatio = async () => {
+        const result = await $flex.CameraByDeviceRatio(0.8, true);
         console.log(result);
          if(result == 'Cancel' || result == null){
                 console.log(result)
          }else {
              var imgTag = document.createElement("img")
-             imgTag.src = 'data:image/png;base64,' + result;
+             imgTag.src = result;
              var imgDiv = document.getElementById('photos');
              imgDiv.appendChild(imgTag)
          }
     }
 
-    const SinglePhoto = async () => {
-        const result = await $flex.SinglePhoto(80, 80);
+    const CameraByRatio = async () => {
+        const result = await $flex.CameraByRatio(0.8);
+        console.log(result);
+        if(result == 'Cancel' || result == null){
+                console.log(result)
+        }else {
+            var imgTag = document.createElement("img")
+            imgTag.src =  result;
+            var imgDiv = document.getElementById('photos');
+            imgDiv.appendChild(imgTag)
+        }
+    }
+
+    const PhotoByDeviceRatio = async () => {
+        const result = await $flex.PhotoByDeviceRatio(0.6, false);
         if(result == 'Cancel' || result == null){
              console.log(result)
         }else {
            var imgTag = document.createElement("img")
-           imgTag.src = 'data:image/png;base64,' + result;
+           imgTag.src = result;
            var imgDiv = document.getElementById('photos');
            imgDiv.appendChild(imgTag)
         }
     }
 
-    const MultiplePhotos = async () => {
-        const result = await $flex.MultiplePhotos(80, 80);
+    const PhotoByRatio = async () => {
+        const result = await $flex.PhotoByRatio(0.6);
+        if(result == 'Cancel' || result == null){
+            console.log(result)
+        }else {
+            var imgTag = document.createElement("img")
+            imgTag.src = 'data:image/png;base64,' + result;
+            var imgDiv = document.getElementById('photos');
+            imgDiv.appendChild(imgTag)
+        }
+    }
+
+    const MultiPhotoByDeviceRatio = async () => {
+        const result = await $flex.MultiPhotoByDeviceRatio(0.3,true);
         if(result == 'Cancel' || result == null){
             console.log(result)
         }else {
             console.log('Return by Native with MultiplePhotos   : ' + result.length)
             for (var i=0; i<result.length; i++){
                 var imgTag = document.createElement("img")
-                imgTag.src = 'data:image/png;base64,' + result[i];
+                imgTag.src = result[i];
+                var imgDiv = document.getElementById('photos');
+                imgDiv.appendChild(imgTag)
+            }
+        }
+    }
+
+    const MultiPhotoByRatio = async () => {
+        const result = await $flex.MultiPhotoByRatio(0.3);
+        if(result == 'Cancel' || result == null){
+            console.log(result)
+        }else {
+            console.log('Return by Native with MultiplePhotos   : ' + result.length)
+            for (var i=0; i<result.length; i++){
+                var imgTag = document.createElement("img")
+                imgTag.src = result[i];
                 var imgDiv = document.getElementById('photos');
                 imgDiv.appendChild(imgTag)
             }
@@ -180,7 +221,7 @@
 
     const WebPopup = async () => {
         try {
-            const result = await $flex.WebPopup( true, "https://www.naver.com", 0.5, 0.5);
+            const result = await $flex.WebPopup( true, "https://www.naver.com", 0.8, 0.8);
                console.log('Return by Native with WebPopup   : '+ result)
            }catch {
                consoel.log('WebPopup() error 발생')
@@ -207,32 +248,37 @@ const Toast = async (message, isShort) => {
 
 
 </script>
-<body style="width: 100%; height: 450px;">
+<body style="width: 100%;">
     <div id = "photos"></div>
     <div id = 'attachFile' style = "backrground-color : blue;">
-        <input type='file' id = 'fileName' style="width: 100%; height: 200px; font-size : 50px; align-text : center;"/>
+        <input type='file' id = 'fileName' style="width: 100%; height: 100px; font-size : 15px; align-text : center;"/>
     </div>
-    <button onclick="Toast('짧은토스트', true)" style="font-size: 50px; width: 100%; height: 150px;"> ShortToast</button>
-    <button onclick="Toast('긴토스트', false)" style="font-size: 50px; width: 100%; height: 150px;"> LongToast</button>
-    <button onclick="WebPopup()" style="font-size: 50px; width: 100%; height: 150px;"> Popup</button>
-    <button onclick='Camera()' style="width: 100%; height: 150px; font-size : 50px">Camera</button>
-    <button onclick='SinglePhoto()' style="width: 100%; height: 150px; font-size : 50px">SinglePhoto</button>
-    <button onclick='MultiplePhotos()' style="width: 100%; height: 150px; font-size : 50px">MultiplePhotos</button>
-    <button onclick='Dialog()' style="width: 100%; height: 150px; font-size : 50px">Dialog</button>
-    <button onclick='Location()' style="width: 100%; height: 150px; font-size : 50px">Location</button>
-    <button onclick='Authentication()' style="width: 100%; height: 150px; font-size : 50px">Authentication</button>
-    <button onclick='RootingCheck()' style="width: 100%; height: 150px; font-size : 50px">RootingCheck</button>
-    <button onclick='Network()' style="width: 100%; height: 150px; font-size : 50px">Network</button>
-    <button onclick='QRCodeScan()' style="width: 100%; height: 150px; font-size : 50px">QRCodeScan</button>
-    <button onclick='NFCReading()' style="width: 100%; height: 150px; font-size : 50px">NFC Reading</button>
-    <button onclick='SendSMS()' style="width: 100%; height: 150px; font-size : 50px">SendSMS</button>
-    <button onclick='Notification()' style="width: 100%; height: 150px; font-size : 50px">Notification</button>
-    <button onclick='FileDownload()' style="font-size: 50px; width: 100%; height: 150px;">FileDownload</button>
-    <button onclick="UserDefault('SET', 'TEST2', ['LeeAyeon' , 'she is so Lovely!', 'Ayeon' , 'she is so Bright!'])" style="font-size: 50px; width: 100%; height: 150px;">UserSet</button>
-    <button onclick="UserDefault('GET', 'TEST2', null)" style="font-size: 50px; width: 100%; height: 150px;">UserGet</button>
-    <button onclick="UserDefault('DELETE', 'TEST2', null)" style="font-size: 50px; width: 100%; height: 150px;">UserDelete</button>
-    <button onclick="UniqueAppID()" style="font-size: 50px; width: 100%; height: 150px;"> AppUUID</button>
-    <button onclick="UniqueDeviceID()" style="font-size: 50px; width: 100%; height: 150px;"> UniqueDeviceID</button>
+    <button onclick="Toast('짧은토스트', true)" style="font-size: 15px; width: 100%; height: 50px;"> ShortToast</button>
+    <button onclick="Toast('긴토스트', false)" style="font-size: 15px; width: 100%; height: 50px;"> LongToast</button>
+    <button onclick="WebPopup()" style="font-size: 15px; width: 100%; height: 50px;"> Popup</button>
+    
+    <button onclick='CameraByDeviceRatio()' style="width: 100%; height: 50px; font-size : 15px">CameraByDeviceRatio</button>
+    <button onclick='CameraByRatio()' style="width: 100%; height: 50px; font-size : 15px">CameraByRatio</button>
+    <button onclick='PhotoByDeviceRatio()' style="width: 100%; height: 50px; font-size : 15px">PhotoByDeviceRatio</button>
+    <button onclick='PhotoByRatio()' style="width: 100%; height: 50px; font-size : 15px">PhotoByRatio</button>
+    <button onclick='MultiPhotoByDeviceRatio()' style="width: 100%; height: 50px; font-size : 15px">MultiPhotoByDeviceRatio</button>
+    <button onclick='MultiPhotoByRatio()' style="width: 100%; height: 50px; font-size : 15px">MultiPhotoByRatio</button>
+    
+    <button onclick='Dialog()' style="width: 100%; height: 50px; font-size : 15px">Dialog</button>
+    <button onclick='Location()' style="width: 100%; height: 50px; font-size : 15px">Location</button>
+    <button onclick='Authentication()' style="width: 100%; height: 50px; font-size : 15px">Authentication</button>
+    <button onclick='RootingCheck()' style="width: 100%; height: 50px; font-size : 15px">RootingCheck</button>
+    <button onclick='Network()' style="width: 100%; height: 50px; font-size : 15px">Network</button>
+    <button onclick='QRCodeScan()' style="width: 100%; height: 50px; font-size : 15px">QRCodeScan</button>
+    <button onclick='NFCReading()' style="width: 100%; height: 50px; font-size : 15px">NFC Reading</button>
+    <button onclick='SendSMS()' style="width: 100%; height: 50px; font-size : 15px">SendSMS</button>
+    <button onclick='Notification()' style="width: 100%; height: 50px; font-size : 15px">Notification</button>
+    <button onclick='FileDownload()' style="font-size: 15px; width: 100%; height: 50px;">FileDownload</button>
+    <button onclick="UserDefault('SET', 'TEST2', ['LeeAyeon' , 'she is so Lovely!', 'Ayeon' , 'she is so Bright!'])" style="font-size: 15px; width: 100%; height: 50px;">UserSet</button>
+    <button onclick="UserDefault('GET', 'TEST2', null)" style="font-size: 15px; width: 100%; height: 50px;">UserGet</button>
+    <button onclick="UserDefault('DELETE', 'TEST2', null)" style="font-size: 15px; width: 100%; height: 50px;">UserDelete</button>
+    <button onclick="UniqueAppID()" style="font-size: 15px; width: 100%; height: 50px;"> AppUUID</button>
+    <button onclick="UniqueDeviceID()" style="font-size: 15px; width: 100%; height: 50px;"> UniqueDeviceID</button>
 </body>
 </html>
 

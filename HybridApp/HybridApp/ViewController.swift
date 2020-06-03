@@ -22,7 +22,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         let _ = ListeningObserver(self.urlObserver)
- 
+
         component.setInterface("Location", Location(self).locationFunction())
          
         component.setInterface("RootingCheck", CheckRooting().checkRootingFunction(self))
@@ -39,11 +39,17 @@ class ViewController: UIViewController {
         
         component.setInterface ("WebPopup", WebPopup().popupFunction(component))
         
-        component.setAction("Camera", CameraPhotos(self).cameraFunction())
-             
-        component.setAction("SinglePhoto", CameraPhotos(self).photosFunction())
+        component.setAction("CameraByDeviceRatio", CameraPhotos(self).cameraFunction())
         
-        component.setAction("MultiplePhotos", CameraPhotos(self).MultiplePhotosFunction())
+        component.setAction("CameraByRatio", CameraPhotos(self).cameraFunction())
+             
+        component.setAction("PhotoByDeviceRatio", CameraPhotos(self).photosFunction())
+        
+        component.setAction("PhotoByRatio", CameraPhotos(self).photosFunction())
+        
+        component.setAction("MultiPhotoByDeviceRatio", CameraPhotos(self).MultiplePhotosFunction())
+        
+        component.setAction("MultiPhotoByRatio", CameraPhotos(self).MultiplePhotosFunction())
     
         component.setAction("Dialog", Dialog().dialogFunction(self))
         

@@ -27,20 +27,27 @@ class CameraPhotos : NSObject {
     private let dialog = Dialog()
     private var flagImageSave = false
     private var imageAction : FlexAction? = nil
-    private var width : Double!
-    private var height : Double!
+    private var ratio : CGFloat!
     private var imagePicker: UIImagePickerController!
+    private var isWidth : Bool? = nil
+    private var newSize: CGSize!
     
     init(_ currentVC : UIViewController){
         self.currentVC = currentVC
+        super.init()
+        self.imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
     }
     
-    func cameraFunction() -> (FlexAction, Array<Any?>?) -> Void? {
+    func cameraFunction() -> (FlexAction, Array<Any?>) -> Void? {
         return { (action, arguments) -> Void in
             
             self.util.setUserHistory(forKey: "CameraBtn")
-            self.width = arguments?[0] as? Double
-            self.height = arguments?[1] as? Double
+            
+            self.ratio = arguments[0] as? CGFloat
+            if arguments.count > 1 {
+                self.isWidth =  arguments[1] as? Bool
+            }
             
             var auth = false
             
@@ -83,12 +90,15 @@ class CameraPhotos : NSObject {
     }
     
     //Photos를 실행시키는 모듈
-    func photosFunction() -> (FlexAction, Array<Any?>?) -> Void?  {
+    func photosFunction() -> (FlexAction, Array<Any?>) -> Void?  {
         return { (action, arguments) -> Void in
             
             self.util.setUserHistory(forKey: "PhotoBtn")
-            self.width = arguments?[0] as? Double
-            self.height = arguments?[1] as? Double
+            
+            self.ratio = arguments[0] as? CGFloat
+            if arguments.count > 1 {
+                self.isWidth =  arguments[1] as? Bool
+            }
             
             var auth = false
 
@@ -134,13 +144,16 @@ class CameraPhotos : NSObject {
     }
     
     //사진 여러장 선택
-    func MultiplePhotosFunction() -> (FlexAction, Array<Any?>?) -> Void?{
+    func MultiplePhotosFunction() -> (FlexAction, Array<Any?>) -> Void?{
         return { (action, arguments) -> Void in
             
             self.util.setUserHistory(forKey: "MultiplePhotoBtn")
             self.imageAction = action
-            self.width = arguments?[0] as? Double
-            self.height = arguments?[1] as? Double
+            
+            self.ratio = arguments[0] as? CGFloat
+            if arguments.count > 1 {
+                self.isWidth =  arguments[1] as? Bool
+            }
             
             var imageArray = [DKAsset]()
             var multiImageArray = [String]()
@@ -160,7 +173,7 @@ class CameraPhotos : NSObject {
                         let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
                         let encodedString = strBase64.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? ""
                         
-                        return encodedString
+                        return "data:image/jpeg;base64," + encodedString
                     }
                     self.imageAction!.PromiseReturn(multiImageArray)
                 }
@@ -174,8 +187,6 @@ class CameraPhotos : NSObject {
 extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func cameraPhotosAction( _ type : String) -> Void {
-        self.imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
         DispatchQueue.main.async {
             switch type {
             case "Camera":
@@ -215,15 +226,15 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
     // 사진 한장 선택
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         self.currentVC.dismiss(animated: true){
-                let captureImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
-                let resizedImage = self.resizeImage(image: captureImage, targetSize: CGSize(width: self.width, height: self.height))
-                if self.flagImageSave {
-                    UIImageWriteToSavedPhotosAlbum(captureImage, self, nil, nil)
-                }
-                let imageData:NSData = resizedImage.jpegData(compressionQuality: 0.25)! as NSData
-                let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
-                let encodedString = strBase64.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? ""
-                self.imageAction?.PromiseReturn(encodedString)
+            let captureImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
+           // let resizedImage = self.resizeImage(image: captureImage, ratio: self.ratio, isWidth: self.isWidth)
+            if self.flagImageSave {
+                UIImageWriteToSavedPhotosAlbum(captureImage, self, nil, nil)
+            }
+            let imageData:NSData = captureImage.jpegData(compressionQuality: 0.25)! as NSData
+            let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
+            let encodedString = strBase64.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? ""
+            self.imageAction?.PromiseReturn("data:image/jpeg;base64," + encodedString)
         }
     }
     
@@ -241,25 +252,34 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
         let imgManager = PHImageManager.default()
         let requestOptions = PHImageRequestOptions()
         requestOptions.isSynchronous = true
-        imgManager.requestImage(for: asset, targetSize: CGSize(width: self.width, height: self.height), contentMode: PHImageContentMode.aspectFit, options: requestOptions, resultHandler: { (img, _) in
+        imgManager.requestImage(for: asset, targetSize: CGSize(width: newSize.width , height: newSize.height), contentMode: PHImageContentMode.aspectFit, options: requestOptions, resultHandler: { (img, _) in
             image = img!
         })
         return image
     }
     
     
-    func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
-        let size = image.size
-        let widthRatio  = targetSize.width  / size.width
-        let heightRatio = targetSize.height / size.height
+    func resizeImage(image: UIImage, ratio : CGFloat, isWidth : Bool?) -> UIImage {
+        let imageSize = image.size
+        var width : CGFloat
+        var height : CGFloat
+        let deviceSize = currentVC.view.frame.size
         
-        var newSize: CGSize
-        if(widthRatio > heightRatio) {
-            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
+        if let deviceRat = isWidth {
+           // let deviceSize = UIScreen.main.bounds
+            if deviceRat {
+                 width  = deviceSize.width * ratio //이미지가로사이즈 deviceSize.width - width / deviceSize.width)
+                 height = (width * imageSize.height) / imageSize.width//이미지세로사이즈
+            } else {
+                 height  = deviceSize.height * ratio
+                width = (height * imageSize.width) / imageSize.height
+            }
         } else {
-            newSize = CGSize(width: size.width * widthRatio,  height: size.height * widthRatio)
+             width  = imageSize.width * ratio//이미지가로사이즈
+             height = imageSize.height * ratio //이미지세로사이즈
         }
         
+        newSize = CGSize(width: width , height: height)
         let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
         
         UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)

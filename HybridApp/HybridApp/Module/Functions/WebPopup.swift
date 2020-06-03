@@ -45,9 +45,24 @@ class WebPopup : NSObject, WKUIDelegate{
                 let startX = self.tempView!.frame.width / 2 - sizeX / 2
                 let startY = self.tempView!.frame.height
             
-                self.createWebView = WKWebView(frame: CGRect(x: startX, y: startY , width: sizeX , height: sizeY), configuration: WKWebViewConfiguration())
+                self.createWebView = WKWebView(frame: CGRect(x: startX, y: startY, width: sizeX , height: sizeY), configuration: WKWebViewConfiguration())
+                self.createWebView?.clipsToBounds = true
+                self.createWebView?.layer.cornerRadius = 30
                 self.createWebView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 self.createWebView?.uiDelegate = self
+                
+                let cancelBtn = UIButton(frame: CGRect(x: startX, y:  0 , width: 35, height: 35))
+                cancelBtn.center = CGPoint(x: self.tempView.frame.size.width / 2.0, y : startY - 30)
+                cancelBtn.layer.borderColor = #colorLiteral(red: 0.1019607857, green: 0.2784313858, blue: 0.400000006, alpha: 1)
+                cancelBtn.layer.borderWidth = 0.4
+                cancelBtn.backgroundColor =  #colorLiteral(red: 0.578004143, green: 0.8483221003, blue: 1, alpha: 1)
+                cancelBtn.layer.cornerRadius = 0.5 * cancelBtn.bounds.size.width
+                cancelBtn.setTitle("X", for: .normal)
+                cancelBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+                cancelBtn.setTitleColor(#colorLiteral(red: 0.1019607857, green: 0.2784313858, blue: 0.400000006, alpha: 1), for: .normal)
+                cancelBtn.addTarget(self, action: #selector(self.webViewClose(sender:)), for: .touchUpInside)
+                self.tempView.addSubview(cancelBtn)
+                self.tempView.bringSubviewToFront(cancelBtn)
                 
                 print("urlname ",urlName)
                 if !type{
@@ -55,7 +70,6 @@ class WebPopup : NSObject, WKUIDelegate{
                 }else {
                     self.createWebView.load(URLRequest(url: URL(string : urlName)!))
                 }
-                
                 
                 self.tempView?.addSubview(self.createWebView!)
                 
@@ -75,14 +89,12 @@ class WebPopup : NSObject, WKUIDelegate{
        }
     }
     
-    func webViewDidClose(_ webView: WKWebView) {
-        if webView == createWebView {
-            tempView?.removeFromSuperview()
-            createWebView?.removeFromSuperview()
-            createWebView = nil
-            tempView = nil
+    @objc func webViewClose(sender : UIButton?) {
+        tempView?.removeFromSuperview()
+        createWebView?.removeFromSuperview()
+        createWebView = nil
+        tempView = nil
          
-            self.urlObserver.url = self.mWebview.url!
-        }
+        self.urlObserver.url = self.mWebview.url!
     }
 }

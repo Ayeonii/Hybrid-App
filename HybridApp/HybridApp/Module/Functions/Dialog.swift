@@ -47,7 +47,6 @@ class Dialog {
             let destructive = btn["destructive"]
             let cancel = btn["cancel"]
             
-    
             if let basicName = basic {
                 btnAction = UIAlertAction(title : basicName, style: .default){ alertAction in
                     promiseAction?.PromiseReturn(basicName)
@@ -68,10 +67,7 @@ class Dialog {
                 }
                 dialog.addAction(btnAction)
             }
-                        
-                 currentVC.present(dialog, animated: animated, completion: nil)
-
-           
+            currentVC.present(dialog, animated: animated, completion: nil)
         }
     }
 }
