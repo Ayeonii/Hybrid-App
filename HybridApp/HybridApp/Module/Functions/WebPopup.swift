@@ -64,9 +64,8 @@ class WebPopup : NSObject, WKUIDelegate, WKNavigationDelegate{
                 cancelBtn.addTarget(self, action: #selector(self.webViewClose(sender:)), for: .touchUpInside)
                 self.tempView.addSubview(cancelBtn)
                 self.tempView.bringSubviewToFront(cancelBtn)
-               
                 self.tempView?.addSubview(self.createWebView!)
-                print(urlName)
+                
                 self.urlObserver.url = self.createWebView.url!
  
                 WKWebView.animate(withDuration: 0.1, animations: {()->Void in
@@ -82,8 +81,6 @@ class WebPopup : NSObject, WKUIDelegate, WKNavigationDelegate{
                         self.indicator.showActivityIndicator(text: "로딩 중", nil)
                     })
                 })
-                
-
             }
             return nil
        }
@@ -99,7 +96,6 @@ class WebPopup : NSObject, WKUIDelegate, WKNavigationDelegate{
     }
 
     func webView(_ webView: WKWebView, didFinish navigation : WKNavigation!){
-        print("로딩끝")
         indicator.stopActivityIndicator()
     }
 }
