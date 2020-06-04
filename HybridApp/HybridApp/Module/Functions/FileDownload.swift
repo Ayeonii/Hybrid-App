@@ -33,7 +33,7 @@ class FileDownload : NSObject{
             
             DispatchQueue.main.async {
                 self.loadingView = LoadingView(self.component.parentViewController!.view)
-                self.loadingView.showActivityIndicator(text: "다운로드 중")
+                self.loadingView.showActivityIndicator(text: "다운로드 중", nil)
             }
             self.flexAction  = action
             self.fileURL = argument[0] as? String

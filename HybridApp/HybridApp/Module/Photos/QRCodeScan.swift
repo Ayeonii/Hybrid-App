@@ -29,7 +29,7 @@ class QRCodeScan : NSObject {
         return { (action, argument) -> Void in
             
             self.util.setUserHistory(forKey: "QRCodeScanBtn")
-            loadingView.showActivityIndicator(text: "로딩 중")
+            loadingView.showActivityIndicator(text: "로딩 중", nil)
            
             if let captureSession = self.createCaptureSession() {
                 self.captureSession = captureSession
@@ -44,13 +44,13 @@ class QRCodeScan : NSObject {
                     
                     let cancelBtn = UIButton(frame: CGRect(x: 0, y: self.currentVC.view.frame.height - 60, width: self.currentVC.view.frame.width / 3.0 , height: 60))
                     cancelBtn.center = CGPoint(x: self.currentVC.view.frame.size.width / 2.0, y : self.currentVC.view.frame.height - 60)
-                    cancelBtn.layer.borderColor = #colorLiteral(red: 0.1019607857, green: 0.2784313858, blue: 0.400000006, alpha: 1)
+                    cancelBtn.layer.borderColor = #colorLiteral(red: 0.578004143, green: 0.8483221003, blue: 1, alpha: 1)
                     cancelBtn.layer.borderWidth = 6
-                    cancelBtn.backgroundColor =  #colorLiteral(red: 0.578004143, green: 0.8483221003, blue: 1, alpha: 1)
+                    cancelBtn.backgroundColor = #colorLiteral(red: 0.9885649944, green: 0.7925130698, blue: 1, alpha: 1)
                     cancelBtn.layer.cornerRadius = 28
                     cancelBtn.setTitle("취소", for: .normal)
                     cancelBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-                    cancelBtn.setTitleColor(#colorLiteral(red: 0.1019607857, green: 0.2784313858, blue: 0.400000006, alpha: 1), for: .normal)
+                    cancelBtn.setTitleColor(#colorLiteral(red: 0.578004143, green: 0.8483221003, blue: 1, alpha: 1), for: .normal)
                     cancelBtn.addTarget(self, action: #selector(self.requestCaptureSessionStopRunning(sender:)), for: .touchUpInside)
                     self.tempView.addSubview(cancelBtn)
                     self.tempView.bringSubviewToFront(cancelBtn)  ///요기요기요기
@@ -108,7 +108,7 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate {
         if metadataObjects.count == 0 {
             print ("No QR Code is detected")
             self.requestCaptureSessionStopRunning(sender: nil)
-            self.flexAction?.PromiseReturn("Stopped QR Code")
+            self.flexAction?.PromiseReturn("Stopped QR Code Scan")
             return
         }
         
@@ -141,6 +141,9 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate {
                 self.tempView.removeFromSuperview()
                 self.currentVC.view.isUserInteractionEnabled = true
             }
+        }
+        if sender != nil {
+            self.flexAction?.PromiseReturn("Stopped QR Code Scan")
         }
     }
     

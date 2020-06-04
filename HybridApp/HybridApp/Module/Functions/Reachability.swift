@@ -176,9 +176,9 @@ class CheckNetwork{
         
         switch Network.reachability?.status {
             case .unreachable:
-                self.flexAction.PromiseReturn("UnReachable!")
+                self.flexAction.PromiseReturn("No Connection!")
             case .wwan:
-                self.flexAction.PromiseReturn("WWAN Connection")
+                self.flexAction.PromiseReturn("Cellular Connection")
             case .wifi:
                 self.flexAction.PromiseReturn("WIFI Connection")
             default :

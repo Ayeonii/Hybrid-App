@@ -26,30 +26,47 @@ class Notification: NSObject, UNUserNotificationCenterDelegate {
         return {(arguments) -> String in
             
             self.util.setUserHistory(forKey: "NotificationBtn")
+            
             let data = Data("Array<Any?>?".utf8)
             print(data)
             let content = UNMutableNotificationContent()
-            content.title = arguments[0] as! String
-            content.subtitle = arguments[1] as? String ?? ""
-            content.body = arguments[2] as! String
-            content.badge = NSNumber(value: arguments[3] as! Int)
-            
-            let identifier = arguments[4] as! String
-            let isRepeat = arguments[5] as! Bool
-            
-            let sec = arguments[6] as! Double
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: sec , repeats:isRepeat)
-            let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-            let center = UNUserNotificationCenter.current()
-            center.delegate = self
-            center.add(request, withCompletionHandler: nil)
-            
-            return "Notification Activate!"
+            if let recieveData = arguments[0] as? Dictionary< String , Any?>
+            {
+                content.title = recieveData["title"] as? String ?? ""
+                content.subtitle = recieveData["subTitle"] as? String ?? ""
+                content.body = recieveData["message"] as? String ?? ""
+                content.badge = NSNumber(value: recieveData["badge"] as? Int ?? 0)
+                
+                let identifier = recieveData["identifier"] as? String ?? "default"
+                let isRepeat = recieveData["isRepeat"] as? Bool ?? false
+                var sec = recieveData["duration"] as! Double
+                if sec <= 0{
+                    sec = 0.01
+                }
+                
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: sec , repeats:isRepeat)
+                let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+                let center = UNUserNotificationCenter.current()
+                
+                center.delegate = self
+                center.add(request, withCompletionHandler: nil)
+                
+                return "Notification Activate!"
+            }else {
+                return "Parameter "
+            }
         }
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, openSettingsFor notification: UNNotification?) {
         self.currentVC.present(self.currentVC, animated: true, completion: nil)
     }
-       
+    
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent
+        notification: UNNotification, withCompletionHandler completionHandler:
+        @escaping (UNNotificationPresentationOptions) -> Void) {
+
+        return completionHandler(UNNotificationPresentationOptions.alert)
+    }
 }

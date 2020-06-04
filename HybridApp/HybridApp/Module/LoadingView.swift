@@ -16,12 +16,11 @@ class LoadingView {
     let activityIndicatorView = UIActivityIndicatorView()
     let loadingTextLabel = UILabel()
     
-    
     init(_ view : UIView){
         self.view = view
     }
     
-    func showActivityIndicator(text: String) {
+    func showActivityIndicator(text: String,  _ handler : (() -> Void)? = nil) {
         DispatchQueue.main.async {
             self.viewForActivityIndicator.frame = CGRect(x: 0.0, y: 0.0, width: 100, height: 100)
             self.viewForActivityIndicator.center = CGPoint(x: self.view.frame.size.width / 2.0, y: (self.view.frame.size.height) / 2.0)
@@ -36,6 +35,7 @@ class LoadingView {
             self.loadingTextLabel.font = UIFont(name: "Avenir Light", size: UIFont.labelFontSize)
             self.loadingTextLabel.sizeToFit()
             self.loadingTextLabel.center = CGPoint(x: self.activityIndicatorView.center.x, y: self.activityIndicatorView.center.y + 30)
+            
             self.viewForActivityIndicator.addSubview(self.loadingTextLabel)
             
             self.activityIndicatorView.hidesWhenStopped = true
@@ -45,12 +45,13 @@ class LoadingView {
             
             self.backgroundView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
             self.backgroundView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0)
-            
+            self.activityIndicatorView.startAnimating()
+            self.view.backgroundColor = .black
             self.view.addSubview(self.backgroundView)
             
-            self.view.backgroundColor = .black
-            self.activityIndicatorView.startAnimating()
+            print("로딩방!!")
         }
+        
     }
         
     func stopActivityIndicator() {

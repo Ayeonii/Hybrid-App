@@ -47,8 +47,8 @@
     }
 
     const PhotoByDeviceRatio = async () => {
-        const result = await $flex.PhotoByDeviceRatio(0.6, false);
-        if(result == 'Cancel' || result == null){
+        const result = await $flex.PhotoByDeviceRatio(0.5, true);
+        if(result == 'cancel' || result == null){
              console.log(result)
         }else {
            var imgTag = document.createElement("img")
@@ -59,12 +59,12 @@
     }
 
     const PhotoByRatio = async () => {
-        const result = await $flex.PhotoByRatio(0.6);
-        if(result == 'Cancel' || result == null){
+        const result = await $flex.PhotoByRatio(0.5);
+        if(result == 'cancel' || result == null){
             console.log(result)
         }else {
             var imgTag = document.createElement("img")
-            imgTag.src = 'data:image/png;base64,' + result;
+            imgTag.src = result;
             var imgDiv = document.getElementById('photos');
             imgDiv.appendChild(imgTag)
         }
@@ -72,7 +72,7 @@
 
     const MultiPhotoByDeviceRatio = async () => {
         const result = await $flex.MultiPhotoByDeviceRatio(0.3,true);
-        if(result == 'Cancel' || result == null){
+        if(result == 'cancel' || result == null){
             console.log(result)
         }else {
             console.log('Return by Native with MultiplePhotos   : ' + result.length)
@@ -175,8 +175,16 @@
 
     const Notification = async () => {
         try {
-            var badge = 1
-            const result = await $flex.Notification('testTitle', '', 'Body임', badge, '식별자이아연',false, 5);
+            var sendData = {
+                "title" : "Testtitle"
+                ,"subTitle" : "서브타이틀"
+                ,"message" : "Body메시지입니다."
+                ,"badge" : 0
+                ,"identifier" : "이아연이식별자임"
+                ,"isRepeat" : false
+                ,"duration" : 0
+            }
+            const result = await $flex.Notification(sendData);
             console.log('Return by Native with Notification   : '+ result)
         }catch {
             consoel.log('Notification() error 발생')
@@ -221,7 +229,7 @@
 
     const WebPopup = async () => {
         try {
-            const result = await $flex.WebPopup( true, "https://www.naver.com", 0.8, 0.8);
+            const result = await $flex.WebPopup("https://www.naver.com", 0.8);
                console.log('Return by Native with WebPopup   : '+ result)
            }catch {
                consoel.log('WebPopup() error 발생')

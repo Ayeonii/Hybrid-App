@@ -20,25 +20,26 @@ class Message : NSObject, MFMessageComposeViewControllerDelegate {
     private var flexAction : FlexAction!
     private let util = Utils()
     
-    func sendMessge (_ currentVC : UIViewController)  -> (FlexAction, Array<Any?>) -> Void? {
+    func sendMessge (_ currentVC : UIViewController)  -> (FlexAction, Array<Any?>?) -> Void? {
         return { (action, argument) -> Void in
             
             self.util.setUserHistory(forKey: "SendMessageBtn")
             
-            let number = argument[0] as! String
-            let message = argument[1] as! String
-            
-            DispatchQueue.main.async {
-                let messageComposer = MFMessageComposeViewController()
-                messageComposer.messageComposeDelegate = self
-                if MFMessageComposeViewController.canSendText(){
-                    self.flexAction = action
-                    messageComposer.recipients = [number]
-                    messageComposer.body = message
-                    currentVC.present(messageComposer, animated: true, completion: nil)
-                } else {
-                    action.PromiseReturn(nil)
+            if let number = argument?[0] as? String, let message = argument?[1] as? String {
+                DispatchQueue.main.async {
+                    let messageComposer = MFMessageComposeViewController()
+                    messageComposer.messageComposeDelegate = self
+                    if MFMessageComposeViewController.canSendText(){
+                        self.flexAction = action
+                        messageComposer.recipients = [number]
+                        messageComposer.body = message
+                        currentVC.present(messageComposer, animated: true, completion: nil)
+                    } else {
+                        action.PromiseReturn("메세지를 보낼 수 없습니다.")
+                    }
                 }
+            }else {
+                action.PromiseReturn("전화번호와 내용을 적어주세요")
             }
         }
     }
@@ -46,16 +47,16 @@ class Message : NSObject, MFMessageComposeViewControllerDelegate {
     func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
         switch result {
         case MessageComposeResult.sent:
-            returnMsg = "Complete Sending Msg"
+            returnMsg = "문자메시지를 전송하였습니다."
             break
         case MessageComposeResult.cancelled:
-            returnMsg = "Sending msg cancelled"
+            returnMsg = "문자메시지 전송이 취소되었습니다."
             break
         case MessageComposeResult.failed:
-            returnMsg = "fail to send Msg"
+            returnMsg = "문자메시지 전송이 실패하였습니다."
             break
         default:
-            returnMsg = "default"
+            returnMsg = "문자메시지 전송을 지원하지 않습니다."
             break
         }
         self.flexAction.PromiseReturn(returnMsg)

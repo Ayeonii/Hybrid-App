@@ -24,8 +24,15 @@ class Toast: NSObject {
             }
 
             DispatchQueue.main.async {
-                let alert = UIAlertController (title : nil, message: message, preferredStyle: .alert)
+                
+                var alert : UIAlertController
             
+                if UIDevice.current.userInterfaceIdiom != .pad {
+                    alert = UIAlertController (title : nil, message : message, preferredStyle: .actionSheet)
+                } else {
+                    alert = UIAlertController (title : nil, message : message, preferredStyle: .alert)
+                }
+                
                 alert.view.backgroundColor = .black
                 alert.view.alpha = 0.9
                 alert.view.layer.cornerRadius = 15

@@ -74,7 +74,7 @@ class ViewController: UIViewController {
         mWebView.scrollView.bounces = false
         view.addSubview(mWebView)
         
-        mWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "test", ofType: "html", inDirectory: "Script")!)))
+        mWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html", inDirectory: "Script")!)))
 
         urlObserver.url = mWebView.url!
         
@@ -101,14 +101,4 @@ class ViewController: UIViewController {
             mWebView.bottomAnchor.constraint(equalTo: bottomLayoutGuide.topAnchor).isActive = true
         }
     }
-    
-    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!){
-        indicator = LoadingView(view)
-        indicator.showActivityIndicator(text: "로딩 중")
-    }
- 
-    func webView(_ webView: WKWebView, didFinish navigation : WKNavigation!){
-        indicator.stopActivityIndicator()
-    }
-
 }
