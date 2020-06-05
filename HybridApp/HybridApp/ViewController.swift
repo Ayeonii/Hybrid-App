@@ -61,7 +61,7 @@ class ViewController: UIViewController {
         
         component.setAction ("SendSMS", Message().sendMessge(self))
         
-        component.setAction ("FileDownload", FileDownload(component).startFileDownload())
+        component.setAction ("FileDownload", FileDownload().startFileDownload(component))
                 
         #if canImport(CoreNFC)
         component.setAction ("NFCReading", NFC(self).nfcReadingFunction())

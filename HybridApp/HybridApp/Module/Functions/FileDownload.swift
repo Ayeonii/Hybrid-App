@@ -12,25 +12,21 @@ import FlexHybridApp
 /*
  파일 다운로드
  */
-class FileDownload : NSObject{
+class FileDownload : NSObject, URLSessionDelegate{
     
     private var flexAction : FlexAction!
     private var fileURL : String!
     private var interaction: UIDocumentInteractionController?
-    private var component : FlexComponent
+    private var component : FlexComponent!
     private let util = Utils()
     private var loadingView : LoadingView!
     
-    init(_ component : FlexComponent){
-        self.component = component
-    }
-    
-    func startFileDownload () -> (FlexAction, Array<Any?>) -> Void?{
-        
+    func startFileDownload (_ component : FlexComponent) -> (FlexAction, Array<Any?>) -> Void?{
         return { (action, argument) -> Void in
-            
+
             self.util.setUserHistory(forKey: "FileDownloadBtn")
             
+            self.component = component
             DispatchQueue.main.async {
                 self.loadingView = LoadingView(self.component.parentViewController!.view)
                 self.loadingView.showActivityIndicator(text: "다운로드 중", nil)
@@ -38,16 +34,11 @@ class FileDownload : NSObject{
             self.flexAction  = action
             self.fileURL = argument[0] as? String
             self.component.evalFlexFunc("result", sendData: "Download Start!")
-            self.fileDownload { (success, path) in
-                DispatchQueue.main.async(execute: {
-                    self.openFileWithPath(filePath: path)
-                })
-            }
+            self.fileDownload()
         }
     }
     
-    func fileDownload(completion: @escaping (_ success:Bool, _ filePath:URL) -> ()) {
-        
+    func fileDownload() {
         guard let url = URL(string: fileURL) else {
             self.flexAction.PromiseReturn("Error: cannot create URL")
             return
@@ -55,50 +46,53 @@ class FileDownload : NSObject{
         
         let urlRequest = URLRequest(url: url)
         let config = URLSessionConfiguration.default
-        let session = URLSession(configuration: config)
+        let session = URLSession(configuration: config, delegate: self, delegateQueue: OperationQueue())
+
+        let task = session.downloadTask (with: urlRequest)
+        task.resume() //시작
+    }
+
+}
+
+extension FileDownload: URLSessionDownloadDelegate {
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+         if totalBytesExpectedToWrite > 0 {
+             let progress = Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)
+             print("Progress \(downloadTask) \(progress)")
+         }
+     }
+    
+     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        let fileManager = FileManager()
+        let documentsUrl = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let destinationFileUrl = documentsUrl.appendingPathComponent("Downloads")
         
-        let task = session.dataTask(with: urlRequest) { (data, response, error) in
-            
-            guard error == nil else {
-                debugPrint("Error!!")
-                print(error as Any)
-                self.flexAction.PromiseReturn(error as Any)
-                return
-            }
-            
-            guard let responseData = data else {
-                print("Error: data empty!!")
-                self.flexAction.PromiseReturn("Error: data empty!!")
-                return
-            }
-            
-            let fileManager = FileManager()
-            let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
-            let dataPath = documentsDirectory.appendingPathComponent("Downloads")
-            
-            if !documentsDirectory.pathComponents.contains("Downloads") {
-                try? fileManager.createDirectory(atPath: dataPath.path, withIntermediateDirectories: false, attributes: nil)
-            }
-            
-            do {
-                let writePath = dataPath.appendingPathComponent(URL(string:self.fileURL)!.lastPathComponent)
-                print(URL(string:self.fileURL)!.lastPathComponent)
-                try responseData.write(to: writePath)
-                completion(true, writePath)
-                self.flexAction.PromiseReturn("Download Complete!")
-                
-            } catch let error as NSError {
-                print("Error Writing File : \(error.localizedDescription)")
-                self.flexAction.PromiseReturn("Error Writing File : \(error.localizedDescription)")
-                return
-            }
+        let writePath = destinationFileUrl.appendingPathComponent(URL(string:self.fileURL)!.lastPathComponent)
+        do {
+            try FileManager.default.copyItem(at: location, to: writePath)
+            self.openFileWithPath(filePath: writePath)
+            self.loadingView.stopActivityIndicator()
+        } catch (let writeError) {
+            print("Error creating a file \(destinationFileUrl) : \(writeError)")
             self.loadingView.stopActivityIndicator()
         }
-        task.resume()
+    }
+    
+    func readDownloadedData(of url: URL) -> Data? {
+        do {
+            let reader = try FileHandle(forReadingFrom: url)
+            let data = reader.readDataToEndOfFile()
+            
+            return data
+        } catch {
+            print(error)
+            return nil
+        }
     }
     
     func openFileWithPath(filePath : URL) {
         DispatchQueue.main.async {
+            self.loadingView.stopActivityIndicator()
             self.interaction = UIDocumentInteractionController(url: filePath)
             self.interaction?.delegate = self
             self.interaction?.presentPreview(animated: true)

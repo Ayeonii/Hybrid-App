@@ -60,7 +60,7 @@
 
     const PhotoByRatio = async () => {
         const result = await $flex.PhotoByRatio(0.5);
-        if(result == 'cancel' || result == null){
+        if(result == null){
             console.log(result)
         }else {
             var imgTag = document.createElement("img")

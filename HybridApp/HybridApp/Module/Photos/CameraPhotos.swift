@@ -141,7 +141,7 @@ class CameraPhotos : NSObject {
                 multiPicker.allowsLandscape = false
                 multiPicker.assetType = .allPhotos
                 multiPicker.didCancel = {
-                    self.imageAction!.PromiseReturn("cancel")
+                    self.imageAction!.PromiseReturn(nil)
                 }
                 multiPicker.maxSelectableCount = 5
                 multiPicker.viewWillAppear(true)
@@ -176,11 +176,9 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
             case "Camera":
                 if(UIImagePickerController.isSourceTypeAvailable(.camera)){
                     self.flagImageSave = true
-                    self.imagePicker.allowsEditing = true
                     self.imagePicker.sourceType = .camera
                     self.imagePicker.mediaTypes = [kUTTypeImage as String]
-                    self.imagePicker.allowsEditing = false
-                    
+                
                     self.currentVC.present(self.imagePicker, animated: true, completion: nil)
                 } else {
                     print("204")
@@ -191,11 +189,9 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
             case "Photos":
                 if (UIImagePickerController.isSourceTypeAvailable(.photoLibrary)) {
                     self.flagImageSave = false
-                    self.imagePicker.allowsEditing = true
                     self.imagePicker.sourceType = .photoLibrary
                     self.imagePicker.mediaTypes = [kUTTypeImage as String]
-                    self.imagePicker.allowsEditing = true
-                    
+                   
                     self.currentVC.present(self.imagePicker, animated: true, completion: nil)
                 }else{
                      print("219")
@@ -232,7 +228,7 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.currentVC.dismiss(animated: true) {
              print("248")
-            self.imageAction?.PromiseReturn("cancel")
+            self.imageAction?.PromiseReturn(nil)
         }
     }
 
