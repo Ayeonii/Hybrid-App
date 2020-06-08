@@ -37,7 +37,7 @@ class NFC : NSObject{
                 return
             }
             self.session = NFCNDEFReaderSession(delegate: self, queue: nil, invalidateAfterFirstRead: false)
-            self.session?.alertMessage = "Hold your iPhone near the item to learn more about it."
+            self.session?.alertMessage = ""
             self.session?.begin()
         }
     }
@@ -71,7 +71,6 @@ extension NFC : NFCNDEFReaderSessionDelegate {
             return
         }
         
-        // Connect to the found tag and write an NDEF message to it.
         let tag = tags.first!
         self.session?.connect(to: tag, completionHandler: { (error: Error?) in
             if nil != error {
@@ -128,44 +127,3 @@ extension NFC : NFCNDEFReaderSessionDelegate {
         self.session = nil
     }
 }
-
-
-
-
-/*
-#if canImport(CoreNFC)
-class NFC : NSObject, NFCNDEFReaderSessionDelegate{
-    
-    private var nfcSession : NFCNDEFReaderSession!
-    private var flexAction : FlexAction!
-    private var nfcString : Array<String>!
-    private let util = Utils()
-    
-    func nfcReadingFunction () -> (FlexAction, Array<Any?>)-> Void? {
-        return { (action, argument) -> Void in
-            self.util.setUserHistory(forKey: "NFCBtn")
-            self.flexAction = action
-            self.nfcSession = NFCNDEFReaderSession(delegate: self, queue: DispatchQueue.main, invalidateAfterFirstRead: false)
-            self.nfcSession.begin()
-        }
-    }
-    
-    func readerSession(_ session: NFCNDEFReaderSession, didDetectNDEFs messages: [NFCNDEFMessage]) {
-        for message in messages {
-            for record in message.records {
-                if let string = String(data: record.payload, encoding: .ascii) {
-                    self.nfcString.append(string)
-                    print(string)
-                }
-            }
-        }
-        flexAction.PromiseReturn(self.nfcString)
-    }
-    
-    func readerSession(_ session: NFCNDEFReaderSession, didInvalidateWithError error: Error) {
-        print("NFC Reading Error : ", error.localizedDescription)
-        flexAction.PromiseReturn( error.localizedDescription)
-    }
-}
-#endif
-*/

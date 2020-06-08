@@ -20,6 +20,7 @@ class FileDownload : NSObject, URLSessionDelegate{
     private var component : FlexComponent!
     private let util = Utils()
     private var loadingView : LoadingView!
+    private var text = UITextView!
     
     func startFileDownload (_ component : FlexComponent) -> (FlexAction, Array<Any?>) -> Void?{
         return { (action, argument) -> Void in
