@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+</head>
+<script type="text/javascript">
+    var imgsrc ;
+
+   // when $flex on ready.....
+     window.onFlexLoad = function() {
+         console.log('Flex Load Success!!');
+         $flex.web.help = function(data) {
+             console.log('Received by Native ---- ' + data);
+             return Promise.resolve('Thanks Flex!')
+         }
+         $flex.web.result = function(data) {
+             console.log(data)
+         }
+     }
+
+    const CameraByDeviceRatio = async () => {
+        const result = await $flex.CameraByDeviceRatio(0.8, true);
+        console.log(result);
+         if(result == 'Cancel' || result == null){
+                console.log(result)
+         }else {
+             var imgTag = document.createElement("img")
+             imgTag.src = result;
+             var imgDiv = document.getElementById('photos');
+             imgDiv.appendChild(imgTag)
+         }
+    }
+
+    const CameraByRatio = async () => {
+        const result = await $flex.CameraByRatio(0.8);
+        console.log(result);
+        if(result == 'Cancel' || result == null){
+                console.log(result)
+        }else {
+            var imgTag = document.createElement("img")
+            imgTag.src =  result;
+            var imgDiv = document.getElementById('photos');
+            imgDiv.appendChild(imgTag)
+        }
+    }
+
+    const PhotoByDeviceRatio = async () => {
+        const result = await $flex.PhotoByDeviceRatio(0.5, true);
+        if(result == 'cancel' || result == null){
+             console.log(result)
+        }else {
+           var imgTag = document.createElement("img")
+           imgTag.src = result;
+           var imgDiv = document.getElementById('photos');
+           imgDiv.appendChild(imgTag)
+        }
+    }
+
+    const PhotoByRatio = async () => {
+        const result = await $flex.PhotoByRatio(0.5);
+        if(result == null){
+            console.log(result)
+        }else {
+            var imgTag = document.createElement("img")
+            imgTag.src = result;
+            var imgDiv = document.getElementById('photos');
+            imgDiv.appendChild(imgTag)
+        }
+    }
+
+    const MultiPhotoByDeviceRatio = async () => {
+        const result = await $flex.MultiPhotoByDeviceRatio(0.3,true);
+        if(result == 'cancel' || result == null){
+            console.log(result)
+        }else {
+            console.log('Return by Native with MultiplePhotos   : ' + result.length)
+            for (var i=0; i<result.length; i++){
+                var imgTag = document.createElement("img")
+                imgTag.src = result[i];
+                var imgDiv = document.getElementById('photos');
+                imgDiv.appendChild(imgTag)
+            }
+        }
+    }
+
+    const MultiPhotoByRatio = async () => {
+        const result = await $flex.MultiPhotoByRatio(0.3);
+        if(result == 'Cancel' || result == null){
+            console.log(result)
+        }else {
+            console.log('Return by Native with MultiplePhotos   : ' + result.length)
+            for (var i=0; i<result.length; i++){
+                var imgTag = document.createElement("img")
+                imgTag.src = result[i];
+                var imgDiv = document.getElementById('photos');
+                imgDiv.appendChild(imgTag)
+            }
+        }
+    }
+
+    const Location = async () => {
+        const result = await $flex.Location();
+        console.log('Return by Native with Location  : ' + result['latitude'] + ':'+ result['longtitude'])
+    }
+
+    const Dialog = async () => {
+        var btn = {'basic': '확인'
+                    ,'destructive' : '삭제'
+                    ,'cancel':'취소'}
+
+        try {
+            const result = await $flex.Dialog('testTitle', 'testMessage', btn, false ,true);
+            console.log('Return by Native with Dialog   : ' + result)
+        } catch {
+            console.log('Dialog() error 발생')
+        }
+    }
+
+    const Authentication = async () => {
+        try {
+            const result = await $flex.Authentication();
+            console.log('Return by Native with Authentication   : ' + result)
+        } catch {
+            console.log('Authentication() error 발생')
+        }
+    }
+
+    const RootingCheck = async () => {
+        try {
+            const result = await $flex.RootingCheck();
+            console.log('Return by Native with RootingCheck   : ' + result)
+        } catch {
+            console.log('RootingCheck() error 발생')
+        }
+    }
+
+    const Network = async () => {
+        try {
+            const result = await $flex.Network();
+            console.log('Return by Native with Network   : ' + result)
+
+        } catch {
+            console.log('Network() error 발생')
+        }
+    }
+
+    const QRCodeScan = async () => {
+        try {
+            const result = await $flex.QRCodeScan();
+            console.log('Return by Native with QRCodeScan   : ' + result)
+        } catch {
+            console.log('QRCodeScan() error 발생')
+        }
+    }
+
+    const NFCReading = async () => {
+        try {
+            const result = await $flex.NFCReading();
+            console.log('Return by Native with NFCReading    : '+ result)
+        } catch {
+            console.log('NFCReading() error 발생')
+        }
+    }
+
+    const SendSMS = async () => {
+        try {
+            const result = await $flex.SendSMS('01099642514','HybridApp에서 보내는 메세지양');
+            console.log('Return by Native with NFCReading   : '+ result)
+        }catch {
+            consoel.log('SendMessage() error 발생')
+        }
+    }
+
+    const Notification = async () => {
+        try {
+            var sendData = {
+                "title" : "Testtitle"
+                ,"subTitle" : "서브타이틀"
+                ,"message" : "Body메시지입니다."
+                ,"badge" : 0
+                ,"identifier" : "이아연이식별자임"
+                ,"isRepeat" : false
+                ,"duration" : 0
+            }
+            const result = await $flex.Notification(sendData);
+            console.log('Return by Native with Notification   : '+ result)
+        }catch {
+            consoel.log('Notification() error 발생')
+        }
+    }
+
+    const FileDownload = async () => {
+        try {
+            const result = await $flex.FileDownload("http://www.alessioatzeni.com/wp-content/themes/az/_include/metrize/custom/metrize-icons/download/Metrize_Icons.zip");
+            console.log('Return by Native with FileDownload   : '+ result)
+        }catch {
+            consoel.log('FileDownload() error 발생')
+        }
+    }
+
+    const LocalRepository = async (mode, forKey, value) => {
+        try {
+            const result = await $flex.LocalRepository(mode, forKey, value);
+            console.log('Return by Native with UserDefault   : '+ result)
+        }catch {
+            consoel.log('UserDefault() error 발생')
+        }
+    }
+
+    const UniqueAppID = async () => {
+        try {
+            const result = await $flex.UniqueAppID();
+            console.log('Return by Native with UniqueAppID   : '+ result)
+        }catch {
+            consoel.log('UniqueAppID() error 발생')
+        }
+    }
+
+    const UniqueDeviceID = async () => {
+        try {
+            const result = await $flex.UniqueDeviceID();
+            console.log('Return by Native with UniqueDeviceID   : '+ result)
+        }catch {
+            consoel.log('UniqueDeviceID() error 발생')
+        }
+    }
+
+    const WebPopup = async () => {
+        try {
+            const result = await $flex.WebPopup("https://www.naver.com", 0.8);
+               console.log('Return by Native with WebPopup   : '+ result)
+           }catch {
+               consoel.log('WebPopup() error 발생')
+           }
+    }
+
+    const Record = async () => {
+        try {
+            const result = await $flex.Record();
+            console.log('Return by Native with Record   : '+ result)
+        }catch {
+            consoel.log('Record() error 발생')
+        }
+    }
+
+const Toast = async (message, isShort) => {
+    try {
+        const result = await $flex.Toast(message, true);
+        console.log('Return by Native with Toast   : '+ result)
+    }catch {
+        consoel.log('Toast() error 발생')
+    }
+}
+
+
+</script>
+<body style="width: 100%;">
+    <div id = "photos"></div>
+    <div id = 'attachFile' style = "backrground-color : blue;">
+        <input type='file' id = 'fileName' style="width: 100%; height: 100px; font-size : 15px; align-text : center;"/>
+    </div>
+    <button onclick="Toast('짧은토스트', true)" style="font-size: 15px; width: 100%; height: 50px;"> ShortToast</button>
+    <button onclick="Toast('긴토스트', false)" style="font-size: 15px; width: 100%; height: 50px;"> LongToast</button>
+    <button onclick="WebPopup()" style="font-size: 15px; width: 100%; height: 50px;"> Popup</button>
+    
+    <button onclick='CameraByDeviceRatio()' style="width: 100%; height: 50px; font-size : 15px">CameraByDeviceRatio</button>
+    <button onclick='CameraByRatio()' style="width: 100%; height: 50px; font-size : 15px">CameraByRatio</button>
+    <button onclick='PhotoByDeviceRatio()' style="width: 100%; height: 50px; font-size : 15px">PhotoByDeviceRatio</button>
+    <button onclick='PhotoByRatio()' style="width: 100%; height: 50px; font-size : 15px">PhotoByRatio</button>
+    <button onclick='MultiPhotoByDeviceRatio()' style="width: 100%; height: 50px; font-size : 15px">MultiPhotoByDeviceRatio</button>
+    <button onclick='MultiPhotoByRatio()' style="width: 100%; height: 50px; font-size : 15px">MultiPhotoByRatio</button>
+    
+    <button onclick='Dialog()' style="width: 100%; height: 50px; font-size : 15px">Dialog</button>
+    <button onclick='Location()' style="width: 100%; height: 50px; font-size : 15px">Location</button>
+    <button onclick='Authentication()' style="width: 100%; height: 50px; font-size : 15px">Authentication</button>
+    <button onclick='RootingCheck()' style="width: 100%; height: 50px; font-size : 15px">RootingCheck</button>
+    <button onclick='Network()' style="width: 100%; height: 50px; font-size : 15px">Network</button>
+    <button onclick='QRCodeScan()' style="width: 100%; height: 50px; font-size : 15px">QRCodeScan</button>
+    <button onclick='NFCReading()' style="width: 100%; height: 50px; font-size : 15px">NFC Reading</button>
+    <button onclick='SendSMS()' style="width: 100%; height: 50px; font-size : 15px">SendSMS</button>
+    <button onclick='Notification()' style="width: 100%; height: 50px; font-size : 15px">Notification</button>
+    <button onclick='FileDownload()' style="font-size: 15px; width: 100%; height: 50px;">FileDownload</button>
+    <button onclick="UserDefault('SET', 'TEST2', ['LeeAyeon' , 'she is so Lovely!', 'Ayeon' , 'she is so Bright!'])" style="font-size: 15px; width: 100%; height: 50px;">UserSet</button>
+    <button onclick="UserDefault('GET', 'TEST2', null)" style="font-size: 15px; width: 100%; height: 50px;">UserGet</button>
+    <button onclick="UserDefault('DELETE', 'TEST2', null)" style="font-size: 15px; width: 100%; height: 50px;">UserDelete</button>
+    <button onclick="UniqueAppID()" style="font-size: 15px; width: 100%; height: 50px;"> AppUUID</button>
+    <button onclick="UniqueDeviceID()" style="font-size: 15px; width: 100%; height: 50px;"> UniqueDeviceID</button>
+</body>
+</html>
+

@@ -7,14 +7,44 @@
 //
 
 import UIKit
+import UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    
+    var backgroundCompletionHandler: (() -> Void)?
+  
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        
+        UserDefaults.standard.set(UUID().uuidString, forKey: "APP_UUID")
+        if #available(iOS 12.0, *) {
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge, .providesAppNotificationSettings], completionHandler: {didAllow,Error in
+                print(didAllow)
+            })
+        } else {
+            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge], completionHandler: {didAllow,Error in
+                print(didAllow)
+            })
+        }
+        
+        do {
+            try Network.reachability = Reachability(hostname: "www.google.com")
+        }catch {
+            switch error as? Network.Error {
+                case let .failedToCreateWith(hostname)?:
+                    print("Network error:\nFailed to create reachability object With host named:", hostname)
+                case let .failedToInitializeWith(address)?:
+                    print("Network error:\nFailed to initialize reachability object With address:", address)
+                case .failedToSetCallout?:
+                    print("Network error:\nFailed to set callout")
+                case .failedToSetDispatchQueue?:
+                    print("Network error:\nFailed to set DispatchQueue")
+                case .none:
+                    print(error)
+            }
+        }
         return true
     }
 
@@ -33,7 +63,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
-
-
+    
+  
 }
 
