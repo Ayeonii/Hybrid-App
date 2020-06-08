@@ -7,6 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		47DE6B731BE4AAA5873A7528 /* Pods_HybridApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E1C673E1C5C46F78C3941C2 /* Pods_HybridApp.framework */; };
+		CC7FE821247B917400ED2455 /* CoreNFC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC7FE820247B917400ED2455 /* CoreNFC.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		CC8A52A82480DEC0005E9387 /* DataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52A72480DEC0005E9387 /* DataBase.swift */; };
+		CC8A52B624839301005E9387 /* CameraPhotos.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52B524839301005E9387 /* CameraPhotos.swift */; };
+		CC8A52B824839352005E9387 /* QRCodeScan.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52B724839352005E9387 /* QRCodeScan.swift */; };
+		CC8A52BB2483943D005E9387 /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52BA2483943D005E9387 /* Location.swift */; };
+		CC8A52BD248394A6005E9387 /* CheckRooting.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52BC248394A6005E9387 /* CheckRooting.swift */; };
+		CC8A52BF248394E8005E9387 /* Dialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52BE248394E8005E9387 /* Dialog.swift */; };
+		CC8A52C124839538005E9387 /* BioAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52C024839538005E9387 /* BioAuth.swift */; };
+		CC8A52C324839574005E9387 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52C224839574005E9387 /* Reachability.swift */; };
+		CC8A52C5248395AC005E9387 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52C4248395AC005E9387 /* Message.swift */; };
+		CC8A52C7248395D8005E9387 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52C6248395D8005E9387 /* Notification.swift */; };
+		CC8A52C924839612005E9387 /* NFC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52C824839612005E9387 /* NFC.swift */; };
+		CC8A52CB24839645005E9387 /* FileDownload.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52CA24839645005E9387 /* FileDownload.swift */; };
+		CC8A52CD2483967C005E9387 /* WebPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52CC2483967C005E9387 /* WebPopup.swift */; };
+		CC8A52CF248396CA005E9387 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52CE248396CA005E9387 /* User.swift */; };
+		CC8A52D32484D9FA005E9387 /* KeyChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52D22484D9FA005E9387 /* KeyChain.swift */; };
+		CC8A52D52484E14A005E9387 /* URLObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52D42484E14A005E9387 /* URLObserver.swift */; };
+		CC93996B2485DA4A0004AD4F /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC93996A2485DA4A0004AD4F /* LoadingView.swift */; };
+		CC93996D24860AC30004AD4F /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC93996C24860AC30004AD4F /* Toast.swift */; };
+		CC93997024862C180004AD4F /* Demo in Resources */ = {isa = PBXBuildFile; fileRef = CC93996F24862C180004AD4F /* Demo */; };
 		CC9B341E246CFABC00FD9FCA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9B341D246CFABC00FD9FCA /* AppDelegate.swift */; };
 		CC9B3420246CFABC00FD9FCA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9B341F246CFABC00FD9FCA /* SceneDelegate.swift */; };
 		CC9B3422246CFABC00FD9FCA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC9B3421246CFABC00FD9FCA /* ViewController.swift */; };
@@ -15,13 +36,34 @@
 		CC9B342A246CFABE00FD9FCA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC9B3428246CFABE00FD9FCA /* LaunchScreen.storyboard */; };
 		CCAF06902473BCE2002F47AD /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCAF068F2473BCE2002F47AD /* Utils.swift */; };
 		CCAF06922473BD0B002F47AD /* Script in Resources */ = {isa = PBXBuildFile; fileRef = CCAF06912473BD0B002F47AD /* Script */; };
-		FBE2896C51E95E20393F5A1E /* Pods_HybridApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 731392CD847A8C4CC03B12CC /* Pods_HybridApp.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0E1C673E1C5C46F78C3941C2 /* Pods_HybridApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HybridApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		284B488D0335B88A34CD9DA7 /* Pods-HybridApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HybridApp.debug.xcconfig"; path = "Target Support Files/Pods-HybridApp/Pods-HybridApp.debug.xcconfig"; sourceTree = "<group>"; };
 		358768DC37C3913A4B4905D3 /* Pods-HybridApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HybridApp.release.xcconfig"; path = "Target Support Files/Pods-HybridApp/Pods-HybridApp.release.xcconfig"; sourceTree = "<group>"; };
-		731392CD847A8C4CC03B12CC /* Pods_HybridApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HybridApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC2A99C9247DE88900C521E1 /* HybridApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HybridApp.entitlements; sourceTree = "<group>"; };
+		CC2A99CA247DF35A00C521E1 /* HybridApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HybridApp-Bridging-Header.h"; sourceTree = "<group>"; };
+		CC7FE820247B917400ED2455 /* CoreNFC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreNFC.framework; path = System/Library/Frameworks/CoreNFC.framework; sourceTree = SDKROOT; };
+		CC8A52A72480DEC0005E9387 /* DataBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataBase.swift; sourceTree = "<group>"; };
+		CC8A52B524839301005E9387 /* CameraPhotos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPhotos.swift; sourceTree = "<group>"; };
+		CC8A52B724839352005E9387 /* QRCodeScan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeScan.swift; sourceTree = "<group>"; };
+		CC8A52BA2483943D005E9387 /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		CC8A52BC248394A6005E9387 /* CheckRooting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckRooting.swift; sourceTree = "<group>"; };
+		CC8A52BE248394E8005E9387 /* Dialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dialog.swift; sourceTree = "<group>"; };
+		CC8A52C024839538005E9387 /* BioAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioAuth.swift; sourceTree = "<group>"; };
+		CC8A52C224839574005E9387 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		CC8A52C4248395AC005E9387 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		CC8A52C6248395D8005E9387 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
+		CC8A52C824839612005E9387 /* NFC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFC.swift; sourceTree = "<group>"; };
+		CC8A52CA24839645005E9387 /* FileDownload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDownload.swift; sourceTree = "<group>"; };
+		CC8A52CC2483967C005E9387 /* WebPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebPopup.swift; sourceTree = "<group>"; };
+		CC8A52CE248396CA005E9387 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		CC8A52D22484D9FA005E9387 /* KeyChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChain.swift; sourceTree = "<group>"; };
+		CC8A52D42484E14A005E9387 /* URLObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLObserver.swift; sourceTree = "<group>"; };
+		CC93996A2485DA4A0004AD4F /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
+		CC93996C24860AC30004AD4F /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
+		CC93996F24862C180004AD4F /* Demo */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Demo; sourceTree = "<group>"; };
 		CC9B341A246CFABC00FD9FCA /* HybridApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HybridApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC9B341D246CFABC00FD9FCA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CC9B341F246CFABC00FD9FCA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -39,7 +81,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FBE2896C51E95E20393F5A1E /* Pods_HybridApp.framework in Frameworks */,
+				CC7FE821247B917400ED2455 /* CoreNFC.framework in Frameworks */,
+				47DE6B731BE4AAA5873A7528 /* Pods_HybridApp.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -49,7 +92,8 @@
 		935932ACD711BC46E01D4D84 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				731392CD847A8C4CC03B12CC /* Pods_HybridApp.framework */,
+				CC7FE820247B917400ED2455 /* CoreNFC.framework */,
+				0E1C673E1C5C46F78C3941C2 /* Pods_HybridApp.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -61,6 +105,47 @@
 				358768DC37C3913A4B4905D3 /* Pods-HybridApp.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		CC8A52B324839291005E9387 /* Photos */ = {
+			isa = PBXGroup;
+			children = (
+				CC8A52B524839301005E9387 /* CameraPhotos.swift */,
+				CC8A52B724839352005E9387 /* QRCodeScan.swift */,
+			);
+			path = Photos;
+			sourceTree = "<group>";
+		};
+		CC8A52B4248392C0005E9387 /* Module */ = {
+			isa = PBXGroup;
+			children = (
+				CCAF068F2473BCE2002F47AD /* Utils.swift */,
+				CC8A52D42484E14A005E9387 /* URLObserver.swift */,
+				CC93996A2485DA4A0004AD4F /* LoadingView.swift */,
+				CC8A52B9248393CB005E9387 /* Functions */,
+				CC8A52B324839291005E9387 /* Photos */,
+			);
+			path = Module;
+			sourceTree = "<group>";
+		};
+		CC8A52B9248393CB005E9387 /* Functions */ = {
+			isa = PBXGroup;
+			children = (
+				CC8A52BA2483943D005E9387 /* Location.swift */,
+				CC8A52BC248394A6005E9387 /* CheckRooting.swift */,
+				CC8A52BE248394E8005E9387 /* Dialog.swift */,
+				CC8A52C024839538005E9387 /* BioAuth.swift */,
+				CC8A52C224839574005E9387 /* Reachability.swift */,
+				CC8A52C4248395AC005E9387 /* Message.swift */,
+				CC8A52C6248395D8005E9387 /* Notification.swift */,
+				CC8A52C824839612005E9387 /* NFC.swift */,
+				CC8A52CA24839645005E9387 /* FileDownload.swift */,
+				CC8A52CC2483967C005E9387 /* WebPopup.swift */,
+				CC8A52CE248396CA005E9387 /* User.swift */,
+				CC8A52D22484D9FA005E9387 /* KeyChain.swift */,
+				CC93996C24860AC30004AD4F /* Toast.swift */,
+			);
+			path = Functions;
 			sourceTree = "<group>";
 		};
 		CC9B3411246CFABC00FD9FCA = {
@@ -84,15 +169,19 @@
 		CC9B341C246CFABC00FD9FCA /* HybridApp */ = {
 			isa = PBXGroup;
 			children = (
+				CC2A99C9247DE88900C521E1 /* HybridApp.entitlements */,
+				CC93996F24862C180004AD4F /* Demo */,
 				CCAF06912473BD0B002F47AD /* Script */,
+				CC8A52B4248392C0005E9387 /* Module */,
 				CC9B341D246CFABC00FD9FCA /* AppDelegate.swift */,
 				CC9B341F246CFABC00FD9FCA /* SceneDelegate.swift */,
 				CC9B3421246CFABC00FD9FCA /* ViewController.swift */,
+				CC8A52A72480DEC0005E9387 /* DataBase.swift */,
 				CC9B3423246CFABC00FD9FCA /* Main.storyboard */,
 				CC9B3426246CFABE00FD9FCA /* Assets.xcassets */,
 				CC9B3428246CFABE00FD9FCA /* LaunchScreen.storyboard */,
 				CC9B342B246CFABE00FD9FCA /* Info.plist */,
-				CCAF068F2473BCE2002F47AD /* Utils.swift */,
+				CC2A99CA247DF35A00C521E1 /* HybridApp-Bridging-Header.h */,
 			);
 			path = HybridApp;
 			sourceTree = "<group>";
@@ -108,7 +197,7 @@
 				CC9B3416246CFABC00FD9FCA /* Sources */,
 				CC9B3417246CFABC00FD9FCA /* Frameworks */,
 				CC9B3418246CFABC00FD9FCA /* Resources */,
-				502900AC26D10C9F0258484B /* [CP] Embed Pods Frameworks */,
+				7497BE8009F09766C989614C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -131,6 +220,7 @@
 				TargetAttributes = {
 					CC9B3419246CFABC00FD9FCA = {
 						CreatedOnToolsVersion = 11.4;
+						LastSwiftMigration = 1140;
 					};
 				};
 			};
@@ -158,6 +248,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC9B342A246CFABE00FD9FCA /* LaunchScreen.storyboard in Resources */,
+				CC93997024862C180004AD4F /* Demo in Resources */,
 				CC9B3427246CFABE00FD9FCA /* Assets.xcassets in Resources */,
 				CC9B3425246CFABC00FD9FCA /* Main.storyboard in Resources */,
 				CCAF06922473BD0B002F47AD /* Script in Resources */,
@@ -167,23 +258,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		502900AC26D10C9F0258484B /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HybridApp/Pods-HybridApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HybridApp/Pods-HybridApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HybridApp/Pods-HybridApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		5E177C41CCA5C5E6F2DEF308 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -206,6 +280,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		7497BE8009F09766C989614C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HybridApp/Pods-HybridApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HybridApp/Pods-HybridApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HybridApp/Pods-HybridApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -213,10 +304,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC8A52A82480DEC0005E9387 /* DataBase.swift in Sources */,
+				CC8A52C124839538005E9387 /* BioAuth.swift in Sources */,
+				CC8A52C924839612005E9387 /* NFC.swift in Sources */,
+				CC8A52C324839574005E9387 /* Reachability.swift in Sources */,
+				CC8A52BF248394E8005E9387 /* Dialog.swift in Sources */,
+				CC93996B2485DA4A0004AD4F /* LoadingView.swift in Sources */,
+				CC8A52CB24839645005E9387 /* FileDownload.swift in Sources */,
+				CC8A52B624839301005E9387 /* CameraPhotos.swift in Sources */,
+				CC8A52D52484E14A005E9387 /* URLObserver.swift in Sources */,
+				CC8A52BB2483943D005E9387 /* Location.swift in Sources */,
 				CC9B3422246CFABC00FD9FCA /* ViewController.swift in Sources */,
+				CC8A52B824839352005E9387 /* QRCodeScan.swift in Sources */,
+				CC8A52D32484D9FA005E9387 /* KeyChain.swift in Sources */,
 				CC9B341E246CFABC00FD9FCA /* AppDelegate.swift in Sources */,
+				CC8A52C5248395AC005E9387 /* Message.swift in Sources */,
+				CC8A52C7248395D8005E9387 /* Notification.swift in Sources */,
 				CC9B3420246CFABC00FD9FCA /* SceneDelegate.swift in Sources */,
+				CC8A52CF248396CA005E9387 /* User.swift in Sources */,
+				CC8A52BD248394A6005E9387 /* CheckRooting.swift in Sources */,
+				CC93996D24860AC30004AD4F /* Toast.swift in Sources */,
 				CCAF06902473BCE2002F47AD /* Utils.swift in Sources */,
+				CC8A52CD2483967C005E9387 /* WebPopup.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -361,15 +470,19 @@
 			baseConfigurationReference = 284B488D0335B88A34CD9DA7 /* Pods-HybridApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = HybridApp/HybridApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 653TUFJ9Y7;
+				DEVELOPMENT_TEAM = 4V6SN23KMY;
 				INFOPLIST_FILE = HybridApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "kr.lay.Hybrid-App";
+				PRODUCT_BUNDLE_IDENTIFIER = kr.lay.HybridApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "HybridApp/HybridApp-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -380,15 +493,18 @@
 			baseConfigurationReference = 358768DC37C3913A4B4905D3 /* Pods-HybridApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = HybridApp/HybridApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 653TUFJ9Y7;
+				DEVELOPMENT_TEAM = 4V6SN23KMY;
 				INFOPLIST_FILE = HybridApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "kr.lay.Hybrid-App";
+				PRODUCT_BUNDLE_IDENTIFIER = kr.lay.HybridApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "HybridApp/HybridApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
