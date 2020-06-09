@@ -20,6 +20,7 @@ class FileDownload : NSObject, URLSessionDelegate{
     private var component : FlexComponent!
     private let util = Utils()
     private var loadingView : LoadingView!
+    private var textLabel = UITextView()
     
     func startFileDownload (_ component : FlexComponent) -> (FlexAction, Array<Any?>) -> Void?{
         return { (action, argument) -> Void in
@@ -30,6 +31,7 @@ class FileDownload : NSObject, URLSessionDelegate{
             DispatchQueue.main.async {
                 self.loadingView = LoadingView(self.component.parentViewController!.view)
                 self.loadingView.showActivityIndicator(text: "다운로드 중", nil)
+                //progress tracker 
             }
             self.flexAction  = action
             self.fileURL = argument[0] as? String
