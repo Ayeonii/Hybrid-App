@@ -48,12 +48,15 @@ class LoadingView {
             self.activityIndicatorView.startAnimating()
             self.view.backgroundColor = .black
             self.view.addSubview(self.backgroundView)
-            
-            print("로딩방!!")
+
         }
         
     }
-        
+    
+    func getLoadingUIView () -> UIView{
+        return self.activityIndicatorView
+    }
+
     func stopActivityIndicator() {
         DispatchQueue.main.async {
             self.viewForActivityIndicator.removeFromSuperview()
