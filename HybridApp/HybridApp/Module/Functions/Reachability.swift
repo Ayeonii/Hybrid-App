@@ -176,13 +176,13 @@ class CheckNetwork{
         
         switch Network.reachability?.status {
             case .unreachable:
-                self.flexAction.PromiseReturn("No Connection!")
+                self.flexAction.promiseReturn("No Connection!")
             case .wwan:
-                self.flexAction.PromiseReturn("Cellular Connection")
+                self.flexAction.promiseReturn("Cellular Connection")
             case .wifi:
-                self.flexAction.PromiseReturn("WIFI Connection")
+                self.flexAction.promiseReturn("WIFI Connection")
             default :
-                self.flexAction.PromiseReturn("No Connection!")
+                self.flexAction.promiseReturn("No Connection!")
                 break
         }
         print("Status:", Network.reachability!.status)

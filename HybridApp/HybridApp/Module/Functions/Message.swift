@@ -35,11 +35,11 @@ class Message : NSObject, MFMessageComposeViewControllerDelegate {
                         messageComposer.body = message
                         currentVC.present(messageComposer, animated: true, completion: nil)
                     } else {
-                        action.PromiseReturn("메세지를 보낼 수 없습니다.")
+                        action.promiseReturn("메세지를 보낼 수 없습니다.")
                     }
                 }
             }else {
-                action.PromiseReturn("전화번호와 내용을 적어주세요")
+                action.promiseReturn("전화번호와 내용을 적어주세요")
             }
         }
     }
@@ -59,7 +59,7 @@ class Message : NSObject, MFMessageComposeViewControllerDelegate {
             returnMsg = "문자메시지 전송을 지원하지 않습니다."
             break
         }
-        self.flexAction.PromiseReturn(returnMsg)
+        self.flexAction.promiseReturn(returnMsg)
         DispatchQueue.main.async {
             controller.dismiss(animated: true, completion: nil)
         }

@@ -38,7 +38,7 @@ class FileDownload : NSObject, URLSessionDelegate{
     
     func fileDownload() {
         guard let url = URL(string: fileURL) else {
-            self.flexAction.PromiseReturn("Error: cannot create URL")
+            self.flexAction.promiseReturn("Error: cannot create URL")
             return
         }
         

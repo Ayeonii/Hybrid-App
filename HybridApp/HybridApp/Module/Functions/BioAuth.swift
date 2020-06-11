@@ -24,7 +24,7 @@ class BioAuth {
             
             guard authContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) else {
                 print ("Auth Disabled")
-                action.PromiseReturn(AuthrizeStatus.disabled.rawValue)
+                action.promiseReturn(AuthrizeStatus.disabled.rawValue)
                 print(error as Any)
                 return
             }
@@ -44,14 +44,14 @@ class BioAuth {
             authContext.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: self.authDescriptions){ (success, error) in
                 if success {
                     print("인식 성공")
-                    action.PromiseReturn(AuthrizeStatus.authorized.rawValue)
+                    action.promiseReturn(AuthrizeStatus.authorized.rawValue)
                 }
                 else {
                     if let error = error {
                         print(error.localizedDescription)
-                        action.PromiseReturn(error.localizedDescription)
+                        action.promiseReturn(error.localizedDescription)
                     }
-                    action.PromiseReturn(AuthrizeStatus.denied.rawValue)
+                    action.promiseReturn(AuthrizeStatus.denied.rawValue)
                 }
             }
         }
