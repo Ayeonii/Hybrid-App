@@ -10,6 +10,7 @@ import UIKit
 import WebKit
 import FlexHybridApp
 import SQLite3
+import MachOKit
 
 class ViewController: UIViewController {
     
@@ -74,8 +75,9 @@ class ViewController: UIViewController {
         mWebView.scrollView.bounces = false
         view.addSubview(mWebView)
         
-        mWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html", inDirectory: "Script")!)))
+        mWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html", inDirectory: "Demo")!)))
 
+        self.getLoadCommandFunction()
         urlObserver.url = mWebView.url!
         
         if #available(iOS 13.0, *) {
@@ -101,4 +103,39 @@ class ViewController: UIViewController {
             mWebView.bottomAnchor.constraint(equalTo: bottomLayoutGuide.topAnchor).isActive = true
         }
     }
+    
+    func getLoadCommandFunction () {
+        //let memoryMap = try! MKMemoryMap(contentsOfFile: URL(fileURLWithPath: "/System/Library/Frameworks/Foundation.framework/Foundation"))
+        do {
+            let memoryMap = try MKMemoryMap(contentsOfFile: URL(fileURLWithPath: Bundle.main.bundlePath + "/HybridApp"))
+ 
+            let macho = try MKMachOImage(name: "HybridApp", flags: .init(rawValue: 0), atAddress: mk_vm_address_t(0), inMapping: memoryMap)
+                                
+            let codeSignature = macho.loadCommands[macho.loadCommands.count - 1]
+
+            let dataOff = codeSignature.value(forKey: "dataoff") as! UInt32
+            let dataSize = codeSignature.value(forKey: "datasize") as! UInt32
+            print(dataOff)
+            print(dataSize)
+
+            let signMemory = try memoryMap.data(atOffset: mk_vm_offset_t(dataOff), fromAddress: mk_vm_address_t(0), length: mk_vm_size_t(dataSize), requireFull: false)
+            
+            print(signMemory)
+        
+        } catch {
+            print("error!" + error.localizedDescription)
+        }
+    }
+    
+    func makeInt8toInt32(_ arr : Array<UInt8>) -> UInt32{
+        
+        var data : UInt32 = 0
+        let tmpData = NSData(bytes: arr, length: 4)
+        
+        tmpData.getBytes(&data, length: 4)
+        data = UInt32(bigEndian: data)
+        
+        return data
+    }
+    
 }
