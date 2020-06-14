@@ -9,4 +9,5 @@ target 'HybridApp' do
   pod 'FlexHybridApp'
   pod 'DKImagePickerController'
   pod 'KeychainAccess'
+  pod 'Alamofire', '~> 5.2'
 end

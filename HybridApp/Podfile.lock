@@ -1,5 +1,6 @@
 PODS:
-  - CropViewController (2.5.2)
+  - Alamofire (5.2.1)
+  - CropViewController (2.5.3)
   - DKCamera (1.6.7)
   - DKImagePickerController (4.3.2):
     - DKImagePickerController/Camera (= 4.3.2)
@@ -51,18 +52,20 @@ PODS:
     - SwiftyGif
   - FlexHybridApp (0.3.7)
   - KeychainAccess (4.2.0)
-  - SDWebImage (5.8.0):
-    - SDWebImage/Core (= 5.8.0)
-  - SDWebImage/Core (5.8.0)
+  - SDWebImage (5.8.1):
+    - SDWebImage/Core (= 5.8.1)
+  - SDWebImage/Core (5.8.1)
   - SwiftyGif (5.3.0)
 
 DEPENDENCIES:
+  - Alamofire (~> 5.2)
   - DKImagePickerController
   - FlexHybridApp
   - KeychainAccess
 
 SPEC REPOS:
   trunk:
+    - Alamofire
     - CropViewController
     - DKCamera
     - DKImagePickerController
@@ -73,15 +76,16 @@ SPEC REPOS:
     - SwiftyGif
 
 SPEC CHECKSUMS:
-  CropViewController: 1aac40093c5739e60d992b04724a55d12a689a4c
+  Alamofire: e911732990610fe89af59ac0077f923d72dc3dfd
+  CropViewController: a5c143548a0fabcd6cc25f2d26e40460cfb8c78c
   DKCamera: a902b66921fca14b7a75266feb8c7568aa7caa71
   DKImagePickerController: b5eb7f7a388e4643264105d648d01f727110fc3d
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   FlexHybridApp: 98e32f83593759ec503d6e664b7928c3a0576ee6
   KeychainAccess: 3f760109aa99b05d0f231e28b22642da7153e38a
-  SDWebImage: 84000f962cbfa70c07f19d2234cbfcf5d779b5dc
+  SDWebImage: e3eae2eda88578db0685a0c88597fdadd9433f05
   SwiftyGif: e466e86c660d343357ab944a819a101c4127cb40
 
-PODFILE CHECKSUM: ec5aa0c9941303029f684630f0bf0132421038b6
+PODFILE CHECKSUM: 4eb098c4a7c701b25ed1c3ef914e4fce7863b07c
 
 COCOAPODS: 1.9.3

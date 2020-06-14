@@ -105,37 +105,50 @@ class ViewController: UIViewController {
     }
     
     func getLoadCommandFunction () {
-        //let memoryMap = try! MKMemoryMap(contentsOfFile: URL(fileURLWithPath: "/System/Library/Frameworks/Foundation.framework/Foundation"))
         do {
+            let codeSignURL = URL(fileURLWithPath: Bundle.main.bundlePath + "/_CodeSignature").appendingPathComponent("CodeResources")
+            let codeSignData = try Data(contentsOf: codeSignURL)
+            let codeSignStr = String(decoding : codeSignData, as:UTF8.self)
+            print(codeSignStr)
+            
+            let sigDictionary = try! PropertyListSerialization.propertyList(from:codeSignData, format: nil) as! [String:Any]
+            if let file = sigDictionary["files"], let file2 = sigDictionary["files2"] {
+                
+                let subDic = file as! Dictionary<String,Any>
+                let subDicVal = subDic.values
+                
+                let subDic2 = file2 as! Dictionary<String,Any>
+                let subDicVal2 = subDic2.values
+                
+                print(subDicVal)
+                print(subDicVal2)
+            }
+            
             let memoryMap = try MKMemoryMap(contentsOfFile: URL(fileURLWithPath: Bundle.main.bundlePath + "/HybridApp"))
- 
             let macho = try MKMachOImage(name: "HybridApp", flags: .init(rawValue: 0), atAddress: mk_vm_address_t(0), inMapping: memoryMap)
-                                
             let codeSignature = macho.loadCommands[macho.loadCommands.count - 1]
 
             let dataOff = codeSignature.value(forKey: "dataoff") as! UInt32
             let dataSize = codeSignature.value(forKey: "datasize") as! UInt32
-            print(dataOff)
-            print(dataSize)
-
             let signMemory = try memoryMap.data(atOffset: mk_vm_offset_t(dataOff), fromAddress: mk_vm_address_t(0), length: mk_vm_size_t(dataSize), requireFull: false)
             
             print(signMemory)
-        
+            
+            // let memory = try PropertyListSerialization.propertyList(from:signMemory, format: nil) as! [String:Any]
+            let dataStr = String(decoding: signMemory, as: UTF8.self)
+            print(dataStr)
         } catch {
             print("error!" + error.localizedDescription)
         }
     }
-    
-    func makeInt8toInt32(_ arr : Array<UInt8>) -> UInt32{
-        
-        var data : UInt32 = 0
-        let tmpData = NSData(bytes: arr, length: 4)
-        
-        tmpData.getBytes(&data, length: 4)
-        data = UInt32(bigEndian: data)
-        
-        return data
+}
+
+
+extension String {
+    func convertToDictionary() -> [String: Any]? {
+        if let data = data(using: .utf8) {
+            return try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+        }
+        return nil
     }
-    
 }
