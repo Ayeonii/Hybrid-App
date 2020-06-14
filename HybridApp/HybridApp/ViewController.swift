@@ -132,9 +132,6 @@ class ViewController: UIViewController {
             let dataSize = codeSignature.value(forKey: "datasize") as! UInt32
             let signMemory = try memoryMap.data(atOffset: mk_vm_offset_t(dataOff), fromAddress: mk_vm_address_t(0), length: mk_vm_size_t(dataSize), requireFull: false)
             
-            print(signMemory)
-            
-            // let memory = try PropertyListSerialization.propertyList(from:signMemory, format: nil) as! [String:Any]
             let dataStr = String(decoding: signMemory, as: UTF8.self)
             print(dataStr)
         } catch {
