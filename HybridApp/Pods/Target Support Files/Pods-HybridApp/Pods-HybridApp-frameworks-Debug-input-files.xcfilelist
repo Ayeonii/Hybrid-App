@@ -1,6 +1,7 @@
 ${PODS_ROOT}/Target Support Files/Pods-HybridApp/Pods-HybridApp-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework
 ${BUILT_PRODUCTS_DIR}/CropViewController/CropViewController.framework
+${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework
 ${BUILT_PRODUCTS_DIR}/DKCamera/DKCamera.framework
 ${BUILT_PRODUCTS_DIR}/DKImagePickerController/DKImagePickerController.framework
 ${BUILT_PRODUCTS_DIR}/DKPhotoGallery/DKPhotoGallery.framework

@@ -50,7 +50,9 @@ class LoadingView {
             self.view.addSubview(self.backgroundView)
 
         }
-        
+        if let handler = handler {
+            handler()
+        }
     }
     
     func getLoadingUIView () -> UIView{

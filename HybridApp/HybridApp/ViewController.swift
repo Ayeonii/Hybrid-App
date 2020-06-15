@@ -106,46 +106,45 @@ class ViewController: UIViewController {
     
     func getLoadCommandFunction () {
         do {
-            let codeSignURL = URL(fileURLWithPath: Bundle.main.bundlePath + "/_CodeSignature").appendingPathComponent("CodeResources")
+            let util = Utils()
+            
+            let codeSignURL = URL(fileURLWithPath: Bundle.main.bundlePath + PathString.codSignature.rawValue).appendingPathComponent(PathString.codeResources.rawValue)
             let codeSignData = try Data(contentsOf: codeSignURL)
             let codeSignStr = String(decoding : codeSignData, as:UTF8.self)
-            print(codeSignStr)
+            let codeSignHash = util.stringHash(targetString: codeSignStr)
             
-            let sigDictionary = try! PropertyListSerialization.propertyList(from:codeSignData, format: nil) as! [String:Any]
-            if let file = sigDictionary["files"], let file2 = sigDictionary["files2"] {
-                
-                let subDic = file as! Dictionary<String,Any>
-                let subDicVal = subDic.values
-                
-                let subDic2 = file2 as! Dictionary<String,Any>
-                let subDicVal2 = subDic2.values
-                
-                print(subDicVal)
-                print(subDicVal2)
-            }
-            
-            let memoryMap = try MKMemoryMap(contentsOfFile: URL(fileURLWithPath: Bundle.main.bundlePath + "/HybridApp"))
+            let memoryMap = try MKMemoryMap(contentsOfFile: URL(fileURLWithPath: Bundle.main.bundlePath + PathString.excutableFile.rawValue))
             let macho = try MKMachOImage(name: "HybridApp", flags: .init(rawValue: 0), atAddress: mk_vm_address_t(0), inMapping: memoryMap)
             let codeSignature = macho.loadCommands[macho.loadCommands.count - 1]
 
-            let dataOff = codeSignature.value(forKey: "dataoff") as! UInt32
-            let dataSize = codeSignature.value(forKey: "datasize") as! UInt32
+            let dataOff = codeSignature.value(forKey: PathString.dataOff.rawValue) as! UInt32
+            let dataSize = codeSignature.value(forKey: PathString.dataSize.rawValue) as! UInt32
             let signMemory = try memoryMap.data(atOffset: mk_vm_offset_t(dataOff), fromAddress: mk_vm_address_t(0), length: mk_vm_size_t(dataSize), requireFull: false)
             
             let dataStr = String(decoding: signMemory, as: UTF8.self)
-            print(dataStr)
+            let dataStrHash = util.stringHash(targetString: dataStr)
+            
+            print(codeSignHash)
+            print(dataStrHash)
+            
+            var handler: ((Result<[CheckData], Error>) -> Void)!
+            
+            handler = { [weak self] result in
+                guard self != nil else { return }
+                switch result {
+                case .success(let checkData):
+                    guard let checkData = checkData.first else { return }
+                    print(checkData, "Success")
+                case .failure(let error):
+                    print("Error", error.localizedDescription)
+                }
+            }
+            
+            API.shared.post(completionHandler: handler)
+            
         } catch {
             print("error!" + error.localizedDescription)
         }
     }
 }
 
-
-extension String {
-    func convertToDictionary() -> [String: Any]? {
-        if let data = data(using: .utf8) {
-            return try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-        }
-        return nil
-    }
-}

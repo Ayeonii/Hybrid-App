@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         do {
-            try Network.reachability = Reachability(hostname: "www.google.com")
+            try Network.reachability = Reachability(hostname: "www.apple.com")
         }catch {
             switch error as? Network.Error {
                 case let .failedToCreateWith(hostname)?:

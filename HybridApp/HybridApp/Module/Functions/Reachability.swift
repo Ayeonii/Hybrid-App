@@ -168,12 +168,11 @@ class CheckNetwork{
 //                            selector: #selector(self.statusManager),
 //                            name: NSNotification.Name(rawValue: "FlagsChanged"),
 //                            object: nil)
-            self.updateUserInterface()
+            self.updateNetworkStatusCheck()
         }
     }
     
-    func updateUserInterface() {
-        
+    func updateNetworkStatusCheck() {
         switch Network.reachability?.status {
             case .unreachable:
                 self.flexAction.promiseReturn("No Connection!")
@@ -193,6 +192,6 @@ class CheckNetwork{
     }
     
     @objc func statusManager(_ notification: NSNotification) {
-        updateUserInterface()
+        updateNetworkStatusCheck()
     }
 }

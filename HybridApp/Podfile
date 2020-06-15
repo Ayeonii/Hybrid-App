@@ -10,4 +10,5 @@ target 'HybridApp' do
   pod 'DKImagePickerController'
   pod 'KeychainAccess'
   pod 'Alamofire', '~> 5.2'
+  pod 'CryptoSwift'
 end
