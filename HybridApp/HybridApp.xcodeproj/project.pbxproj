@@ -25,6 +25,7 @@
 		CC8A52CF248396CA005E9387 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52CE248396CA005E9387 /* User.swift */; };
 		CC8A52D32484D9FA005E9387 /* KeyChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52D22484D9FA005E9387 /* KeyChain.swift */; };
 		CC8A52D52484E14A005E9387 /* URLObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52D42484E14A005E9387 /* URLObserver.swift */; };
+		CC8BDF8D2496EC6300889624 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8BDF8C2496EC6300889624 /* API.swift */; };
 		CC93996B2485DA4A0004AD4F /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC93996A2485DA4A0004AD4F /* LoadingView.swift */; };
 		CC93996D24860AC30004AD4F /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC93996C24860AC30004AD4F /* Toast.swift */; };
 		CC93997024862C180004AD4F /* Demo in Resources */ = {isa = PBXBuildFile; fileRef = CC93996F24862C180004AD4F /* Demo */; };
@@ -36,7 +37,47 @@
 		CC9B342A246CFABE00FD9FCA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC9B3428246CFABE00FD9FCA /* LaunchScreen.storyboard */; };
 		CCAF06902473BCE2002F47AD /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCAF068F2473BCE2002F47AD /* Utils.swift */; };
 		CCAF06922473BD0B002F47AD /* Script in Resources */ = {isa = PBXBuildFile; fileRef = CCAF06912473BD0B002F47AD /* Script */; };
+		CCF9D1FF249316ED000823D6 /* MachOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCF9D1FA249316DA000823D6 /* MachOKit.framework */; };
+		CCF9D200249316ED000823D6 /* MachOKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CCF9D1FA249316DA000823D6 /* MachOKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		CCF9D1F9249316DA000823D6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CCF9D1F1249316D9000823D6 /* MachOKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D02FEB361890FF88004E88ED;
+			remoteInfo = MachOKit;
+		};
+		CCF9D1FB249316DA000823D6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CCF9D1F1249316D9000823D6 /* MachOKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D02FEB4D1890FF88004E88ED;
+			remoteInfo = MachOKitTests;
+		};
+		CCF9D1FD249316DA000823D6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CCF9D1F1249316D9000823D6 /* MachOKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D0A3BB741A68EB9D00D663A0;
+			remoteInfo = libMachO;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CCF9D201249316ED000823D6 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				CCF9D200249316ED000823D6 /* MachOKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0E1C673E1C5C46F78C3941C2 /* Pods_HybridApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HybridApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -61,6 +102,7 @@
 		CC8A52CE248396CA005E9387 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		CC8A52D22484D9FA005E9387 /* KeyChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChain.swift; sourceTree = "<group>"; };
 		CC8A52D42484E14A005E9387 /* URLObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLObserver.swift; sourceTree = "<group>"; };
+		CC8BDF8C2496EC6300889624 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		CC93996A2485DA4A0004AD4F /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		CC93996C24860AC30004AD4F /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		CC93996F24862C180004AD4F /* Demo */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Demo; sourceTree = "<group>"; };
@@ -74,6 +116,7 @@
 		CC9B342B246CFABE00FD9FCA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CCAF068F2473BCE2002F47AD /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		CCAF06912473BD0B002F47AD /* Script */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Script; sourceTree = SOURCE_ROOT; };
+		CCF9D1F1249316D9000823D6 /* MachOKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MachOKit.xcodeproj; path = "../MachO-Kit/MachOKit.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +124,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CCF9D1FF249316ED000823D6 /* MachOKit.framework in Frameworks */,
 				CC7FE821247B917400ED2455 /* CoreNFC.framework in Frameworks */,
 				47DE6B731BE4AAA5873A7528 /* Pods_HybridApp.framework in Frameworks */,
 			);
@@ -119,6 +163,7 @@
 		CC8A52B4248392C0005E9387 /* Module */ = {
 			isa = PBXGroup;
 			children = (
+				CC8BDF852496E9A500889624 /* HTTP */,
 				CCAF068F2473BCE2002F47AD /* Utils.swift */,
 				CC8A52D42484E14A005E9387 /* URLObserver.swift */,
 				CC93996A2485DA4A0004AD4F /* LoadingView.swift */,
@@ -148,9 +193,18 @@
 			path = Functions;
 			sourceTree = "<group>";
 		};
+		CC8BDF852496E9A500889624 /* HTTP */ = {
+			isa = PBXGroup;
+			children = (
+				CC8BDF8C2496EC6300889624 /* API.swift */,
+			);
+			path = HTTP;
+			sourceTree = "<group>";
+		};
 		CC9B3411246CFABC00FD9FCA = {
 			isa = PBXGroup;
 			children = (
+				CCF9D1F1249316D9000823D6 /* MachOKit.xcodeproj */,
 				CC9B341C246CFABC00FD9FCA /* HybridApp */,
 				CC9B341B246CFABC00FD9FCA /* Products */,
 				95958184BA9A414F6306906B /* Pods */,
@@ -186,6 +240,16 @@
 			path = HybridApp;
 			sourceTree = "<group>";
 		};
+		CCF9D1F2249316D9000823D6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CCF9D1FA249316DA000823D6 /* MachOKit.framework */,
+				CCF9D1FC249316DA000823D6 /* MachOKitTests.xctest */,
+				CCF9D1FE249316DA000823D6 /* libMachO.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -198,6 +262,7 @@
 				CC9B3417246CFABC00FD9FCA /* Frameworks */,
 				CC9B3418246CFABC00FD9FCA /* Resources */,
 				7497BE8009F09766C989614C /* [CP] Embed Pods Frameworks */,
+				CCF9D201249316ED000823D6 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -235,12 +300,42 @@
 			mainGroup = CC9B3411246CFABC00FD9FCA;
 			productRefGroup = CC9B341B246CFABC00FD9FCA /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = CCF9D1F2249316D9000823D6 /* Products */;
+					ProjectRef = CCF9D1F1249316D9000823D6 /* MachOKit.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				CC9B3419246CFABC00FD9FCA /* HybridApp */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		CCF9D1FA249316DA000823D6 /* MachOKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = MachOKit.framework;
+			remoteRef = CCF9D1F9249316DA000823D6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		CCF9D1FC249316DA000823D6 /* MachOKitTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = MachOKitTests.xctest;
+			remoteRef = CCF9D1FB249316DA000823D6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		CCF9D1FE249316DA000823D6 /* libMachO.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libMachO.a;
+			remoteRef = CCF9D1FD249316DA000823D6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		CC9B3418246CFABC00FD9FCA /* Resources */ = {
@@ -322,6 +417,7 @@
 				CC8A52C7248395D8005E9387 /* Notification.swift in Sources */,
 				CC9B3420246CFABC00FD9FCA /* SceneDelegate.swift in Sources */,
 				CC8A52CF248396CA005E9387 /* User.swift in Sources */,
+				CC8BDF8D2496EC6300889624 /* API.swift in Sources */,
 				CC8A52BD248394A6005E9387 /* CheckRooting.swift in Sources */,
 				CC93996D24860AC30004AD4F /* Toast.swift in Sources */,
 				CCAF06902473BCE2002F47AD /* Utils.swift in Sources */,
@@ -473,13 +569,14 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = HybridApp/HybridApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4V6SN23KMY;
+				DEVELOPMENT_TEAM = 653TUFJ9Y7;
 				INFOPLIST_FILE = HybridApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = kr.lay.HybridApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "kr.lay.Hybrid-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "HybridApp/HybridApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -495,15 +592,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = HybridApp/HybridApp.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4V6SN23KMY;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = HybridApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = kr.lay.HybridApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "kr.lay.Hybrid-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "HybridApp/HybridApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

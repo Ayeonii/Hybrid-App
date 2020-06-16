@@ -8,6 +8,8 @@
 
 import UIKit
 import FlexHybridApp
+import Foundation
+import CryptoSwift
 
 enum AuthrizeStatus : String {
     case authorized = "Access Authorized."
@@ -16,6 +18,16 @@ enum AuthrizeStatus : String {
     case disabled = "Access disabled"
     case error = "Error"
 }
+
+enum PathString : String {
+    case codSignature = "/_CodeSignature"
+    case codeResources = "CodeResources"
+    case excutableFile = "/HybridApp"
+    case dataOff = "dataoff"
+    case dataSize = "datasize"
+    case nonAuth = "비정상적인 접근입니다. 앱을 종료합니다."
+}
+
 
 /*
   모듈공통사용기능
@@ -73,6 +85,12 @@ class Utils: NSObject {
             currentVC.present(dialog, animated: animated, completion: completion)
         }
     }
+    
+    //hasing
+    func stringHash(targetString : String) -> String {
+        return targetString.sha256()
+    }
+
 }
 
 

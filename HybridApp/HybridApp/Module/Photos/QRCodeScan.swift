@@ -56,7 +56,7 @@ class QRCodeScan : NSObject {
                     self.tempView.bringSubviewToFront(cancelBtn)  ///요기요기요기
                 }
             } else {
-                action.PromiseReturn(nil)
+                action.resolveVoid()
             }
             loadingView.stopActivityIndicator()
         }
@@ -108,14 +108,14 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate {
         if metadataObjects.count == 0 {
             print ("No QR Code is detected")
             self.requestCaptureSessionStopRunning(sender: nil)
-            self.flexAction?.PromiseReturn("Stopped QR Code Scan")
+            self.flexAction?.promiseReturn("Stopped QR Code Scan")
             return
         }
         
         if let metadataObject = metadataObjects.first {
             guard let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject else { return }
             guard let stringValue = readableObject.stringValue else { return }
-            flexAction?.PromiseReturn(stringValue)
+            flexAction?.promiseReturn(stringValue)
             self.requestCaptureSessionStopRunning(sender: nil)
         }
         
@@ -123,7 +123,7 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate {
 
     func requestCaptureSessionStartRunning() {
         guard let captureSession = self.captureSession else {
-            self.flexAction?.PromiseReturn("captureSession is null")
+            self.flexAction?.promiseReturn("captureSession is null")
             return
         }
         
@@ -143,7 +143,7 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate {
             }
         }
         if sender != nil {
-            self.flexAction?.PromiseReturn("Stopped QR Code Scan")
+            self.flexAction?.promiseReturn("Stopped QR Code Scan")
         }
     }
     

@@ -18,7 +18,7 @@ class DataBase: NSObject {
         let fileURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("TestDB.sqlite")
         
         if sqlite3_open(fileURL.path, &db) == SQLITE_OK {
-            print("DB Open")
+            print("DB Open : DataBase.openDataBase")
         }
         
         if sqlite3_exec(db, "CREATE TABLE IF NOT EXISTS VisitLogs (id INTEGER PRIMARY KEY AUTOINCREMENT, URL TEXT, Date TEXT)", nil, nil, nil) != SQLITE_OK {
@@ -51,9 +51,9 @@ class DataBase: NSObject {
         }
         
         if sqlite3_step(insertStatement) == SQLITE_DONE {
-            print("Insert Success")
+            print("Insert Success : DataBase.createVisitURL")
         }else {
-            print("Fail to Insert")
+            print("Fail to Insert : DataBase.createVisitURL")
         }
         
         sqlite3_finalize(insertStatement)
@@ -78,7 +78,7 @@ class DataBase: NSObject {
                 }
             }
         } else {
-            print("Fail to Read Table")
+            print("Fail to Read Table in DataBase.readVisitURL")
         }
         sqlite3_finalize(queryStatement)
     }
@@ -93,12 +93,12 @@ class DataBase: NSObject {
 
         if sqlite3_prepare_v2(db, deleteStatementStirng, -1, &deleteStatement, nil) == SQLITE_OK {
             if sqlite3_step(deleteStatement) == SQLITE_DONE {
-                print("Data inserted in 3Days ago is Deleted")
+                print("Data inserted in 3Days ago is Deleted : Class - DataBase.deleteVisitURL")
             } else {
-                print("Delete Fail")
+                print("Delete Fail in DataBase.deleteVisitURL")
             }
         } else {
-            print("Delete Fail")
+            print("Delete Fail in DataBase.deleteVisitURL")
         }
         sqlite3_finalize(deleteStatement)
     }

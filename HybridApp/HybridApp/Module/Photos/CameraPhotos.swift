@@ -60,7 +60,7 @@ class CameraPhotos : NSObject {
                 self.cameraPhotosAction(ModuleType.camera.rawValue)
             case .denied :
                 self.util.setAuthAlertAction(currentVC : self.currentVC,  dialog: self.util.authDialog)
-                action.PromiseReturn(returnStr)
+                action.promiseReturn(returnStr)
             case .notDetermined:
                 AVCaptureDevice.requestAccess(for: AVMediaType.video) { (response) in
                     if response {
@@ -72,9 +72,9 @@ class CameraPhotos : NSObject {
                     }
                 }
             case .restricted:
-                action.PromiseReturn(AuthrizeStatus.restricted.rawValue)
+                action.promiseReturn(AuthrizeStatus.restricted.rawValue)
             default:
-                action.PromiseReturn("default")
+                action.promiseReturn("default")
                 break
             }
         }
@@ -96,7 +96,7 @@ class CameraPhotos : NSObject {
                 self.imageAction = action
                 self.cameraPhotosAction(ModuleType.photos.rawValue)
             case .denied:
-                action.PromiseReturn(AuthrizeStatus.denied.rawValue)
+                action.promiseReturn(AuthrizeStatus.denied.rawValue)
                 self.util.setAuthAlertAction(currentVC : self.currentVC,  dialog: self.util.authDialog)
             case .notDetermined:
                 PHPhotoLibrary.requestAuthorization({(status) in
@@ -111,9 +111,9 @@ class CameraPhotos : NSObject {
                     }
                 })
             case .restricted:
-                action.PromiseReturn(AuthrizeStatus.restricted.rawValue)
+                action.promiseReturn(AuthrizeStatus.restricted.rawValue)
             default :
-                action.PromiseReturn(nil)
+                action.resolveVoid()
                 break
             }
         }
@@ -141,26 +141,29 @@ class CameraPhotos : NSObject {
                 multiPicker.allowsLandscape = false
                 multiPicker.assetType = .allPhotos
                 multiPicker.didCancel = {
-                    self.imageAction!.PromiseReturn(nil)
+                    self.imageAction!.resolveVoid()
                 }
                 multiPicker.maxSelectableCount = 5
                 multiPicker.viewWillAppear(true)
                 multiPicker.didSelectAssets = { (assets : [DKAsset]) in
-                    self.loadingView.showActivityIndicator(text: "로딩 중", nil )
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.02, execute: {
-                        imageArray.append(contentsOf: assets)
-                        multiImageArray = imageArray.map {
-                            let captureImage = self.getAsset(asset: $0.originalAsset.self!)
-                            let resizeImageg = self.resizeImage(image: captureImage, ratio: self.ratio, isWidth: self.isWidth)
-                            let imageData : NSData = resizeImageg.jpegData(compressionQuality: 0.25)! as NSData
-                            let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
-                            let encodedString = strBase64.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? ""
-                            return "data:image/jpeg;base64," + encodedString
+                    DispatchQueue.main.async {
+                        DispatchQueue(label: "indicatorQueue").async {
+                            self.loadingView.showActivityIndicator(text: "로딩 중", nil )
                         }
-                        self.imageAction!.PromiseReturn(multiImageArray)
-                        self.loadingView.stopActivityIndicator()
-                    })
+                        DispatchQueue(label: "indicatorQueue").async {
+                            imageArray.append(contentsOf: assets)
+                            multiImageArray = imageArray.map {
+                                let captureImage = self.getAsset(asset: $0.originalAsset.self!)
+                                let resizeImageg = self.resizeImage(image: captureImage, ratio: self.ratio, isWidth: self.isWidth)
+                                let imageData : NSData = resizeImageg.jpegData(compressionQuality: 0.25)! as NSData
+                                let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
+                                let encodedString = strBase64.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? ""
+                                return "data:image/jpeg;base64," + encodedString
+                            }
+                            self.imageAction!.promiseReturn(multiImageArray)
+                            self.loadingView.stopActivityIndicator()
+                        }
+                    }
                 }
                 self.currentVC.present(multiPicker, animated : true)
             }
@@ -181,8 +184,7 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
                 
                     self.currentVC.present(self.imagePicker, animated: true, completion: nil)
                 } else {
-                    print("204")
-                    self.imageAction?.PromiseReturn(nil)
+                    self.imageAction?.resolveVoid()
                     self.dialog.makeDialog(self.currentVC, title : "경고", message : "카메라를 실행할 수 없습니다." , btn: ["basic": "확인"] , type : true, animated : true, promiseAction: nil)
                 }
                 break
@@ -194,8 +196,7 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
                    
                     self.currentVC.present(self.imagePicker, animated: true, completion: nil)
                 }else{
-                     print("219")
-                    self.imageAction?.PromiseReturn(nil)
+                    self.imageAction?.resolveVoid()
                     self.dialog.makeDialog(self.currentVC, title : "경고", message : "사진을 실행할 수 없습니다." , btn: ["basic": "확인"] , type :true, animated : true, promiseAction: nil)
                 }
                 break
@@ -208,7 +209,6 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
     // 사진 한장 선택
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
-        print("imagePickerController")
         self.loadingView.showActivityIndicator(text: "로딩 중", nil)
         self.currentVC.dismiss(animated: true){
             let captureImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
@@ -220,15 +220,14 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
             let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
             let encodedString = strBase64.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? ""
 
-            self.imageAction?.PromiseReturn("data:image/jpeg;base64," + encodedString)
+            self.imageAction?.promiseReturn("data:image/jpeg;base64," + encodedString)
             self.loadingView.stopActivityIndicator()
         }
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.currentVC.dismiss(animated: true) {
-             print("248")
-            self.imageAction?.PromiseReturn(nil)
+            self.imageAction?.resolveVoid()
         }
     }
 

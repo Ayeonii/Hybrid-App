@@ -101,4 +101,16 @@ class ViewController: UIViewController {
             mWebView.bottomAnchor.constraint(equalTo: bottomLayoutGuide.topAnchor).isActive = true
         }
     }
+    
+    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!){
+        indicator.showActivityIndicator(text: "로딩 중", nil)
+    }
+
+    func webView(_ webView: WKWebView, didFinish navigation : WKNavigation!){
+        indicator.stopActivityIndicator()
+        
+    }
+    
+    
 }
+

@@ -49,21 +49,21 @@ class Dialog {
             
             if let basicName = basic {
                 btnAction = UIAlertAction(title : basicName, style: .default){ alertAction in
-                    promiseAction?.PromiseReturn(basicName)
+                    promiseAction?.promiseReturn(basicName)
                 }
                 dialog.addAction(btnAction)
             }
             
             if let destructiveName = destructive {
                 btnAction = UIAlertAction(title : destructiveName, style: .destructive){ alertAction in
-                    promiseAction?.PromiseReturn(destructiveName)
+                    promiseAction?.promiseReturn(destructiveName)
                 }
                 dialog.addAction(btnAction)
             }
             
             if let cancelName = cancel {
                 btnAction = UIAlertAction(title : cancelName, style: .cancel){ alertAction in
-                    promiseAction?.PromiseReturn(cancelName)
+                    promiseAction?.promiseReturn(cancelName)
                 }
                 dialog.addAction(btnAction)
             }
