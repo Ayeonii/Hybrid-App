@@ -17,8 +17,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        if UserDefaults.standard.string(forKey: "APP_UUID") == nil{
+            UserDefaults.standard.set(UUID().uuidString, forKey: "APP_UUID")
+        }
         
-        UserDefaults.standard.set(UUID().uuidString, forKey: "APP_UUID")
         if #available(iOS 12.0, *) {
             UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge, .providesAppNotificationSettings], completionHandler: {didAllow,Error in
                 print(didAllow)
