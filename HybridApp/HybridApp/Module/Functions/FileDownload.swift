@@ -38,7 +38,7 @@ class FileDownload : NSObject, URLSessionDelegate{
     
     func fileDownload() {
         guard let url = URL(string: fileURL) else {
-            self.flexAction.promiseReturn("Error: cannot create URL")
+            self.flexAction.reject(reason: "There is no URL")
             return
         }
         
@@ -91,17 +91,32 @@ extension FileDownload: URLSessionDownloadDelegate {
         let documentsUrl = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
         let destinationFileUrl = documentsUrl.appendingPathComponent("Downloads")
         
-        let writePath = destinationFileUrl.appendingPathComponent(URL(string:self.fileURL)!.lastPathComponent)
+        if !documentsUrl.pathComponents.contains("Downloads") {
+            try? fileManager.createDirectory(atPath: destinationFileUrl.path, withIntermediateDirectories: false, attributes: nil)
+        }
+        
+        var fileName = URL(string:self.fileURL)!.lastPathComponent
+        var writePath = destinationFileUrl.appendingPathComponent(fileName)
+        var index = 0
+        
+        while fileManager.fileExists(atPath: writePath.path) {
+            print(fileName)
+            index += 1
+            let fileUrl = URL(string:self.fileURL)!
+            fileName = fileUrl.deletingPathExtension().lastPathComponent + "(\(index))." + fileUrl.pathExtension
+            writePath = destinationFileUrl.appendingPathComponent(fileName)
+        }
+        
         do {
             try FileManager.default.copyItem(at: location, to: writePath)
             self.openFileWithPath(filePath: writePath)
             self.loadingView.stopActivityIndicator()
+            
         } catch (let writeError) {
             print("Error creating a file \(destinationFileUrl) : \(writeError)")
             self.loadingView.stopActivityIndicator()
         }
         try? FileManager.default.removeItem(at: location)
-        
     }
     
     func readDownloadedData(of url: URL) -> Data? {

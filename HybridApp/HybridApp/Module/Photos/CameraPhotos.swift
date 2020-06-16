@@ -146,21 +146,24 @@ class CameraPhotos : NSObject {
                 multiPicker.maxSelectableCount = 5
                 multiPicker.viewWillAppear(true)
                 multiPicker.didSelectAssets = { (assets : [DKAsset]) in
-                    self.loadingView.showActivityIndicator(text: "로딩 중", nil )
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.02, execute: {
-                        imageArray.append(contentsOf: assets)
-                        multiImageArray = imageArray.map {
-                            let captureImage = self.getAsset(asset: $0.originalAsset.self!)
-                            let resizeImageg = self.resizeImage(image: captureImage, ratio: self.ratio, isWidth: self.isWidth)
-                            let imageData : NSData = resizeImageg.jpegData(compressionQuality: 0.25)! as NSData
-                            let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
-                            let encodedString = strBase64.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? ""
-                            return "data:image/jpeg;base64," + encodedString
+                    DispatchQueue.main.async {
+                        DispatchQueue(label: "indicatorQueue").async {
+                            self.loadingView.showActivityIndicator(text: "로딩 중", nil )
                         }
-                        self.imageAction!.promiseReturn(multiImageArray)
-                        self.loadingView.stopActivityIndicator()
-                    })
+                        DispatchQueue(label: "indicatorQueue").async {
+                            imageArray.append(contentsOf: assets)
+                            multiImageArray = imageArray.map {
+                                let captureImage = self.getAsset(asset: $0.originalAsset.self!)
+                                let resizeImageg = self.resizeImage(image: captureImage, ratio: self.ratio, isWidth: self.isWidth)
+                                let imageData : NSData = resizeImageg.jpegData(compressionQuality: 0.25)! as NSData
+                                let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
+                                let encodedString = strBase64.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? ""
+                                return "data:image/jpeg;base64," + encodedString
+                            }
+                            self.imageAction!.promiseReturn(multiImageArray)
+                            self.loadingView.stopActivityIndicator()
+                        }
+                    }
                 }
                 self.currentVC.present(multiPicker, animated : true)
             }
@@ -206,7 +209,6 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
     // 사진 한장 선택
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
-        print("imagePickerController")
         self.loadingView.showActivityIndicator(text: "로딩 중", nil)
         self.currentVC.dismiss(animated: true){
             let captureImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage

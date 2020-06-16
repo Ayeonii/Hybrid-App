@@ -25,6 +25,7 @@ enum PathString : String {
     case excutableFile = "/HybridApp"
     case dataOff = "dataoff"
     case dataSize = "datasize"
+    case nonAuth = "비정상적인 접근입니다. 앱을 종료합니다."
 }
 
 

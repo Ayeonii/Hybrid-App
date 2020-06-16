@@ -10,7 +10,6 @@ import UIKit
 import WebKit
 import FlexHybridApp
 import SQLite3
-import MachOKit
 
 class ViewController: UIViewController {
     
@@ -75,9 +74,8 @@ class ViewController: UIViewController {
         mWebView.scrollView.bounces = false
         view.addSubview(mWebView)
         
-        mWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html", inDirectory: "Demo")!)))
+        mWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html", inDirectory: "Script")!)))
 
-        self.getLoadCommandFunction()
         urlObserver.url = mWebView.url!
         
         if #available(iOS 13.0, *) {
@@ -104,47 +102,15 @@ class ViewController: UIViewController {
         }
     }
     
-    func getLoadCommandFunction () {
-        do {
-            let util = Utils()
-            
-            let codeSignURL = URL(fileURLWithPath: Bundle.main.bundlePath + PathString.codSignature.rawValue).appendingPathComponent(PathString.codeResources.rawValue)
-            let codeSignData = try Data(contentsOf: codeSignURL)
-            let codeSignStr = String(decoding : codeSignData, as:UTF8.self)
-            let codeSignHash = util.stringHash(targetString: codeSignStr)
-            
-            let memoryMap = try MKMemoryMap(contentsOfFile: URL(fileURLWithPath: Bundle.main.bundlePath + PathString.excutableFile.rawValue))
-            let macho = try MKMachOImage(name: "HybridApp", flags: .init(rawValue: 0), atAddress: mk_vm_address_t(0), inMapping: memoryMap)
-            let codeSignature = macho.loadCommands[macho.loadCommands.count - 1]
-
-            let dataOff = codeSignature.value(forKey: PathString.dataOff.rawValue) as! UInt32
-            let dataSize = codeSignature.value(forKey: PathString.dataSize.rawValue) as! UInt32
-            let signMemory = try memoryMap.data(atOffset: mk_vm_offset_t(dataOff), fromAddress: mk_vm_address_t(0), length: mk_vm_size_t(dataSize), requireFull: false)
-            
-            let dataStr = String(decoding: signMemory, as: UTF8.self)
-            let dataStrHash = util.stringHash(targetString: dataStr)
-            
-            print(codeSignHash)
-            print(dataStrHash)
-            
-            var handler: ((Result<[CheckData], Error>) -> Void)!
-            
-            handler = { [weak self] result in
-                guard self != nil else { return }
-                switch result {
-                case .success(let checkData):
-                    guard let checkData = checkData.first else { return }
-                    print(checkData, "Success")
-                case .failure(let error):
-                    print("Error", error.localizedDescription)
-                }
-            }
-            
-            API.shared.post(completionHandler: handler)
-            
-        } catch {
-            print("error!" + error.localizedDescription)
-        }
+    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!){
+        indicator.showActivityIndicator(text: "로딩 중", nil)
     }
+
+    func webView(_ webView: WKWebView, didFinish navigation : WKNavigation!){
+        indicator.stopActivityIndicator()
+        
+    }
+    
+    
 }
 

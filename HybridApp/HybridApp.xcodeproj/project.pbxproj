@@ -25,7 +25,6 @@
 		CC8A52CF248396CA005E9387 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52CE248396CA005E9387 /* User.swift */; };
 		CC8A52D32484D9FA005E9387 /* KeyChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52D22484D9FA005E9387 /* KeyChain.swift */; };
 		CC8A52D52484E14A005E9387 /* URLObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52D42484E14A005E9387 /* URLObserver.swift */; };
-		CC8BDF8B2496EAB500889624 /* Data.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8BDF8A2496EAB500889624 /* Data.swift */; };
 		CC8BDF8D2496EC6300889624 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8BDF8C2496EC6300889624 /* API.swift */; };
 		CC93996B2485DA4A0004AD4F /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC93996A2485DA4A0004AD4F /* LoadingView.swift */; };
 		CC93996D24860AC30004AD4F /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC93996C24860AC30004AD4F /* Toast.swift */; };
@@ -103,7 +102,6 @@
 		CC8A52CE248396CA005E9387 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		CC8A52D22484D9FA005E9387 /* KeyChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChain.swift; sourceTree = "<group>"; };
 		CC8A52D42484E14A005E9387 /* URLObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLObserver.swift; sourceTree = "<group>"; };
-		CC8BDF8A2496EAB500889624 /* Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data.swift; sourceTree = "<group>"; };
 		CC8BDF8C2496EC6300889624 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		CC93996A2485DA4A0004AD4F /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		CC93996C24860AC30004AD4F /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
@@ -198,7 +196,6 @@
 		CC8BDF852496E9A500889624 /* HTTP */ = {
 			isa = PBXGroup;
 			children = (
-				CC8BDF8A2496EAB500889624 /* Data.swift */,
 				CC8BDF8C2496EC6300889624 /* API.swift */,
 			);
 			path = HTTP;
@@ -409,7 +406,6 @@
 				CC8A52BF248394E8005E9387 /* Dialog.swift in Sources */,
 				CC93996B2485DA4A0004AD4F /* LoadingView.swift in Sources */,
 				CC8A52CB24839645005E9387 /* FileDownload.swift in Sources */,
-				CC8BDF8B2496EAB500889624 /* Data.swift in Sources */,
 				CC8A52B624839301005E9387 /* CameraPhotos.swift in Sources */,
 				CC8A52D52484E14A005E9387 /* URLObserver.swift in Sources */,
 				CC8A52BB2483943D005E9387 /* Location.swift in Sources */,
@@ -573,14 +569,14 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = HybridApp/HybridApp.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4V6SN23KMY;
+				DEVELOPMENT_TEAM = 653TUFJ9Y7;
 				INFOPLIST_FILE = HybridApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = kr.lay.HybridApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "kr.lay.Hybrid-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "HybridApp/HybridApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -596,16 +592,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = HybridApp/HybridApp.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 4V6SN23KMY;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = HybridApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = kr.lay.HybridApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "kr.lay.Hybrid-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "HybridApp/HybridApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

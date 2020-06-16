@@ -23,9 +23,9 @@ class CheckRooting {
             
             var returnStr : String = "Not Root Authority"
             DispatchQueue.main.async{
-                if !self.hasJailbreak() {
+                if self.hasJailbreak() {
                     returnStr = "RootAuthority"
-                    let dialog = UIAlertController(title: nil, message: "루트권한을 가진 디바이스에서는 실행할 수 없습니다. 앱이 종료됩니다.", preferredStyle: .alert)
+                    let dialog = UIAlertController(title: nil, message: PathString.nonAuth.rawValue, preferredStyle: .alert)
                     let action = UIAlertAction(title: "확인", style: .default){
                         (action:UIAlertAction!) in
                         exit(0)
