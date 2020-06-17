@@ -23,7 +23,7 @@ class NFC : NSObject{
         self.currentVC = currentVC
     }
     
-    func nfcReadingFunction () -> (FlexAction, Array<Any?>)-> Void? {
+    func nfcReadingFunction () -> (FlexAction, Array<Any?>)-> Void {
         return { (action, argument) -> Void in
             guard NFCNDEFReaderSession.readingAvailable else {
                 DispatchQueue.main.async {

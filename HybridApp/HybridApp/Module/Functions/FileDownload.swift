@@ -23,7 +23,7 @@ class FileDownload : NSObject, URLSessionDelegate{
     private var progressLabel = UILabel()
 
     
-    func startFileDownload (_ component : FlexComponent) -> (FlexAction, Array<Any?>) -> Void?{
+    func startFileDownload (_ component : FlexComponent) -> (FlexAction, Array<Any?>) -> Void {
         return { (action, argument) -> Void in
 
             self.util.setUserHistory(forKey: "FileDownloadBtn")

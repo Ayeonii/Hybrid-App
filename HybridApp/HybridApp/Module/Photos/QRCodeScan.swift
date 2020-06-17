@@ -24,7 +24,7 @@ class QRCodeScan : NSObject {
         self.currentVC = viewController
     }
     
-    func codeScanFunction() -> (FlexAction, Array<Any?>) ->Void? {
+    func codeScanFunction() -> (FlexAction, Array<Any?>) -> Void {
         let loadingView = LoadingView(currentVC.view)
         return { (action, argument) -> Void in
             

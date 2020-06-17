@@ -41,7 +41,7 @@ class CameraPhotos : NSObject {
         imagePicker.delegate = self
     }
     
-    func cameraFunction() -> (FlexAction, Array<Any?>) -> Void? {
+    func cameraFunction() -> (FlexAction, Array<Any?>) -> Void {
         return { (action, arguments) -> Void in
             
             self.util.setUserHistory(forKey: "CameraBtn")
@@ -51,7 +51,6 @@ class CameraPhotos : NSObject {
                 self.isWidth =  arguments[1] as? Bool
             }
 
-            var returnStr : String?
             let cameraAuthorizationsStatus : AVAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
             
             switch cameraAuthorizationsStatus {
@@ -60,15 +59,14 @@ class CameraPhotos : NSObject {
                 self.cameraPhotosAction(ModuleType.camera.rawValue)
             case .denied :
                 self.util.setAuthAlertAction(currentVC : self.currentVC,  dialog: self.util.authDialog)
-                action.promiseReturn(returnStr)
+                action.resolveVoid()
             case .notDetermined:
                 AVCaptureDevice.requestAccess(for: AVMediaType.video) { (response) in
                     if response {
                         self.imageAction = action
                         self.cameraPhotosAction(ModuleType.camera.rawValue)
-                    }else {
+                    } else {
                         self.dialog.makeDialog(self.currentVC, title : "알림", message : "해당 권한이 거부되었습니다." , btn: ["basic": "확인"] , type : true, animated : true, promiseAction : nil)
-                        returnStr = AuthrizeStatus.denied.rawValue
                     }
                 }
             case .restricted:
@@ -81,7 +79,7 @@ class CameraPhotos : NSObject {
     }
     
     //Photos를 실행시키는 모듈
-    func photosFunction() -> (FlexAction, Array<Any?>) -> Void?  {
+    func photosFunction() -> (FlexAction, Array<Any?>) -> Void  {
         return { (action, arguments) -> Void in
             self.util.setUserHistory(forKey: "PhotoBtn")
             
@@ -120,7 +118,7 @@ class CameraPhotos : NSObject {
     }
     
     //사진 여러장 선택
-    func MultiplePhotosFunction() -> (FlexAction, Array<Any?>) -> Void?{
+    func MultiplePhotosFunction() -> (FlexAction, Array<Any?>) -> Void {
         return { (action, arguments) -> Void in
             
             self.util.setUserHistory(forKey: "MultiplePhotoBtn")

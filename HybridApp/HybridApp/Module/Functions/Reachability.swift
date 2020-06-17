@@ -160,7 +160,7 @@ class CheckNetwork{
         self.currentVC = currentVC
     }
     
-    func checkNetworkConnect () -> (FlexAction, Array<Any?>) -> Void? {
+    func checkNetworkConnect () -> (FlexAction, Array<Any?>) -> Void {
         return{ (action, argumnet) -> Void in
             self.flexAction = action
 //            NotificationCenter.default

@@ -20,7 +20,7 @@ class Message : NSObject, MFMessageComposeViewControllerDelegate {
     private var flexAction : FlexAction!
     private let util = Utils()
     
-    func sendMessge (_ currentVC : UIViewController)  -> (FlexAction, Array<Any?>?) -> Void? {
+    func sendMessge (_ currentVC : UIViewController)  -> (FlexAction, Array<Any?>?) -> Void {
         return { (action, argument) -> Void in
             
             self.util.setUserHistory(forKey: "SendMessageBtn")

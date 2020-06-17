@@ -30,7 +30,7 @@ class Dialog {
         }
     }
     
-    func makeDialog(_ currentVC : UIViewController, title : String, message : String , btn : Dictionary<String?,String?>, type : Bool?, animated : Bool, promiseAction : FlexAction?){
+    func makeDialog(_ currentVC : UIViewController, title : String, message : String , btn : Dictionary<String,String>, type : Bool?, animated : Bool, promiseAction : FlexAction?){
 
         DispatchQueue.main.async {
             var dialog : UIAlertController
@@ -43,30 +43,27 @@ class Dialog {
                 dialog = UIAlertController (title : title, message : message, preferredStyle: .alert)
             }
             
-            let basic = btn["basic"]
-            let destructive = btn["destructive"]
-            let cancel = btn["cancel"]
-            
-            if let basicName = basic {
-                btnAction = UIAlertAction(title : basicName, style: .default){ alertAction in
-                    promiseAction?.promiseReturn(basicName)
+            if let basic = btn["basic"] {
+                btnAction = UIAlertAction(title : basic, style: .default)
+                { alertAction in
+                    promiseAction?.promiseReturn(basic)
+                }
+                dialog.addAction(btnAction)
+            }
+            if let destructive = btn["destructive"] {
+                btnAction = UIAlertAction(title : destructive, style: .destructive){ alertAction in
+                    promiseAction?.promiseReturn(destructive)
+                }
+                dialog.addAction(btnAction)
+            }
+
+            if let cancel = btn["cancel"] {
+                btnAction = UIAlertAction(title : cancel, style: .cancel){ alertAction in
+                    promiseAction?.promiseReturn(cancel)
                 }
                 dialog.addAction(btnAction)
             }
             
-            if let destructiveName = destructive {
-                btnAction = UIAlertAction(title : destructiveName, style: .destructive){ alertAction in
-                    promiseAction?.promiseReturn(destructiveName)
-                }
-                dialog.addAction(btnAction)
-            }
-            
-            if let cancelName = cancel {
-                btnAction = UIAlertAction(title : cancelName, style: .cancel){ alertAction in
-                    promiseAction?.promiseReturn(cancelName)
-                }
-                dialog.addAction(btnAction)
-            }
             currentVC.present(dialog, animated: animated, completion: nil)
         }
     }

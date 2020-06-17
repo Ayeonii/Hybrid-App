@@ -51,7 +51,7 @@ PODS:
   - DKPhotoGallery/Resource (0.0.17):
     - SDWebImage
     - SwiftyGif
-  - FlexHybridApp (0.3.7)
+  - FlexHybridApp (0.3.9)
   - KeychainAccess (4.2.0)
   - SDWebImage (5.8.1):
     - SDWebImage/Core (= 5.8.1)
@@ -85,7 +85,7 @@ SPEC CHECKSUMS:
   DKCamera: a902b66921fca14b7a75266feb8c7568aa7caa71
   DKImagePickerController: b5eb7f7a388e4643264105d648d01f727110fc3d
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
-  FlexHybridApp: 98e32f83593759ec503d6e664b7928c3a0576ee6
+  FlexHybridApp: deec37fbb17b29e1064244fde753ca8ac140ff21
   KeychainAccess: 3f760109aa99b05d0f231e28b22642da7153e38a
   SDWebImage: e3eae2eda88578db0685a0c88597fdadd9433f05
   SwiftyGif: e466e86c660d343357ab944a819a101c4127cb40
