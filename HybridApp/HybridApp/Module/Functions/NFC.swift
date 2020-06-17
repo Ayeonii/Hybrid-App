@@ -24,7 +24,7 @@ class NFC : NSObject{
     }
     
     func nfcReadingFunction () -> (FlexAction, Array<Any?>)-> Void {
-        return { (action, argument) -> Void in
+        return { (action, _) -> Void in
             guard NFCNDEFReaderSession.readingAvailable else {
                 DispatchQueue.main.async {
                     let alertController = UIAlertController (
@@ -44,7 +44,7 @@ class NFC : NSObject{
     
     
     func nfcWriteFunction () -> (FlexAction, Array<Any?>)-> Void? {
-        return { (action, argument) -> Void in
+        return { (action, _) -> Void in
             self.session = NFCNDEFReaderSession(delegate: self, queue: nil, invalidateAfterFirstRead: false)
             self.session?.alertMessage = "Hold your iPhone near an NDEF tag to write the message."
             self.session?.begin()

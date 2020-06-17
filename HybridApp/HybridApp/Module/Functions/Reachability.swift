@@ -163,11 +163,6 @@ class CheckNetwork{
     func checkNetworkConnect () -> (FlexAction, Array<Any?>) -> Void {
         return{ (action, argumnet) -> Void in
             self.flexAction = action
-//            NotificationCenter.default
-//            .addObserver(self.currentVC,
-//                            selector: #selector(self.statusManager),
-//                            name: NSNotification.Name(rawValue: "FlagsChanged"),
-//                            object: nil)
             self.updateNetworkStatusCheck()
         }
     }

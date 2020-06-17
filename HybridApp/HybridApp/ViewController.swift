@@ -23,7 +23,7 @@ class ViewController: UIViewController {
         
         let _ = ListeningObserver(self.urlObserver)
 
-        component.setInterface("Location", Location(self).locationFunction())
+        component.setAction("Location", Location(self).locationFunction())
          
         component.setInterface("RootingCheck", CheckRooting().checkRootingFunction(self))
         
@@ -33,7 +33,7 @@ class ViewController: UIViewController {
         
         component.setInterface ("UniqueAppID"){_ in return UserDefaults.standard.string(forKey: "APP_UUID")}
         
-        component.setInterface ("Toast",Toast().toastFunction(self))
+        component.setInterface ("Toast", Toast().toastFunction(self))
         
         component.setInterface ("UniqueDeviceID", KeyChain().keyChainInit())
         

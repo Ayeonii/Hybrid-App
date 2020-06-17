@@ -17,7 +17,7 @@ class CheckRooting {
     let util = Utils()
     
     func checkRootingFunction (_ currentVC : UIViewController) -> ((Array<Any?>) -> Any?) {
-        return{ (arguments) -> String in
+        return{ (_) -> String in
             
             self.util.setUserHistory(forKey: "RootingCheckBtn")
             

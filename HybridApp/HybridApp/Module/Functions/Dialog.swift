@@ -31,7 +31,6 @@ class Dialog {
     }
     
     func makeDialog(_ currentVC : UIViewController, title : String, message : String , btn : Dictionary<String,String>, type : Bool?, animated : Bool, promiseAction : FlexAction?){
-
         DispatchQueue.main.async {
             var dialog : UIAlertController
             var btnAction : UIAlertAction!
@@ -50,6 +49,7 @@ class Dialog {
                 }
                 dialog.addAction(btnAction)
             }
+            
             if let destructive = btn["destructive"] {
                 btnAction = UIAlertAction(title : destructive, style: .destructive){ alertAction in
                     promiseAction?.promiseReturn(destructive)
@@ -62,6 +62,10 @@ class Dialog {
                     promiseAction?.promiseReturn(cancel)
                 }
                 dialog.addAction(btnAction)
+            }
+            
+            if dialog.actions.count == 0 {
+                promiseAction?.resolveVoid()
             }
             
             currentVC.present(dialog, animated: animated, completion: nil)

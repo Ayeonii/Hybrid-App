@@ -15,7 +15,7 @@ class BioAuth {
     let util = Utils()
     
     func authFunction() -> (FlexAction, Array<Any?>) -> Void {
-        return { (action,  arguments) -> Void in
+        return { (action,  _) -> Void in
             
             self.util.setUserHistory(forKey: "BioAuthBtn")
             

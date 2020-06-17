@@ -25,7 +25,7 @@ class LoadingView {
             self.viewForActivityIndicator.frame = CGRect(x: 0.0, y: 0.0, width: 100, height: 100)
             self.viewForActivityIndicator.center = CGPoint(x: self.view.frame.size.width / 2.0, y: (self.view.frame.size.height) / 2.0)
             self.viewForActivityIndicator.layer.cornerRadius = 15
-            self.viewForActivityIndicator.backgroundColor =  #colorLiteral(red: 0.578004143, green: 0.8483221003, blue: 1, alpha: 1).withAlphaComponent(0.9)
+            self.viewForActivityIndicator.backgroundColor =  #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1).withAlphaComponent(0.9)
             self.backgroundView.addSubview(self.viewForActivityIndicator)
         
             self.activityIndicatorView.center = CGPoint(x: self.viewForActivityIndicator.frame.size.width / 2.0, y: (self.viewForActivityIndicator.frame.size.height) / 2.0)
@@ -34,13 +34,13 @@ class LoadingView {
             self.loadingTextLabel.text = text
             self.loadingTextLabel.font = UIFont(name: "Avenir Light", size: UIFont.labelFontSize)
             self.loadingTextLabel.sizeToFit()
-            self.loadingTextLabel.center = CGPoint(x: self.activityIndicatorView.center.x, y: self.activityIndicatorView.center.y + 30)
+            self.loadingTextLabel.center = CGPoint(x: self.activityIndicatorView.center.x, y: self.viewForActivityIndicator.frame.size.height * 0.85)
             
             self.viewForActivityIndicator.addSubview(self.loadingTextLabel)
             
             self.activityIndicatorView.hidesWhenStopped = true
             self.activityIndicatorView.style = .whiteLarge
-            self.activityIndicatorView.color = #colorLiteral(red: 1, green: 0.8089166809, blue: 0.9284902291, alpha: 1)
+            self.activityIndicatorView.color = #colorLiteral(red: 0.3333333433, green: 0.3333333433, blue: 0.3333333433, alpha: 1)
             self.viewForActivityIndicator.addSubview(self.activityIndicatorView)
             
             self.backgroundView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
