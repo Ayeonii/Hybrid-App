@@ -18,12 +18,11 @@ class CheckRooting {
         return{ (action, _) -> Void in
             
             Utils.setUserHistory(forKey: "RootingCheckBtn")
-            var result: [String:Any] = [:]
+            var result = ""
             
             DispatchQueue.main.async{
                 if self.hasJailbreak() {
-                    result["data"] = true
-                    result["msg"] = "탈옥되었습니다."
+                    result = "탈옥되었습니다."
                     let dialog = UIAlertController(title: nil, message: PathString.nonAuth, preferredStyle: .alert)
                     let action = UIAlertAction(title: "확인", style: .default){
                         (action:UIAlertAction!) in
@@ -32,8 +31,7 @@ class CheckRooting {
                     dialog.addAction(action)
                     currentVC.present(dialog, animated: true, completion: nil)
                 } else {
-                    result["data"] = false
-                    result["msg"] = "탈옥되지 않았습니다."
+                    result = "탈옥되지 않았습니다."
                 }
                 action.promiseReturn(result)
             }
@@ -51,7 +49,6 @@ class CheckRooting {
         return false
         #endif
         
-        //file check
         let fileManager = FileManager.default
         if fileManager.fileExists(atPath: J.J2) ||
             fileManager.fileExists(atPath: J.J3) ||
@@ -63,7 +60,6 @@ class CheckRooting {
             return true
         }
 
-        //rootAutority check
         if canOpen(path: J.J9) ||
             canOpen(path: J.J10) ||
             canOpen(path: J.J4) ||
