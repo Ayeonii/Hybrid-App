@@ -14,7 +14,6 @@ import CoreLocation
  */
 class Location: NSObject, CLLocationManagerDelegate{
     
-    private let util = Utils()
     private let currentVC : UIViewController
     private var locationManager = CLLocationManager()
     private var locationAction : FlexAction? = nil
@@ -27,7 +26,7 @@ class Location: NSObject, CLLocationManagerDelegate{
     
     func locationFunction() -> ((FlexAction, Array<Any?>) -> Void) {
         return { (action, _ ) -> Void  in
-            self.util.setUserHistory(forKey: "LocationBtn")
+            Utils.setUserHistory(forKey: "LocationBtn")
             self.locationAction = action
             self.getLocation()
         }
@@ -38,10 +37,7 @@ class Location: NSObject, CLLocationManagerDelegate{
     }
     
     private func getLocation() {
-        var resultValue: [String:Any] = [:]
-        resultValue["auth"] = false
-        resultValue["data"] = nil
-        resultValue["msg"] = nil
+        var resultValue = Utils.genResult()
                     
         let status = CLLocationManager.authorizationStatus()
         switch status {
@@ -61,15 +57,15 @@ class Location: NSObject, CLLocationManagerDelegate{
             locationAction?.promiseReturn(resultValue)
             break
         case .denied, .restricted :
-            resultValue["msg"] = "no Location Auth"
+            resultValue["msg"] = AuthrizeStatus.denied
             locationAction?.promiseReturn(resultValue)
-            self.util.setAuthAlertAction(currentVC : self.currentVC, dialog: self.util.authDialog)
+            Utils.setAuthAlertAction(currentVC : self.currentVC, dialog: Utils.authDialog)
             break
         case .notDetermined :
             self.locationManager.requestWhenInUseAuthorization()
             break
         default:
-            resultValue["msg"] = "unknown error"
+            resultValue["msg"] = Msg.UnknownError
             locationAction?.promiseReturn(resultValue)
             break
         }

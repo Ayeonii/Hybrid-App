@@ -13,13 +13,11 @@ import FlexHybridApp
  알럿 모듈
  */
 class Dialog {
-    
-    let util = Utils()
-    
+        
     func dialogFunction(_ currentVC : UIViewController) -> (FlexAction, Array<Any?>) -> Void {
         return { (action,  arguments) -> Void in
             
-            self.util.setUserHistory(forKey: "DialogBtn")
+            Utils.setUserHistory(forKey: "DialogBtn")
             let title = arguments[0] as! String
             let message = arguments[1] as! String
             let btn = arguments[2] as! Dictionary<String,String>

@@ -18,7 +18,6 @@ class FileDownload : NSObject, URLSessionDelegate{
     private var fileURL : String!
     private var interaction: UIDocumentInteractionController?
     private var component : FlexComponent!
-    private let util = Utils()
     private var loadingView : LoadingView!
     private var progressLabel = UILabel()
 
@@ -26,7 +25,7 @@ class FileDownload : NSObject, URLSessionDelegate{
     func startFileDownload (_ component : FlexComponent) -> (FlexAction, Array<Any?>) -> Void {
         return { (action, argument) -> Void in
 
-            self.util.setUserHistory(forKey: "FileDownloadBtn")
+            Utils.setUserHistory(forKey: "FileDownloadBtn")
             
             self.component = component
             self.flexAction  = action

@@ -25,7 +25,7 @@ class LoadingView {
             self.viewForActivityIndicator.frame = CGRect(x: 0.0, y: 0.0, width: 100, height: 100)
             self.viewForActivityIndicator.center = CGPoint(x: self.view.frame.size.width / 2.0, y: (self.view.frame.size.height) / 2.0)
             self.viewForActivityIndicator.layer.cornerRadius = 15
-            self.viewForActivityIndicator.backgroundColor =  #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1).withAlphaComponent(0.9)
+            self.viewForActivityIndicator.backgroundColor =  #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1).withAlphaComponent(0.5)
             self.backgroundView.addSubview(self.viewForActivityIndicator)
         
             self.activityIndicatorView.center = CGPoint(x: self.viewForActivityIndicator.frame.size.width / 2.0, y: (self.viewForActivityIndicator.frame.size.height) / 2.0)

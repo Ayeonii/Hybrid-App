@@ -168,15 +168,27 @@ class CheckNetwork{
     }
     
     func updateNetworkStatusCheck() {
+        var result: [String:Any] = [:]
         switch Network.reachability?.status {
             case .unreachable:
-                self.flexAction.promiseReturn("No Connection!")
+                result["data"] = 0
+                result["msg"] = "No Connection"
+                self.flexAction.promiseReturn(result)
+                break
             case .wwan:
-                self.flexAction.promiseReturn("Cellular Connection")
+                result["data"] = 1
+                result["msg"] = "Cellular Connection"
+                self.flexAction.promiseReturn(result)
+                break
             case .wifi:
-                self.flexAction.promiseReturn("WIFI Connection")
+                result["data"] = 2
+                result["msg"] = "WIFI Connection"
+                self.flexAction.promiseReturn(result)
+                break
             default :
-                self.flexAction.promiseReturn("No Connection!")
+                result["data"] = 0
+                result["msg"] = "No Connection"
+                self.flexAction.promiseReturn(result)
                 break
         }
         print("Status:", Network.reachability!.status)

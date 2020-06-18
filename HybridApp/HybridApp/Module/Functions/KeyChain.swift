@@ -26,5 +26,4 @@ class KeyChain: NSObject {
             return keychain["UUID"]!
         }
     }
-    
 }

@@ -22,7 +22,6 @@ class WebPopup : NSObject, WKUIDelegate, WKNavigationDelegate{
 
     var indicator : LoadingView!
     
-    
     func popupFunction(_ component : FlexComponent) -> (Array<Any?>) -> Any?{
         return { (argument) -> Any? in
             DispatchQueue.main.async {
@@ -78,7 +77,7 @@ class WebPopup : NSObject, WKUIDelegate, WKNavigationDelegate{
                                                        height: height)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
                         self.indicator = LoadingView(self.currentVC.view)
-                        self.indicator.showActivityIndicator(text: "로딩 중", nil)
+                        self.indicator.showActivityIndicator(text: Msg.Loading, nil)
                     })
                 })
             }

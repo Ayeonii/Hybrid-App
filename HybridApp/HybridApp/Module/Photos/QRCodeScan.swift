@@ -17,7 +17,6 @@ class QRCodeScan : NSObject {
     private var captureSession : AVCaptureSession?
     private var flexAction : FlexAction?
     private var previewLayer : CALayer!
-    private var util = Utils()
     private var tempView : UIView!
     var resultValue: [String:Any] = [:]
 
@@ -29,8 +28,8 @@ class QRCodeScan : NSObject {
         let loadingView = LoadingView(currentVC.view)
         return { (action, _) -> Void in
             
-            self.util.setUserHistory(forKey: "QRCodeScanBtn")
-            loadingView.showActivityIndicator(text: "로딩 중", nil)
+            Utils.setUserHistory(forKey: "QRCodeScanBtn")
+            loadingView.showActivityIndicator(text: Msg.Loading, nil)
            
             if let captureSession = self.createCaptureSession() {
                 self.captureSession = captureSession
@@ -38,23 +37,20 @@ class QRCodeScan : NSObject {
                 self.requestCaptureSessionStartRunning()
                 DispatchQueue.main.async {
                     self.tempView = UIView(frame: self.currentVC.view.bounds)
-//                    self.tempView?.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+                    self.tempView?.backgroundColor = UIColor.black.withAlphaComponent(0.7)
                     self.currentVC.view.addSubview(self.tempView!)
                     self.previewLayer = self.createPreviewLayer(withCaptureSession : captureSession)
                     self.tempView.layer.addSublayer(self.previewLayer)
                     
-                    let cancelBtn = UIButton(frame: CGRect(x: 0, y: self.currentVC.view.frame.height - 60, width: self.currentVC.view.frame.width / 3.0 , height: 60))
+                    let cancelBtn = UIButton(frame: CGRect(x: 0, y: self.currentVC.view.frame.height - 60, width: self.currentVC.view.frame.width / 3.5 , height: 50))
                     cancelBtn.center = CGPoint(x: self.currentVC.view.frame.size.width / 2.0, y : self.currentVC.view.frame.height - 60)
-//                    cancelBtn.layer.borderColor = #colorLiteral(red: 0.578004143, green: 0.8483221003, blue: 1, alpha: 1)
-                    cancelBtn.layer.borderWidth = 6
-//                    cancelBtn.backgroundColor = #colorLiteral(red: 0.9885649944, green: 0.7925130698, blue: 1, alpha: 1)
-                    cancelBtn.layer.cornerRadius = 28
+                    cancelBtn.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                    cancelBtn.layer.cornerRadius = 25
                     cancelBtn.setTitle("취소", for: .normal)
                     cancelBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-//                    cancelBtn.setTitleColor(#colorLiteral(red: 0.578004143, green: 0.8483221003, blue: 1, alpha: 1), for: .normal)
                     cancelBtn.addTarget(self, action: #selector(self.requestCaptureSessionStopRunning(sender:)), for: .touchUpInside)
                     self.tempView.addSubview(cancelBtn)
-                    self.tempView.bringSubviewToFront(cancelBtn)  ///요기요기요기
+                    self.tempView.bringSubviewToFront(cancelBtn)
                 }
             }
             loadingView.stopActivityIndicator()
@@ -125,7 +121,6 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate {
         
         if metadataObjects.count == 0 {
             flexAction?.promiseReturn(resultValue)
-            flexAction = nil
             self.requestCaptureSessionStopRunning(sender: nil)
             return
         }
@@ -146,7 +141,6 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate {
             resultValue["data"] = nil
             resultValue["msg"] = "captureSession is null"
             flexAction?.promiseReturn(resultValue)
-            flexAction = nil
             return
         }
         
@@ -171,7 +165,6 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate {
             resultValue["data"] = nil
             resultValue["msg"] = "Stopped QR Code Scan"
             flexAction?.promiseReturn(resultValue)
-            flexAction = nil
         }
         
     }

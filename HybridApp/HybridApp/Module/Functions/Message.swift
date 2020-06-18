@@ -18,12 +18,11 @@ class Message : NSObject, MFMessageComposeViewControllerDelegate {
     
     private var returnMsg : String!
     private var flexAction : FlexAction!
-    private let util = Utils()
     
     func sendMessge (_ currentVC : UIViewController)  -> (FlexAction, Array<Any?>?) -> Void {
         return { (action, argument) -> Void in
             
-            self.util.setUserHistory(forKey: "SendMessageBtn")
+            Utils.setUserHistory(forKey: "SendMessageBtn")
             
             if let number = argument?[0] as? String, let message = argument?[1] as? String {
                 DispatchQueue.main.async {

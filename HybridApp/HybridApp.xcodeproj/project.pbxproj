@@ -39,6 +39,7 @@
 		CCAF06922473BD0B002F47AD /* Script in Resources */ = {isa = PBXBuildFile; fileRef = CCAF06912473BD0B002F47AD /* Script */; };
 		DF25CEF3249A2A2B00683B45 /* MachOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCF9D1FA249316DA000823D6 /* MachOKit.framework */; };
 		DF25CEF4249A2A2B00683B45 /* MachOKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CCF9D1FA249316DA000823D6 /* MachOKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DF25CEF7249AEC5300683B45 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF25CEF6249AEC5300683B45 /* String.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -117,6 +118,7 @@
 		CCAF068F2473BCE2002F47AD /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		CCAF06912473BD0B002F47AD /* Script */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Script; sourceTree = SOURCE_ROOT; };
 		CCF9D1F1249316D9000823D6 /* MachOKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MachOKit.xcodeproj; path = "../MachO-Kit/MachOKit.xcodeproj"; sourceTree = "<group>"; };
+		DF25CEF6249AEC5300683B45 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +171,7 @@
 				CC93996A2485DA4A0004AD4F /* LoadingView.swift */,
 				CC8A52B9248393CB005E9387 /* Functions */,
 				CC8A52B324839291005E9387 /* Photos */,
+				DF25CEF6249AEC5300683B45 /* String.swift */,
 			);
 			path = Module;
 			sourceTree = "<group>";
@@ -405,6 +408,7 @@
 				CC8A52C324839574005E9387 /* Reachability.swift in Sources */,
 				CC8A52BF248394E8005E9387 /* Dialog.swift in Sources */,
 				CC93996B2485DA4A0004AD4F /* LoadingView.swift in Sources */,
+				DF25CEF7249AEC5300683B45 /* String.swift in Sources */,
 				CC8A52CB24839645005E9387 /* FileDownload.swift in Sources */,
 				CC8A52B624839301005E9387 /* CameraPhotos.swift in Sources */,
 				CC8A52D52484E14A005E9387 /* URLObserver.swift in Sources */,

@@ -16,7 +16,6 @@ import UserNotifications
 class Notification: NSObject, UNUserNotificationCenterDelegate {
     
     private let currentVC : UIViewController
-    private let util = Utils()
     
     init(_ currentVC : UIViewController){
         self.currentVC = currentVC
@@ -25,7 +24,7 @@ class Notification: NSObject, UNUserNotificationCenterDelegate {
     func notifiFunction () -> ( Array<Any?>) -> Any? {
         return {(arguments) -> Bool in
             
-            self.util.setUserHistory(forKey: "NotificationBtn")
+            Utils.setUserHistory(forKey: "NotificationBtn")
             
             let content = UNMutableNotificationContent()
             if let recieveData = arguments[0] as? Dictionary< String , Any?>

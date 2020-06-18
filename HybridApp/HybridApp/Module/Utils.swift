@@ -11,52 +11,35 @@ import FlexHybridApp
 import Foundation
 import CryptoSwift
 
-enum AuthrizeStatus : String {
-    case authorized = "Access Authorized."
-    case denied = "Access Denied"
-    case restricted = "Access Restricted"
-    case disabled = "Access disabled"
-    case error = "Error"
-}
-
-enum PathString : String {
-    case codSignature = "/_CodeSignature"
-    case codeResources = "CodeResources"
-    case excutableFile = "/HybridApp"
-    case dataOff = "dataoff"
-    case dataSize = "datasize"
-    case nonAuth = "비정상적인 접근입니다. 앱을 종료합니다."
-}
-
-
 /*
   모듈공통사용기능
  */
 class Utils: NSObject {
     
-    let authDialog = UIAlertController (title : "권한요청", message : "권한을 허용해야만 해당 기능을 사용하실 수 있습니다.", preferredStyle: .alert)
-    let userDefault = UserDefaults.standard
-    var history = Array<Any?>()
+    static let authDialog = UIAlertController (title : "권한요청", message : "권한을 허용해야만 해당 기능을 사용하실 수 있습니다.", preferredStyle: .alert)
+    static let userDefault = UserDefaults.standard
     
-    func setUserHistory(forKey : String){
+    static func setUserHistory(forKey : String){
+        
+        var history = Array<Any?>()
         
         if let result = getUserHistory(forKey: forKey) {
-            self.history = result
-            self.history.append(Date())
+            history = result
+            history.append(Date())
         } else {
-            self.history.append(Date())
+            history.append(Date())
         }
 
-        self.userDefault.set(self.history,forKey: forKey)
+        self.userDefault.set(history,forKey: forKey)
 
     }
     
-    func getUserHistory(forKey : String) -> Array<Any?>? {
+    static func getUserHistory(forKey : String) -> Array<Any?>? {
         return self.userDefault.array(forKey: forKey)
     }
     
     //권한설정 버튼 다이얼로그
-    func setAuthAlertAction(currentVC : UIViewController, dialog : UIAlertController){
+    static func setAuthAlertAction(currentVC : UIViewController, dialog : UIAlertController){
         var actions : Array<UIAlertAction>? = []
         
         let getAuthBtnAction = UIAlertAction(title : "설정", style: .default) {(UIAlertAction) in
@@ -73,7 +56,7 @@ class Utils: NSObject {
     }
     
     //메인스레드에서 처리하기 위한 알럿 다이얼로그
-    func alertDialog (currentVC : UIViewController, dialog: UIAlertController, animated: Bool, action : Array<UIAlertAction>?, completion: (() -> Void)? = nil){
+    static func alertDialog (currentVC : UIViewController, dialog: UIAlertController, animated: Bool, action : Array<UIAlertAction>?, completion: (() -> Void)? = nil){
         DispatchQueue.main.async {
             if let size = action {
                 if dialog.actions.isEmpty{
@@ -87,8 +70,16 @@ class Utils: NSObject {
     }
     
     //hasing
-    func stringHash(targetString : String) -> String {
+    static func stringHash(targetString : String) -> String {
         return targetString.sha256()
+    }
+    
+    static func genResult() -> [String:Any] {
+        var result: [String:Any] = [:]
+        result["auth"] = false
+        result["data"] = nil
+        result["msg"] = nil
+        return result
     }
 
 }

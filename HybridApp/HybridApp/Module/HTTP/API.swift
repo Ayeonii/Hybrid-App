@@ -15,7 +15,6 @@ struct Config {
 
 class API {
     static let shared: API = API()
-    let utils = Utils()
     
     private var request: DataRequest? {
         didSet {
@@ -24,8 +23,8 @@ class API {
     }
 
     func post(param1 : String, param2 : String, completionHandler: @escaping (Result<Any?, Error>) -> Void) {
-        let checkData = [utils.stringHash(targetString: "h1"): param1,
-                         utils.stringHash(targetString: "h2"): param2 ]
+        let checkData = [Utils.stringHash(targetString: "h1"): param1,
+                         Utils.stringHash(targetString: "h2"): param2 ]
         //print(checkData)
         self.request = AF.request(Config.authURL, method: .post, parameters: checkData , encoder: JSONParameterEncoder.default).validate(statusCode: 200..<300).responseString(){response in
             switch response.result {
