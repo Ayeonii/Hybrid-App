@@ -32,7 +32,7 @@ class LoadingView {
         
             self.loadingTextLabel.textColor = UIColor.white
             self.loadingTextLabel.text = text
-            self.loadingTextLabel.font = UIFont(name: "Avenir Light", size: UIFont.labelFontSize)
+            self.loadingTextLabel.font = UIFont(name: "Avenir Light", size: UIFont.labelFontSize * 0.7)
             self.loadingTextLabel.sizeToFit()
             self.loadingTextLabel.center = CGPoint(x: self.activityIndicatorView.center.x, y: self.viewForActivityIndicator.frame.size.height * 0.85)
             

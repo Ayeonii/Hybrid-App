@@ -31,8 +31,8 @@ struct Conf {
 }
 
 struct Msg {
-    static let Loading = "Loading..."
-    static let DownLoading = "Download..."
+    static let Loading = "LOADING..."
+    static let DownLoading = "DOWNLOAD..."
     static let UnknownError = "unknown error"
     static let Cancel = "Cancel work"
         

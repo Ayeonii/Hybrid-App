@@ -65,7 +65,7 @@ class Message : NSObject, MFMessageComposeViewControllerDelegate {
             self.result["msg"] = "문자메시지 전송을 지원하지 않습니다."
         }
         self.flexAction.promiseReturn(self.result)
-        DispatchQueue.main.async {
+        DispatchQueue.main.async {  
             controller.dismiss(animated: true, completion: nil)
         }
     }
