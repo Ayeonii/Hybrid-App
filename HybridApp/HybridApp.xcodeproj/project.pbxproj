@@ -323,14 +323,8 @@
 		CC91F7B22498CB9F00F7CF18 /* MachOKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-<<<<<<< HEAD
 			path = MachOKit.framework;
 			remoteRef = CC91F7B12498CB9F00F7CF18 /* PBXContainerItemProxy */;
-=======
-			name = MachOKit.framework;
-			path = .framework;
-			remoteRef = CCF9D1F9249316DA000823D6 /* PBXContainerItemProxy */;
->>>>>>> master
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		CC91F7B42498CB9F00F7CF18 /* MachOKitTests.xctest */ = {
