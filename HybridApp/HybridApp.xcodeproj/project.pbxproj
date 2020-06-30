@@ -37,9 +37,9 @@
 		CC9B342A246CFABE00FD9FCA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC9B3428246CFABE00FD9FCA /* LaunchScreen.storyboard */; };
 		CCAF06902473BCE2002F47AD /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCAF068F2473BCE2002F47AD /* Utils.swift */; };
 		CCAF06922473BD0B002F47AD /* Script in Resources */ = {isa = PBXBuildFile; fileRef = CCAF06912473BD0B002F47AD /* Script */; };
-		DF25CEF3249A2A2B00683B45 /* MachOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCF9D1FA249316DA000823D6 /* MachOKit.framework */; };
-		DF25CEF4249A2A2B00683B45 /* MachOKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CCF9D1FA249316DA000823D6 /* MachOKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		DF25CEF7249AEC5300683B45 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF25CEF6249AEC5300683B45 /* String.swift */; };
+		E8D134A924AACC8D000C286E /* MachOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCF9D1FA249316DA000823D6 /* MachOKit.framework */; };
+		E8D134AA24AACC8D000C286E /* MachOKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CCF9D1FA249316DA000823D6 /* MachOKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,13 +67,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		DF25CEF5249A2A2B00683B45 /* Embed Frameworks */ = {
+		E8D134AB24AACC8D000C286E /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				DF25CEF4249A2A2B00683B45 /* MachOKit.framework in Embed Frameworks */,
+				E8D134AA24AACC8D000C286E /* MachOKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -126,7 +126,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DF25CEF3249A2A2B00683B45 /* MachOKit.framework in Frameworks */,
+				E8D134A924AACC8D000C286E /* MachOKit.framework in Frameworks */,
 				CC7FE821247B917400ED2455 /* CoreNFC.framework in Frameworks */,
 				47DE6B731BE4AAA5873A7528 /* Pods_HybridApp.framework in Frameworks */,
 			);
@@ -265,7 +265,7 @@
 				CC9B3417246CFABC00FD9FCA /* Frameworks */,
 				CC9B3418246CFABC00FD9FCA /* Resources */,
 				5302FF9FCFE4E20A61A2B92B /* [CP] Embed Pods Frameworks */,
-				DF25CEF5249A2A2B00683B45 /* Embed Frameworks */,
+				E8D134AB24AACC8D000C286E /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -320,7 +320,8 @@
 		CCF9D1FA249316DA000823D6 /* MachOKit.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
-			path = MachOKit.framework;
+			name = MachOKit.framework;
+			path = .framework;
 			remoteRef = CCF9D1F9249316DA000823D6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
