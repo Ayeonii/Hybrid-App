@@ -13,67 +13,65 @@ import FlexHybridApp
  권한 / 루팅체킹 모듈
  */
 class CheckRooting {
-    
-    let util = Utils()
-    
-    func checkRootingFunction (_ currentVC : UIViewController) -> ((Array<Any?>) -> Any?) {
-        return{ (arguments) -> String in
+        
+    func checkRootingFunction (_ currentVC : UIViewController) -> ((FlexAction, Array<Any?>) -> Void) {
+        return{ (action, _) -> Void in
             
-            self.util.setUserHistory(forKey: "RootingCheckBtn")
+            Utils.setUserHistory(forKey: "RootingCheckBtn")
+            var result = ""
             
-            var returnStr : String = "Not Root Authority"
             DispatchQueue.main.async{
                 if self.hasJailbreak() {
-                    returnStr = "RootAuthority"
-                    let dialog = UIAlertController(title: nil, message: PathString.nonAuth.rawValue, preferredStyle: .alert)
+                    result = "탈옥되었습니다."
+                    let dialog = UIAlertController(title: nil, message: PathString.nonAuth, preferredStyle: .alert)
                     let action = UIAlertAction(title: "확인", style: .default){
                         (action:UIAlertAction!) in
                         exit(0)
                     }
                     dialog.addAction(action)
                     currentVC.present(dialog, animated: true, completion: nil)
+                } else {
+                    result = "탈옥되지 않았습니다."
                 }
+                action.promiseReturn(result)
             }
-            return returnStr
         }
     }
     
     func hasJailbreak() -> Bool {
         
-        guard let cydiaUrlScheme = NSURL(string: "cydia://package/com.example.package") else { return false }
+        guard let cydiaUrlScheme = NSURL(string: J.J1) else { return false }
         if UIApplication.shared.canOpenURL(cydiaUrlScheme as URL) {
             return true
         }
-        
+
         #if arch(i386) || arch(x86_64)
         return false
         #endif
         
-        //file check
         let fileManager = FileManager.default
-        if fileManager.fileExists(atPath: "/Applications/Cydia.app") ||
-            fileManager.fileExists(atPath: "/Library/MobileSubstrate/MobileSubstrate.dylib") ||
-            fileManager.fileExists(atPath: "/bin/bash") ||
-            fileManager.fileExists(atPath: "/usr/sbin/sshd") ||
-            fileManager.fileExists(atPath: "/etc/apt") ||
-            fileManager.fileExists(atPath: "/usr/bin/ssh") ||
-            fileManager.fileExists(atPath: "/private/var/lib/apt") {
+        if fileManager.fileExists(atPath: J.J2) ||
+            fileManager.fileExists(atPath: J.J3) ||
+            fileManager.fileExists(atPath: J.J4) ||
+            fileManager.fileExists(atPath: J.J5) ||
+            fileManager.fileExists(atPath: J.J6) ||
+            fileManager.fileExists(atPath: J.J7) ||
+            fileManager.fileExists(atPath: J.J8) {
             return true
         }
-        
-        //rootAutority check
-        if canOpen(path: "/Applications/Cydia.app") ||
-            canOpen(path: "/Library/MobileSubstrate/MobileSubstrate.dylib") ||
-            canOpen(path: "/bin/bash") ||
-            canOpen(path: "/usr/sbin/sshd") ||
-            canOpen(path: "/etc/apt") ||
-            canOpen(path: "/usr/bin/ssh") {
+
+        if canOpen(path: J.J9) ||
+            canOpen(path: J.J10) ||
+            canOpen(path: J.J4) ||
+            canOpen(path: J.J5) ||
+            canOpen(path: J.J6) ||
+            canOpen(path: J.J7) {
             return true
         }
-        let path = "/private/" + NSUUID().uuidString
+
         do {
-            try "anyString".write(toFile: path, atomically: true, encoding: String.Encoding.utf8)
-            try fileManager.removeItem(atPath: path)
+            try "".write(toFile: NSUUID().uuidString, atomically: true, encoding: String.Encoding.utf8)
+            try fileManager.removeItem(atPath: NSUUID().uuidString)
             return true
         } catch {
             return false
@@ -86,5 +84,6 @@ class CheckRooting {
         fclose(file)
         return true
     }
+    
 }
 

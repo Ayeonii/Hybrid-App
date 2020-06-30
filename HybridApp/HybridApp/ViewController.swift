@@ -23,17 +23,17 @@ class ViewController: UIViewController {
         
         let _ = ListeningObserver(self.urlObserver)
 
-        component.setInterface("Location", Location(self).locationFunction())
+        component.setAction("Location", Location(self).locationFunction())
          
-        component.setInterface("RootingCheck", CheckRooting().checkRootingFunction(self))
+        component.setAction("RootingCheck", CheckRooting().checkRootingFunction(self))
         
         component.setInterface ("Notification", Notification(self).notifiFunction())
         
         component.setInterface ("LocalRepository", User().userDefaultFunction())
         
-        component.setInterface ("UniqueAppID"){_ in return UserDefaults.standard.string(forKey: "APP_UUID")}
+        component.setInterface ("UniqueAppID"){_ in return UserDefaults.standard.string(forKey: Key.AppID)}
         
-        component.setInterface ("Toast",Toast().toastFunction(self))
+        component.setInterface ("Toast", Toast().toastFunction(self))
         
         component.setInterface ("UniqueDeviceID", KeyChain().keyChainInit())
         
@@ -67,14 +67,15 @@ class ViewController: UIViewController {
         component.setAction ("NFCReading", NFC(self).nfcReadingFunction())
         #endif
 
-        component.setBaseUrl("file://")
+        component.setBaseUrl(Conf.BaseUrl)
         
         mWebView = FlexWebView(frame: self.view.frame, component: component)
         mWebView.translatesAutoresizingMaskIntoConstraints = false
         mWebView.scrollView.bounces = false
         view.addSubview(mWebView)
         
-        mWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html", inDirectory: "Script")!)))
+        mWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html", inDirectory: "Demo")!)))
+//        mWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html", inDirectory: "Script")!)))
 
         urlObserver.url = mWebView.url!
         
@@ -103,7 +104,7 @@ class ViewController: UIViewController {
     }
     
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!){
-        indicator.showActivityIndicator(text: "로딩 중", nil)
+        indicator.showActivityIndicator(text: Msg.Loading, nil)
     }
 
     func webView(_ webView: WKWebView, didFinish navigation : WKNavigation!){

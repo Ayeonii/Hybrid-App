@@ -13,13 +13,11 @@ import FlexHybridApp
  알럿 모듈
  */
 class Dialog {
-    
-    let util = Utils()
-    
+        
     func dialogFunction(_ currentVC : UIViewController) -> (FlexAction, Array<Any?>) -> Void {
         return { (action,  arguments) -> Void in
             
-            self.util.setUserHistory(forKey: "DialogBtn")
+            Utils.setUserHistory(forKey: "DialogBtn")
             let title = arguments[0] as! String
             let message = arguments[1] as! String
             let btn = arguments[2] as! Dictionary<String,String>
@@ -30,8 +28,7 @@ class Dialog {
         }
     }
     
-    func makeDialog(_ currentVC : UIViewController, title : String, message : String , btn : Dictionary<String?,String?>, type : Bool?, animated : Bool, promiseAction : FlexAction?){
-
+    func makeDialog(_ currentVC : UIViewController, title : String, message : String , btn : Dictionary<String,String>, type : Bool?, animated : Bool, promiseAction : FlexAction?){
         DispatchQueue.main.async {
             var dialog : UIAlertController
             var btnAction : UIAlertAction!
@@ -43,30 +40,32 @@ class Dialog {
                 dialog = UIAlertController (title : title, message : message, preferredStyle: .alert)
             }
             
-            let basic = btn["basic"]
-            let destructive = btn["destructive"]
-            let cancel = btn["cancel"]
-            
-            if let basicName = basic {
-                btnAction = UIAlertAction(title : basicName, style: .default){ alertAction in
-                    promiseAction?.promiseReturn(basicName)
+            if let basic = btn["basic"] {
+                btnAction = UIAlertAction(title : basic, style: .default)
+                { alertAction in
+                    promiseAction?.promiseReturn("basic")
                 }
                 dialog.addAction(btnAction)
             }
             
-            if let destructiveName = destructive {
-                btnAction = UIAlertAction(title : destructiveName, style: .destructive){ alertAction in
-                    promiseAction?.promiseReturn(destructiveName)
+            if let destructive = btn["destructive"] {
+                btnAction = UIAlertAction(title : destructive, style: .destructive){ alertAction in
+                    promiseAction?.promiseReturn("destructive")
+                }
+                dialog.addAction(btnAction)
+            }
+
+            if let cancel = btn["cancel"] {
+                btnAction = UIAlertAction(title : cancel, style: .cancel){ alertAction in
+                    promiseAction?.promiseReturn("cancel")
                 }
                 dialog.addAction(btnAction)
             }
             
-            if let cancelName = cancel {
-                btnAction = UIAlertAction(title : cancelName, style: .cancel){ alertAction in
-                    promiseAction?.promiseReturn(cancelName)
-                }
-                dialog.addAction(btnAction)
+            if dialog.actions.count == 0 {
+                promiseAction?.resolveVoid()
             }
+            
             currentVC.present(dialog, animated: animated, completion: nil)
         }
     }

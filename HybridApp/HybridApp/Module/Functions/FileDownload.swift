@@ -18,15 +18,14 @@ class FileDownload : NSObject, URLSessionDelegate{
     private var fileURL : String!
     private var interaction: UIDocumentInteractionController?
     private var component : FlexComponent!
-    private let util = Utils()
     private var loadingView : LoadingView!
     private var progressLabel = UILabel()
 
     
-    func startFileDownload (_ component : FlexComponent) -> (FlexAction, Array<Any?>) -> Void?{
+    func startFileDownload (_ component : FlexComponent) -> (FlexAction, Array<Any?>) -> Void {
         return { (action, argument) -> Void in
 
-            self.util.setUserHistory(forKey: "FileDownloadBtn")
+            Utils.setUserHistory(forKey: "FileDownloadBtn")
             
             self.component = component
             self.flexAction  = action
@@ -38,7 +37,10 @@ class FileDownload : NSObject, URLSessionDelegate{
     
     func fileDownload() {
         guard let url = URL(string: fileURL) else {
-            self.flexAction.reject(reason: "There is no URL")
+            var result: [String:Any] = [:]
+            result["data"] = false
+            result["msg"] = "There is no URL"
+            self.flexAction.promiseReturn(result)
             return
         }
         
@@ -50,7 +52,7 @@ class FileDownload : NSObject, URLSessionDelegate{
             let currentVC =  self.component.parentViewController!
            
             self.loadingView = LoadingView(currentVC.view)
-            self.loadingView.showActivityIndicator(text: "다운로드 중..", nil)
+            self.loadingView.showActivityIndicator(text: Msg.DownLoading, nil)
             
             let loadingUIView = self.loadingView.getLoadingUIView()
             
@@ -64,7 +66,7 @@ class FileDownload : NSObject, URLSessionDelegate{
             loadingUIView.addSubview(self.progressLabel)
         }
 
-        let task = session.downloadTask (with: urlRequest)
+        let task = session.downloadTask(with: urlRequest)
         task.resume() //시작
     }
 
@@ -73,7 +75,7 @@ class FileDownload : NSObject, URLSessionDelegate{
 extension FileDownload: URLSessionDownloadDelegate {
     func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
          if totalBytesExpectedToWrite > 0 {
-             let percentDownloaded = (Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)) * 100
+            let percentDownloaded = (Float(totalBytesWritten) / Float(totalBytesExpectedToWrite)) * 100
             
             let StringPT = String(format: "%.1f", percentDownloaded)
             
@@ -90,6 +92,9 @@ extension FileDownload: URLSessionDownloadDelegate {
         let fileManager = FileManager()
         let documentsUrl = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
         let destinationFileUrl = documentsUrl.appendingPathComponent("Downloads")
+        
+        var result: [String:Any] = [:]
+        result["data"] = false
         
         if !documentsUrl.pathComponents.contains("Downloads") {
             try? fileManager.createDirectory(atPath: destinationFileUrl.path, withIntermediateDirectories: false, attributes: nil)
@@ -110,25 +115,17 @@ extension FileDownload: URLSessionDownloadDelegate {
         do {
             try FileManager.default.copyItem(at: location, to: writePath)
             self.openFileWithPath(filePath: writePath)
+            result["data"] = true
+            self.flexAction?.promiseReturn(result)
             self.loadingView.stopActivityIndicator()
             
         } catch (let writeError) {
             print("Error creating a file \(destinationFileUrl) : \(writeError)")
+            result["msg"] = "Error creating a file \(destinationFileUrl) : \(writeError)"
+            self.flexAction?.promiseReturn(result)
             self.loadingView.stopActivityIndicator()
         }
         try? FileManager.default.removeItem(at: location)
-    }
-    
-    func readDownloadedData(of url: URL) -> Data? {
-        do {
-            let reader = try FileHandle(forReadingFrom: url)
-            let data = reader.readDataToEndOfFile()
-            
-            return data
-        } catch {
-            print(error)
-            return nil
-        }
     }
     
     func openFileWithPath(filePath : URL) {

@@ -13,16 +13,15 @@ import Photos
 import MobileCoreServices
 import DKImagePickerController // 이미지 다중선택
 
-enum ModuleType : String{
-    case camera = "Camera"
-    case photos = "Photos"
+struct ModuleType {
+    static let camera = "Camera"
+    static let photos = "Photos"
 }
 /*
  카메라 및 앨범 관련 동작 수행
  */
 class CameraPhotos : NSObject {
     
-    private let util = Utils()
     private let currentVC : UIViewController
     private let dialog = Dialog()
     private var flagImageSave = false
@@ -41,90 +40,104 @@ class CameraPhotos : NSObject {
         imagePicker.delegate = self
     }
     
-    func cameraFunction() -> (FlexAction, Array<Any?>) -> Void? {
+    func cameraFunction() -> (FlexAction, Array<Any?>) -> Void {
         return { (action, arguments) -> Void in
             
-            self.util.setUserHistory(forKey: "CameraBtn")
+            Utils.setUserHistory(forKey: "CameraBtn")
             
             self.ratio = arguments[0] as? CGFloat
             if arguments.count > 1 {
                 self.isWidth =  arguments[1] as? Bool
             }
+            
+            var result = Utils.genResult()
 
-            var returnStr : String?
             let cameraAuthorizationsStatus : AVAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
             
             switch cameraAuthorizationsStatus {
             case .authorized :
                 self.imageAction = action
-                self.cameraPhotosAction(ModuleType.camera.rawValue)
+                self.cameraPhotosAction(ModuleType.camera)
             case .denied :
-                self.util.setAuthAlertAction(currentVC : self.currentVC,  dialog: self.util.authDialog)
-                action.promiseReturn(returnStr)
+                Utils.setAuthAlertAction(currentVC : self.currentVC,  dialog: Utils.authDialog)
+                result["msg"] = AuthrizeStatus.denied
+                action.promiseReturn(result)
             case .notDetermined:
                 AVCaptureDevice.requestAccess(for: AVMediaType.video) { (response) in
                     if response {
                         self.imageAction = action
-                        self.cameraPhotosAction(ModuleType.camera.rawValue)
-                    }else {
+                        self.cameraPhotosAction(ModuleType.camera)
+                    } else {
                         self.dialog.makeDialog(self.currentVC, title : "알림", message : "해당 권한이 거부되었습니다." , btn: ["basic": "확인"] , type : true, animated : true, promiseAction : nil)
-                        returnStr = AuthrizeStatus.denied.rawValue
+                        result["msg"] = AuthrizeStatus.denied
+                        action.promiseReturn(result)
                     }
                 }
             case .restricted:
-                action.promiseReturn(AuthrizeStatus.restricted.rawValue)
+                result["msg"] = AuthrizeStatus.restricted
+                action.promiseReturn(result)
             default:
-                action.promiseReturn("default")
-                break
+                result["msg"] = Msg.UnknownError
+                action.promiseReturn(result)
             }
         }
     }
     
     //Photos를 실행시키는 모듈
-    func photosFunction() -> (FlexAction, Array<Any?>) -> Void?  {
+    func photosFunction() -> (FlexAction, Array<Any?>) -> Void  {
         return { (action, arguments) -> Void in
-            self.util.setUserHistory(forKey: "PhotoBtn")
+            Utils.setUserHistory(forKey: "PhotoBtn")
             
             self.ratio = arguments[0] as? CGFloat
             if arguments.count > 1 {
                 self.isWidth =  arguments[1] as? Bool
             }
             
+            var result = Utils.genResult()
+            
             let photoAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
             switch photoAuthorizationStatus{
             case .authorized:
                 self.imageAction = action
-                self.cameraPhotosAction(ModuleType.photos.rawValue)
+                self.cameraPhotosAction(ModuleType.photos)
             case .denied:
-                action.promiseReturn(AuthrizeStatus.denied.rawValue)
-                self.util.setAuthAlertAction(currentVC : self.currentVC,  dialog: self.util.authDialog)
+                result["msg"] = AuthrizeStatus.denied
+                action.promiseReturn(result)
+                Utils.setAuthAlertAction(currentVC : self.currentVC,  dialog: Utils.authDialog)
             case .notDetermined:
                 PHPhotoLibrary.requestAuthorization({(status) in
                     switch status {
                     case .authorized :
                         self.imageAction = action
-                        self.cameraPhotosAction(ModuleType.photos.rawValue)
+                        self.cameraPhotosAction(ModuleType.photos)
                     case .denied :
                         self.dialog.makeDialog(self.currentVC, title : "알림", message : "해당 권한이 거부되었습니다." , btn: ["basic": "확인"] , type : true, animated : true, promiseAction: nil)
+                        result["msg"] = AuthrizeStatus.denied
+                        action.promiseReturn(result)
                     default:
-                        break
+                        result["msg"] = Msg.UnknownError
+                        action.promiseReturn(result)
                     }
                 })
             case .restricted:
-                action.promiseReturn(AuthrizeStatus.restricted.rawValue)
-            default :
-                action.resolveVoid()
-                break
+                result["msg"] = AuthrizeStatus.restricted
+                action.promiseReturn(result)
+            default:
+                result["msg"] = Msg.UnknownError
+                action.promiseReturn(result)
             }
         }
     }
     
     //사진 여러장 선택
-    func MultiplePhotosFunction() -> (FlexAction, Array<Any?>) -> Void?{
+    func MultiplePhotosFunction() -> (FlexAction, Array<Any?>) -> Void {
         return { (action, arguments) -> Void in
             
-            self.util.setUserHistory(forKey: "MultiplePhotoBtn")
+            Utils.setUserHistory(forKey: "MultiplePhotoBtn")
             self.imageAction = action
+            
+            var result = Utils.genResult()
+            result["auth"] = true
             
             self.ratio = arguments[0] as? CGFloat
             if arguments.count > 1 {
@@ -141,14 +154,15 @@ class CameraPhotos : NSObject {
                 multiPicker.allowsLandscape = false
                 multiPicker.assetType = .allPhotos
                 multiPicker.didCancel = {
-                    self.imageAction!.resolveVoid()
+                    result["msg"] = Msg.Cancel
+                    self.imageAction?.promiseReturn(result)
                 }
                 multiPicker.maxSelectableCount = 5
                 multiPicker.viewWillAppear(true)
                 multiPicker.didSelectAssets = { (assets : [DKAsset]) in
                     DispatchQueue.main.async {
                         DispatchQueue(label: "indicatorQueue").async {
-                            self.loadingView.showActivityIndicator(text: "로딩 중", nil )
+                            self.loadingView.showActivityIndicator(text: Msg.Loading, nil )
                         }
                         DispatchQueue(label: "indicatorQueue").async {
                             imageArray.append(contentsOf: assets)
@@ -160,7 +174,8 @@ class CameraPhotos : NSObject {
                                 let encodedString = strBase64.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? ""
                                 return "data:image/jpeg;base64," + encodedString
                             }
-                            self.imageAction!.promiseReturn(multiImageArray)
+                            result["data"] = multiImageArray
+                            self.imageAction?.promiseReturn(result)
                             self.loadingView.stopActivityIndicator()
                         }
                     }
@@ -174,9 +189,11 @@ class CameraPhotos : NSObject {
 extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     func cameraPhotosAction( _ type : String) -> Void {
+        var result = Utils.genResult()
+        result["auth"] = true
         DispatchQueue.main.async {
             switch type {
-            case "Camera":
+            case ModuleType.camera:
                 if(UIImagePickerController.isSourceTypeAvailable(.camera)){
                     self.flagImageSave = true
                     self.imagePicker.sourceType = .camera
@@ -184,11 +201,11 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
                 
                     self.currentVC.present(self.imagePicker, animated: true, completion: nil)
                 } else {
-                    self.imageAction?.resolveVoid()
+                    result["msg"] = Msg.NoCamera
+                    self.imageAction?.promiseReturn(result)
                     self.dialog.makeDialog(self.currentVC, title : "경고", message : "카메라를 실행할 수 없습니다." , btn: ["basic": "확인"] , type : true, animated : true, promiseAction: nil)
                 }
-                break
-            case "Photos":
+            case ModuleType.photos:
                 if (UIImagePickerController.isSourceTypeAvailable(.photoLibrary)) {
                     self.flagImageSave = false
                     self.imagePicker.sourceType = .photoLibrary
@@ -196,12 +213,13 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
                    
                     self.currentVC.present(self.imagePicker, animated: true, completion: nil)
                 }else{
-                    self.imageAction?.resolveVoid()
+                    result["msg"] = Msg.NoPhotos
+                    self.imageAction?.promiseReturn(result)
                     self.dialog.makeDialog(self.currentVC, title : "경고", message : "사진을 실행할 수 없습니다." , btn: ["basic": "확인"] , type :true, animated : true, promiseAction: nil)
                 }
-                break
             default:
-                break
+                result["msg"] = Msg.UnknownError
+                self.imageAction?.promiseReturn(result)
             }
         }
     }
@@ -209,7 +227,7 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
     // 사진 한장 선택
     @objc func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
-        self.loadingView.showActivityIndicator(text: "로딩 중", nil)
+        self.loadingView.showActivityIndicator(text: Msg.Loading, nil)
         self.currentVC.dismiss(animated: true){
             let captureImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
             let resizedImage = self.resizeImage(image: captureImage, ratio: self.ratio, isWidth: self.isWidth)
@@ -219,15 +237,21 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
             let imageData:NSData = resizedImage.jpegData(compressionQuality: 0.25)! as NSData
             let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
             let encodedString = strBase64.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? ""
-
-            self.imageAction?.promiseReturn("data:image/jpeg;base64," + encodedString)
+            
+            var result = Utils.genResult()
+            result["auth"] = true
+            result["data"] = "data:image/jpeg;base64," + encodedString
+            self.imageAction?.promiseReturn(result)
             self.loadingView.stopActivityIndicator()
         }
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.currentVC.dismiss(animated: true) {
-            self.imageAction?.resolveVoid()
+            var result = Utils.genResult()
+            result["auth"] = true
+            result["msg"] = Msg.Cancel
+            self.imageAction?.promiseReturn(result)
         }
     }
 

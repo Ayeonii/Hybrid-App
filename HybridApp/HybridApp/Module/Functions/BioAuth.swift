@@ -12,50 +12,50 @@ import LocalAuthentication
 
 class BioAuth {
     var authDescriptions : String!
-    let util = Utils()
     
     func authFunction() -> (FlexAction, Array<Any?>) -> Void {
-        return { (action,  arguments) -> Void in
+        return { (action,  _) -> Void in
             
-            self.util.setUserHistory(forKey: "BioAuthBtn")
+            Utils.setUserHistory(forKey: "BioAuthBtn")
             
             let authContext = LAContext()
             var error : NSError?
             
-            guard authContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) else {
-                print ("Auth Disabled")
-                action.promiseReturn(AuthrizeStatus.disabled.rawValue)
-                print(error as Any)
-                return
-            }
+            var result = Utils.genResult()
             
-            switch authContext.biometryType {
-            case .faceID:
-                self.authDescriptions = "Face ID로 인증합니다."
-                break
-            case .touchID:
-                self.authDescriptions = "지문 인식해주세용"
-                break
-            default:
-                self.authDescriptions = "로그인하세용"
-                break
-            }
-            
-            authContext.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: self.authDescriptions){ (success, error) in
-                if success {
-                    print("인식 성공")
-                    action.promiseReturn(AuthrizeStatus.authorized.rawValue)
+            if authContext.canEvaluatePolicy(.deviceOwnerAuthentication, error: &error) {
+                result["auth"] = true
+                
+                switch authContext.biometryType {
+                case .faceID:
+                    self.authDescriptions = "Face ID로 인증합니다."
+                    break
+                case .touchID:
+                    self.authDescriptions = "Touch ID로 인증합니다."
+                    break
+                default:
+                    self.authDescriptions = "비밀번호로 인증합니다."
+                    break
                 }
-                else {
-                    if let error = error {
-                        print(error.localizedDescription)
-                        action.promiseReturn(error.localizedDescription)
+                
+                authContext.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: self.authDescriptions)
+                { (success, error) in
+                    if success {
+                        result["data"] = true
+                        action.promiseReturn(result)
                     }
-                    action.promiseReturn(AuthrizeStatus.denied.rawValue)
+                    else {
+                        result["data"] = false
+                        result["msg"] = error?.localizedDescription
+                        action.promiseReturn(result)
+                    }
                 }
+            } else {
+                result["data"] = false
+                result["msg"] = AuthrizeStatus.disabled
+                action.promiseReturn(result)
+                print(error as Any)
             }
         }
     }
 }
-
-

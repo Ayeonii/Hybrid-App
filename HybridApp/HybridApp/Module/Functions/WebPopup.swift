@@ -22,7 +22,6 @@ class WebPopup : NSObject, WKUIDelegate, WKNavigationDelegate{
 
     var indicator : LoadingView!
     
-    
     func popupFunction(_ component : FlexComponent) -> (Array<Any?>) -> Any?{
         return { (argument) -> Any? in
             DispatchQueue.main.async {
@@ -40,7 +39,7 @@ class WebPopup : NSObject, WKUIDelegate, WKNavigationDelegate{
                 self.currentVC.view.addSubview(self.tempView!)
                 
                 let sizeX = self.tempView!.frame.width * (x as! CGFloat)
-                let sizeY = self.tempView!.frame.height * (x as! CGFloat)
+                let sizeY = self.tempView!.frame.height * (x as! CGFloat) * 0.9
                 
                 let startX = self.tempView!.frame.width / 2 - sizeX / 2
                 let startY = self.tempView!.frame.height
@@ -54,8 +53,8 @@ class WebPopup : NSObject, WKUIDelegate, WKNavigationDelegate{
                 self.createWebView.load(URLRequest(url: URL(string : urlName)!))
                 
                 
-                let cancelBtn = UIButton(frame: CGRect(x: startX, y:  0 , width: 35, height: 35))
-                cancelBtn.center = CGPoint(x: self.tempView.frame.size.width / 2.0, y : (self.tempView.frame.size.height - self.createWebView.frame.size.height ) / 4.0)
+                let cancelBtn = UIButton(frame: CGRect(x: 0, y: 0 , width: 35, height: 35))
+                cancelBtn.center = CGPoint(x: self.tempView.frame.size.width / 2.0, y : self.currentVC.view.frame.height / 2 + self.createWebView.frame.size.height / 2 + 35)
                 cancelBtn.backgroundColor =  #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1).withAlphaComponent(0.3)
                 cancelBtn.layer.cornerRadius = 0.5 * cancelBtn.bounds.size.width
                 cancelBtn.setTitle("X", for: .normal)
@@ -68,7 +67,7 @@ class WebPopup : NSObject, WKUIDelegate, WKNavigationDelegate{
                 
                 self.urlObserver.url = self.createWebView.url!
  
-                WKWebView.animate(withDuration: 0.1, animations: {()->Void in
+                WKWebView.animate(withDuration: 0.2, animations: {()->Void in
                     let height = self.createWebView!.frame.height
                     let width = self.createWebView!.frame.width
                     let yPos = self.currentVC.view.frame.height / 2 - height / 2
@@ -78,7 +77,7 @@ class WebPopup : NSObject, WKUIDelegate, WKNavigationDelegate{
                                                        height: height)
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
                         self.indicator = LoadingView(self.currentVC.view)
-                        self.indicator.showActivityIndicator(text: "로딩 중", nil)
+                        self.indicator.showActivityIndicator(text: Msg.Loading, nil)
                     })
                 })
             }

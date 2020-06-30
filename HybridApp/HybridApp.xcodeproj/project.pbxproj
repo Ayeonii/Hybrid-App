@@ -39,6 +39,9 @@
 		CC9B342A246CFABE00FD9FCA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CC9B3428246CFABE00FD9FCA /* LaunchScreen.storyboard */; };
 		CCAF06902473BCE2002F47AD /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCAF068F2473BCE2002F47AD /* Utils.swift */; };
 		CCAF06922473BD0B002F47AD /* Script in Resources */ = {isa = PBXBuildFile; fileRef = CCAF06912473BD0B002F47AD /* Script */; };
+		DF25CEF3249A2A2B00683B45 /* MachOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCF9D1FA249316DA000823D6 /* MachOKit.framework */; };
+		DF25CEF4249A2A2B00683B45 /* MachOKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CCF9D1FA249316DA000823D6 /* MachOKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		DF25CEF7249AEC5300683B45 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF25CEF6249AEC5300683B45 /* String.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,13 +69,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		CCF9D201249316ED000823D6 /* Embed Frameworks */ = {
+		DF25CEF5249A2A2B00683B45 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				CC91F7B82498CBC600F7CF18 /* MachOKit.framework in Embed Frameworks */,
+				DF25CEF4249A2A2B00683B45 /* MachOKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -117,6 +120,8 @@
 		CC9B342B246CFABE00FD9FCA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CCAF068F2473BCE2002F47AD /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		CCAF06912473BD0B002F47AD /* Script */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Script; sourceTree = SOURCE_ROOT; };
+		CCF9D1F1249316D9000823D6 /* MachOKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MachOKit.xcodeproj; path = "../MachO-Kit/MachOKit.xcodeproj"; sourceTree = "<group>"; };
+		DF25CEF6249AEC5300683B45 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,7 +129,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CC91F7B72498CBC600F7CF18 /* MachOKit.framework in Frameworks */,
+				DF25CEF3249A2A2B00683B45 /* MachOKit.framework in Frameworks */,
 				CC7FE821247B917400ED2455 /* CoreNFC.framework in Frameworks */,
 				47DE6B731BE4AAA5873A7528 /* Pods_HybridApp.framework in Frameworks */,
 			);
@@ -169,6 +174,7 @@
 				CC93996A2485DA4A0004AD4F /* LoadingView.swift */,
 				CC8A52B9248393CB005E9387 /* Functions */,
 				CC8A52B324839291005E9387 /* Photos */,
+				DF25CEF6249AEC5300683B45 /* String.swift */,
 			);
 			path = Module;
 			sourceTree = "<group>";
@@ -261,8 +267,8 @@
 				CC9B3416246CFABC00FD9FCA /* Sources */,
 				CC9B3417246CFABC00FD9FCA /* Frameworks */,
 				CC9B3418246CFABC00FD9FCA /* Resources */,
-				7497BE8009F09766C989614C /* [CP] Embed Pods Frameworks */,
-				CCF9D201249316ED000823D6 /* Embed Frameworks */,
+				5302FF9FCFE4E20A61A2B92B /* [CP] Embed Pods Frameworks */,
+				DF25CEF5249A2A2B00683B45 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -353,6 +359,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		5302FF9FCFE4E20A61A2B92B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HybridApp/Pods-HybridApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HybridApp/Pods-HybridApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HybridApp/Pods-HybridApp-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		5E177C41CCA5C5E6F2DEF308 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -375,23 +398,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		7497BE8009F09766C989614C /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HybridApp/Pods-HybridApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HybridApp/Pods-HybridApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HybridApp/Pods-HybridApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -405,6 +411,7 @@
 				CC8A52C324839574005E9387 /* Reachability.swift in Sources */,
 				CC8A52BF248394E8005E9387 /* Dialog.swift in Sources */,
 				CC93996B2485DA4A0004AD4F /* LoadingView.swift in Sources */,
+				DF25CEF7249AEC5300683B45 /* String.swift in Sources */,
 				CC8A52CB24839645005E9387 /* FileDownload.swift in Sources */,
 				CC8A52B624839301005E9387 /* CameraPhotos.swift in Sources */,
 				CC8A52D52484E14A005E9387 /* URLObserver.swift in Sources */,
@@ -568,16 +575,18 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = HybridApp/HybridApp.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 653TUFJ9Y7;
+				DEVELOPMENT_TEAM = 7V78M894K4;
 				INFOPLIST_FILE = HybridApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "kr.lay.Hybrid-App";
+				PRODUCT_BUNDLE_IDENTIFIER = "kr.lay.Hybrid-App1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "HybridApp/HybridApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;

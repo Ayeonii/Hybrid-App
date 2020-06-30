@@ -41,19 +41,19 @@ class User {
                     if let returnVal =  (UserDefaults.standard.object(forKey: forkey) as Any?) {
                         returnValue = returnVal
                     }else{
-                        returnValue = "해당 Data Key에 대한 데이터가 존재하지 않습니다."
+                        returnValue = nil
                     }
                     break
                 case 2 :
                     if (UserDefaults.standard.object(forKey: forkey) as Any?) != nil {
                         UserDefaults.standard.removeObject(forKey: forkey)
                         if (UserDefaults.standard.object(forKey: forkey) as Any?) != nil {
-                                               returnValue = "Delete Failed"
-                                           }else {
-                                               returnValue = "Delete Completely"
-                                           }
+                            returnValue = "Delete Failed"
+                        } else {
+                            returnValue = "Delete Completely"
+                        }
                     } else {
-                        returnValue = "해당 Data Key에 대한 데이터가 존재하지 않습니다."
+                        returnValue = nil
                     }
                     break
                 default:

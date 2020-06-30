@@ -16,19 +16,16 @@ import UserNotifications
 class Notification: NSObject, UNUserNotificationCenterDelegate {
     
     private let currentVC : UIViewController
-    private let util = Utils()
     
     init(_ currentVC : UIViewController){
         self.currentVC = currentVC
     }
     
-    func notifiFunction () -> ( Array<Any?>) -> Any?{
-        return {(arguments) -> String in
+    func notifiFunction () -> ( Array<Any?>) -> Any? {
+        return {(arguments) -> Bool in
             
-            self.util.setUserHistory(forKey: "NotificationBtn")
+            Utils.setUserHistory(forKey: "NotificationBtn")
             
-            let data = Data("Array<Any?>?".utf8)
-            print(data)
             let content = UNMutableNotificationContent()
             if let recieveData = arguments[0] as? Dictionary< String , Any?>
             {
@@ -51,9 +48,9 @@ class Notification: NSObject, UNUserNotificationCenterDelegate {
                 center.delegate = self
                 center.add(request, withCompletionHandler: nil)
                 
-                return "Notification Activate!"
-            }else {
-                return "Parameter "
+                return true
+            } else {
+                return false
             }
         }
     }

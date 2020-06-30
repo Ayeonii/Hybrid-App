@@ -17,8 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        if UserDefaults.standard.string(forKey: "APP_UUID") == nil{
-            UserDefaults.standard.set(UUID().uuidString, forKey: "APP_UUID")
+        if UserDefaults.standard.string(forKey: Key.AppID) == nil{
+            UserDefaults.standard.set(UUID().uuidString, forKey: Key.AppID)
         }
         
         if #available(iOS 12.0, *) {
@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         do {
-            try Network.reachability = Reachability(hostname: "www.apple.com")
+            try Network.reachability = Reachability(hostname: Conf.SecurityUrl)
         }catch {
             switch error as? Network.Error {
                 case let .failedToCreateWith(hostname)?:

@@ -17,19 +17,19 @@ class QRCodeScan : NSObject {
     private var captureSession : AVCaptureSession?
     private var flexAction : FlexAction?
     private var previewLayer : CALayer!
-    private var util = Utils()
     private var tempView : UIView!
+    var resultValue: [String:Any] = [:]
 
     init (_ viewController : UIViewController){
         self.currentVC = viewController
     }
     
-    func codeScanFunction() -> (FlexAction, Array<Any?>) ->Void? {
+    func codeScanFunction() -> (FlexAction, Array<Any?>) -> Void {
         let loadingView = LoadingView(currentVC.view)
-        return { (action, argument) -> Void in
+        return { (action, _) -> Void in
             
-            self.util.setUserHistory(forKey: "QRCodeScanBtn")
-            loadingView.showActivityIndicator(text: "로딩 중", nil)
+            Utils.setUserHistory(forKey: "QRCodeScanBtn")
+            loadingView.showActivityIndicator(text: Msg.Loading, nil)
            
             if let captureSession = self.createCaptureSession() {
                 self.captureSession = captureSession
@@ -42,21 +42,16 @@ class QRCodeScan : NSObject {
                     self.previewLayer = self.createPreviewLayer(withCaptureSession : captureSession)
                     self.tempView.layer.addSublayer(self.previewLayer)
                     
-                    let cancelBtn = UIButton(frame: CGRect(x: 0, y: self.currentVC.view.frame.height - 60, width: self.currentVC.view.frame.width / 3.0 , height: 60))
+                    let cancelBtn = UIButton(frame: CGRect(x: 0, y: self.currentVC.view.frame.height - 60, width: self.currentVC.view.frame.width / 3.5 , height: 50))
                     cancelBtn.center = CGPoint(x: self.currentVC.view.frame.size.width / 2.0, y : self.currentVC.view.frame.height - 60)
-                    cancelBtn.layer.borderColor = #colorLiteral(red: 0.578004143, green: 0.8483221003, blue: 1, alpha: 1)
-                    cancelBtn.layer.borderWidth = 6
-                    cancelBtn.backgroundColor = #colorLiteral(red: 0.9885649944, green: 0.7925130698, blue: 1, alpha: 1)
-                    cancelBtn.layer.cornerRadius = 28
+                    cancelBtn.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                    cancelBtn.layer.cornerRadius = 25
                     cancelBtn.setTitle("취소", for: .normal)
                     cancelBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-                    cancelBtn.setTitleColor(#colorLiteral(red: 0.578004143, green: 0.8483221003, blue: 1, alpha: 1), for: .normal)
                     cancelBtn.addTarget(self, action: #selector(self.requestCaptureSessionStopRunning(sender:)), for: .touchUpInside)
                     self.tempView.addSubview(cancelBtn)
-                    self.tempView.bringSubviewToFront(cancelBtn)  ///요기요기요기
+                    self.tempView.bringSubviewToFront(cancelBtn)
                 }
-            } else {
-                action.resolveVoid()
             }
             loadingView.stopActivityIndicator()
         }
@@ -67,7 +62,14 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate {
     
     private func createCaptureSession() -> AVCaptureSession? {
         let captureSession = AVCaptureSession()
-        guard let captureDevice = AVCaptureDevice.default(for: .video) else {return nil}
+        resultValue["auth"] = false
+        resultValue["data"] = nil
+        
+        guard let captureDevice = AVCaptureDevice.default(for: .video) else {
+            resultValue["msg"] = "Not Camera Device"
+            flexAction?.promiseReturn(resultValue)
+            return nil
+        }
         
         do {
             let deviceInput = try AVCaptureDeviceInput(device: captureDevice)
@@ -75,7 +77,9 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate {
             
             if captureSession.canAddInput(deviceInput){
                 captureSession.addInput(deviceInput)
-            }else {
+            } else {
+                resultValue["msg"] = "cannot add input"
+                flexAction?.promiseReturn(resultValue)
                 return nil
             }
             
@@ -93,37 +97,50 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate {
                                                       .itf14,
                                                       .pdf417,
                                                       .upce]
-            }else {
+            } else {
+                resultValue["msg"] = "cannot add output"
+                flexAction?.promiseReturn(resultValue)
                 return nil
             }
-        }catch{
+        } catch {
+            resultValue["msg"] = error.localizedDescription
+            flexAction?.promiseReturn(resultValue)
             return nil
         }
+        
         return captureSession
     }
     
     public func metadataOutput(_ output : AVCaptureMetadataOutput,
                                didOutput metadataObjects : [AVMetadataObject],
                                from connection : AVCaptureConnection){
+
+        resultValue["auth"] = true
+        resultValue["data"] = nil
+        resultValue["msg"] = nil
+        
         if metadataObjects.count == 0 {
-            print ("No QR Code is detected")
+            flexAction?.promiseReturn(resultValue)
             self.requestCaptureSessionStopRunning(sender: nil)
-            self.flexAction?.promiseReturn("Stopped QR Code Scan")
             return
         }
         
-        if let metadataObject = metadataObjects.first {
-            guard let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject else { return }
-            guard let stringValue = readableObject.stringValue else { return }
-            flexAction?.promiseReturn(stringValue)
+        if let readableObject = metadataObjects.first as? AVMetadataMachineReadableCodeObject {
+            resultValue["data"] = readableObject.stringValue
+            flexAction?.promiseReturn(resultValue)
+            flexAction = nil
             self.requestCaptureSessionStopRunning(sender: nil)
         }
         
     }
 
     func requestCaptureSessionStartRunning() {
+        
         guard let captureSession = self.captureSession else {
-            self.flexAction?.promiseReturn("captureSession is null")
+            resultValue["auth"] = true
+            resultValue["data"] = nil
+            resultValue["msg"] = "captureSession is null"
+            flexAction?.promiseReturn(resultValue)
             return
         }
         
@@ -133,8 +150,8 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate {
     }
     
     @objc func requestCaptureSessionStopRunning(sender : UIButton?) {
-        guard let captureSession = self.captureSession else { return }
         
+        guard let captureSession = self.captureSession else { return }
         if captureSession.isRunning {
             DispatchQueue.main.async {
                 self.previewLayer.removeFromSuperlayer()
@@ -142,9 +159,14 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate {
                 self.currentVC.view.isUserInteractionEnabled = true
             }
         }
+        
         if sender != nil {
-            self.flexAction?.promiseReturn("Stopped QR Code Scan")
+            resultValue["auth"] = true
+            resultValue["data"] = nil
+            resultValue["msg"] = "Stopped QR Code Scan"
+            flexAction?.promiseReturn(resultValue)
         }
+        
     }
     
     private func createPreviewLayer(withCaptureSession captureSession: AVCaptureSession) -> AVCaptureVideoPreviewLayer{

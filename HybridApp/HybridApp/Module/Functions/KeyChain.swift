@@ -11,7 +11,7 @@ import KeychainAccess
 
 class KeyChain: NSObject {
     func keyChainInit() -> (Array<Any?>?) -> Any? {
-        return {(argument) -> String in
+        return {(_) -> String in
             let keychain = Keychain(service: "kr.lay.HybridApp")
             guard keychain["UUID"] != nil else {
                 do {
@@ -26,5 +26,4 @@ class KeyChain: NSObject {
             return keychain["UUID"]!
         }
     }
-    
 }
