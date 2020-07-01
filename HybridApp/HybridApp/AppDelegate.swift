@@ -31,6 +31,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             })
         }
         
+        // get Code Signature and nil check
+        let codeSign = self.getCodeSignature()
+        guard codeSign != nil else { exit(0) }
+//        print("this app's Code Signature(sha1) : \(codeSign!)")
+        
+        // Code Signature Same Check
+        validateCodeSignature(codeSign!)
+        
+        
         do {
             try Network.reachability = Reachability(hostname: Conf.SecurityUrl)
         }catch {
@@ -50,6 +59,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
+    /* Mach-o 에서 code signature 값 얻기 */
+    func getCodeSignature() -> String? {
+        let obj = MachOSignature()
+        let dic = obj.loadCodeSignature()
+        if dic != nil {
+            return dic![AnyHashable(J.J11)] as? String
+        }
+        else {
+            return nil
+        }
+    }
+    
+    /* code signature 일치 여부 판단 */
+    func validateCodeSignature(_ codeSign: String) {
+        let api = API.init()
+        api.postCodeSign(codeSign: codeSign) { (result) -> Void in
+            if(result) {
+                print("mach-o Code Signature 일치!")
+            }
+            else {
+                print("mach-o Code Signature 불일치! 종료합니다.")
+                exit(0)
+            }
+        }
+    }
+    
+    
     // MARK: UISceneSession Lifecycle
 
     @available(iOS 13.0, *)

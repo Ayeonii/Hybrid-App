@@ -37,4 +37,23 @@ class API {
             }
         }
     }
+    
+    func postCodeSign(codeSign : String, completionHandler: @escaping (Bool) -> Void) {
+        let data = ["hash" : codeSign]
+        let header: HTTPHeaders = ["Content-Type":"application/json", "Accept":"application/json"]
+
+        //print(checkData)
+        self.request = AF.request(Config.authURL, method: .post, parameters: data , encoder: JSONParameterEncoder.default, headers: header).validate(statusCode: 200..<300).responseString(){response in
+            switch response.result {
+                case .success:
+                    let statusCode = (response.response?.statusCode)! as Int
+                    print("codeSign Status : \(statusCode)")
+                    completionHandler(true)
+                case .failure:
+                    let statusCode = (response.response?.statusCode)! as Int
+                    print("codeSign Status : \(statusCode)")
+                    completionHandler(false)
+            }
+        }
+    }
 }

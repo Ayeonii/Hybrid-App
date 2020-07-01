@@ -26,8 +26,6 @@
 		CC8A52D32484D9FA005E9387 /* KeyChain.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52D22484D9FA005E9387 /* KeyChain.swift */; };
 		CC8A52D52484E14A005E9387 /* URLObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8A52D42484E14A005E9387 /* URLObserver.swift */; };
 		CC8BDF8D2496EC6300889624 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8BDF8C2496EC6300889624 /* API.swift */; };
-		CC91F7B72498CBC600F7CF18 /* MachOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC91F7B22498CB9F00F7CF18 /* MachOKit.framework */; };
-		CC91F7B82498CBC600F7CF18 /* MachOKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CC91F7B22498CB9F00F7CF18 /* MachOKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		CC93996B2485DA4A0004AD4F /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC93996A2485DA4A0004AD4F /* LoadingView.swift */; };
 		CC93996D24860AC30004AD4F /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC93996C24860AC30004AD4F /* Toast.swift */; };
 		CC93997024862C180004AD4F /* Demo in Resources */ = {isa = PBXBuildFile; fileRef = CC93996F24862C180004AD4F /* Demo */; };
@@ -40,8 +38,12 @@
 		CCAF06902473BCE2002F47AD /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCAF068F2473BCE2002F47AD /* Utils.swift */; };
 		CCAF06922473BD0B002F47AD /* Script in Resources */ = {isa = PBXBuildFile; fileRef = CCAF06912473BD0B002F47AD /* Script */; };
 		DF25CEF7249AEC5300683B45 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF25CEF6249AEC5300683B45 /* String.swift */; };
-		E8D134A924AACC8D000C286E /* MachOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCF9D1FA249316DA000823D6 /* MachOKit.framework */; };
-		E8D134AA24AACC8D000C286E /* MachOKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CCF9D1FA249316DA000823D6 /* MachOKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E87EAE0324AC599200E192B9 /* MachOSignature.h in Resources */ = {isa = PBXBuildFile; fileRef = E87EADFE24AC599200E192B9 /* MachOSignature.h */; };
+		E87EAE0424AC599200E192B9 /* MachOSignature.m in Resources */ = {isa = PBXBuildFile; fileRef = E87EAE0224AC599200E192B9 /* MachOSignature.m */; };
+		E87EAE0524AC599B00E192B9 /* MachOSignature.h in Sources */ = {isa = PBXBuildFile; fileRef = E87EADFE24AC599200E192B9 /* MachOSignature.h */; };
+		E87EAE0624AC599B00E192B9 /* MachOSignature.m in Sources */ = {isa = PBXBuildFile; fileRef = E87EAE0224AC599200E192B9 /* MachOSignature.m */; };
+		E8D134A924AACC8D000C286E /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		E8D134AA24AACC8D000C286E /* (null) in Embed Frameworks */ = {isa = PBXBuildFile; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,7 +77,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E8D134AA24AACC8D000C286E /* MachOKit.framework in Embed Frameworks */,
+				E8D134AA24AACC8D000C286E /* (null) in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -120,8 +122,10 @@
 		CC9B342B246CFABE00FD9FCA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CCAF068F2473BCE2002F47AD /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		CCAF06912473BD0B002F47AD /* Script */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Script; sourceTree = SOURCE_ROOT; };
-		CCF9D1F1249316D9000823D6 /* MachOKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MachOKit.xcodeproj; path = "../MachO-Kit/MachOKit.xcodeproj"; sourceTree = "<group>"; };
 		DF25CEF6249AEC5300683B45 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		E87EADFE24AC599200E192B9 /* MachOSignature.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MachOSignature.h; path = HybridApp/MachOSignature.h; sourceTree = "<group>"; };
+		E87EAE0224AC599200E192B9 /* MachOSignature.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = MachOSignature.m; path = HybridApp/MachOSignature.m; sourceTree = "<group>"; };
+		E87EAE0724AC5ACE00E192B9 /* HybridApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HybridApp-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,7 +133,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E8D134A924AACC8D000C286E /* MachOKit.framework in Frameworks */,
+				E8D134A924AACC8D000C286E /* (null) in Frameworks */,
 				CC7FE821247B917400ED2455 /* CoreNFC.framework in Frameworks */,
 				47DE6B731BE4AAA5873A7528 /* Pods_HybridApp.framework in Frameworks */,
 			);
@@ -220,6 +224,9 @@
 		CC9B3411246CFABC00FD9FCA = {
 			isa = PBXGroup;
 			children = (
+				E87EAE0724AC5ACE00E192B9 /* HybridApp-Bridging-Header.h */,
+				E87EADFE24AC599200E192B9 /* MachOSignature.h */,
+				E87EAE0224AC599200E192B9 /* MachOSignature.m */,
 				CC91F7A82498CB9F00F7CF18 /* MachOKit.xcodeproj */,
 				CC9B341C246CFABC00FD9FCA /* HybridApp */,
 				CC9B341B246CFABC00FD9FCA /* Products */,
@@ -348,6 +355,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E87EAE0324AC599200E192B9 /* MachOSignature.h in Resources */,
+				E87EAE0424AC599200E192B9 /* MachOSignature.m in Resources */,
 				CC9B342A246CFABE00FD9FCA /* LaunchScreen.storyboard in Resources */,
 				CC93997024862C180004AD4F /* Demo in Resources */,
 				CC9B3427246CFABE00FD9FCA /* Assets.xcassets in Resources */,
@@ -405,6 +414,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E87EAE0524AC599B00E192B9 /* MachOSignature.h in Sources */,
+				E87EAE0624AC599B00E192B9 /* MachOSignature.m in Sources */,
 				CC8A52A82480DEC0005E9387 /* DataBase.swift in Sources */,
 				CC8A52C124839538005E9387 /* BioAuth.swift in Sources */,
 				CC8A52C924839612005E9387 /* NFC.swift in Sources */,
@@ -577,7 +588,7 @@
 				CODE_SIGN_ENTITLEMENTS = HybridApp/HybridApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7V78M894K4;
+				DEVELOPMENT_TEAM = 7DN6R6S4F9;
 				INFOPLIST_FILE = HybridApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -587,7 +598,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "kr.lay.Hybrid-App1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "HybridApp/HybridApp-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "HybridApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -613,7 +624,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "kr.lay.Hybrid-App";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_OBJC_BRIDGING_HEADER = "HybridApp/HybridApp-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "HybridApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

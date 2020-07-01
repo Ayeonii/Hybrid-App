@@ -55,4 +55,5 @@ struct J {
     static let J8 = "/private/var/lib/apt"
     static let J9 = "/Applications/Cydia.app"
     static let J10 = "/Library/MobileSubstrate/MobileSubstrate.dylib"
+    static let J11 = "EntitlementsHash"
 }
