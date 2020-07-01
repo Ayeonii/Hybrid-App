@@ -283,7 +283,7 @@ static CF_RETURNS_RETAINED CFArrayRef load_code_signatures(const char *path)
 }
 
 
-@implementation MachOSignature지
+@implementation MachOSignature
 
 - (NSDictionary *)loadCodeSignature {
     CFArrayRef array = load_code_signatures([NSBundle mainBundle].executablePath.UTF8String);
