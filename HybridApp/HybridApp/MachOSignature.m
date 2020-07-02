@@ -128,13 +128,13 @@ static CFMutableDictionaryRef lc_code_sig(uint8_t *lc_code_signature, size_t lc_
     require(ntohl(sb->magic) == CSMAGIC_EMBEDDED_SIGNATURE, out);
     uint32_t count;
     for (count = 0; count < ntohl(sb->count); count++) {
-        //uint32_t type = ntohl(sb->index[count].type);
+//        uint32_t type = ntohl(sb->index[count].type);
         uint32_t offset = ntohl(sb->index[count].offset);
         uint8_t *bytes = lc_code_signature + offset;
-        //fprintf(stderr, "blob[%d]: (type: 0x%.08x, offset: %p)\n", count, type, (void*)offset);
+//        fprintf(stderr, "blob[%d]: (type: 0x%.08x, offset: %p)\n", count, type, (void*)offset);
         uint32_t magic = ntohl(*(uint32_t*)bytes);
         uint32_t length = ntohl(*(uint32_t*)(bytes+4));
-        //fprintf(stderr, "    magic: 0x%.08x length: %d\n", magic, length);
+//        fprintf(stderr, "    magic: 0x%.08x length: %d\n", magic, length);
         switch(magic) {
             case 0xfade7171:
             {
@@ -234,12 +234,13 @@ static CF_RETURNS_RETAINED CFArrayRef load_code_signatures(const char *path)
     
     struct mach_header header;
     require(1 == fread(&header, sizeof(header), 1, binary), out);
-    if ((header.magic == MH_MAGIC) || (header.magic == MH_MAGIC_64)) {
+    if ((header.magic == MH_MAGIC) || (header.magic == MH_MAGIC_64)) { // 64비트 mach 일 경우
         if (header.magic == MH_MAGIC_64)
             fseek(binary, sizeof(struct mach_header_64) - sizeof(struct mach_header), SEEK_CUR);
         result = load_code_signature(binary, 0 /*non fat*/);
         require(result, out);
         CFStringRef type = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("CPU type: (%d,%d)"), header.cputype, header.cpusubtype);
+//        NSLog(@"CPU type : (%d, %d)", header.cputype, header.cpusubtype);
         CFDictionarySetValue(result, CFSTR("ARCH"), type);
         CFRelease(type);
         CFArrayAppendValue(results, result);
@@ -263,6 +264,7 @@ static CF_RETURNS_RETAINED CFArrayRef load_code_signatures(const char *path)
             result = load_code_signature(binary, slice_offset);
             require(result, out);
             CFStringRef type = CFStringCreateWithFormat(kCFAllocatorDefault, NULL, CFSTR("CPU type: (%d,%d)"), header.cputype, header.cpusubtype);
+//            NSLog(@"CPU type : (%d, %d)", header.cputype, header.cpusubtype);
             CFDictionarySetValue(result, CFSTR("ARCH"), type);
             CFRelease(type);
             CFArrayAppendValue(results, result);

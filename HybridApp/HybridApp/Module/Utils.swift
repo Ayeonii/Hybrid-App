@@ -82,6 +82,10 @@ class Utils: NSObject {
         return result
     }
 
+    // 홈 화면으로 강제 이동
+    static func moveHome() -> Void {
+        UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
+    }
 }
 
 

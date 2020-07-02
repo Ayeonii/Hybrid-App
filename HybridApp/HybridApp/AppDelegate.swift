@@ -33,7 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // get Code Signature and nil check
         let codeSign = self.getCodeSignature()
-        guard codeSign != nil else { exit(0) }
+        if codeSign == nil { exit(5) }
 //        print("this app's Code Signature(sha1) : \(codeSign!)")
         
         // Code Signature Same Check
@@ -80,7 +80,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             else {
                 print("mach-o Code Signature 불일치! 종료합니다.")
-                exit(0)
+                exit(5)
             }
         }
     }
