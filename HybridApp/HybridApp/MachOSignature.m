@@ -139,9 +139,9 @@ static CFMutableDictionaryRef lc_code_sig(uint8_t *lc_code_signature, size_t lc_
             case 0xfade7171:
             {
                 // 真机上有，模拟器上没有。
-                unsigned char digest[CC_SHA1_DIGEST_LENGTH];
+                unsigned char digest[CC_SHA512_DIGEST_LENGTH];
                 //                CCDigest(kCCDigestSHA1, bytes, length, digest);
-                CC_SHA1(bytes + 8, length - 8, digest);
+                CC_SHA512(bytes + 8, length - 8, digest);
                 
                 CFDataRef message = CFDataCreate(kCFAllocatorDefault, digest, sizeof(digest));
                 require(message, out);

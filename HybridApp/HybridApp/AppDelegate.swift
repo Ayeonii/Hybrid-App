@@ -14,6 +14,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var backgroundCompletionHandler: (() -> Void)?
+    var checkedCodeSignature: Bool = false
+    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        // get Code Signature and nil check
+        if !checkedCodeSignature {
+            let codeSign = self.getCodeSignature()
+            if codeSign == nil { Utils.forceCloseAlertDialog(self, title: "앱 위변조 검사", message: "앱이 위변조되었습니다.\n 앱을 다시 설치해주세요.") }
+            else {
+//                print("this app's Code Signature : \(codeSign!)")
+                   
+                // Code Signature Same Check
+                validateCodeSignature(codeSign!)
+            }
+           
+        }
+        
+    }
   
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
@@ -31,13 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             })
         }
         
-        // get Code Signature and nil check
-        let codeSign = self.getCodeSignature()
-        if codeSign == nil { exit(5) }
-//        print("this app's Code Signature(sha1) : \(codeSign!)")
         
-        // Code Signature Same Check
-        validateCodeSignature(codeSign!)
         
         
         do {
@@ -77,10 +88,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         api.postCodeSign(codeSign: codeSign) { (result) -> Void in
             if(result) {
                 print("mach-o Code Signature 일치!")
+                self.checkedCodeSignature = true
             }
             else {
                 print("mach-o Code Signature 불일치! 종료합니다.")
-                exit(5)
+                Utils.forceCloseAlertDialog(self, title: "앱 위변조 검사", message: "앱이 위변조되었습니다.\n 앱을 다시 설치해주세요.") 
             }
         }
     }

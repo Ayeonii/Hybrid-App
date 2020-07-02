@@ -86,6 +86,17 @@ class Utils: NSObject {
     static func moveHome() -> Void {
         UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
     }
+    
+    // 강제 종료 alert dialog
+    static func forceCloseAlertDialog(_ appWindow : AppDelegate, title: String, message: String) -> Void {
+        let dialog = UIAlertController (title : title, message : message, preferredStyle: .alert)
+        
+        dialog.addAction(UIAlertAction(title: "OK", style: .default, handler: {(action: UIAlertAction!) in
+            moveHome()
+        }))
+        
+        appWindow.window?.rootViewController?.present(dialog, animated: true, completion: nil)
+    }
 }
 
 
