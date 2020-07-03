@@ -13,25 +13,7 @@ import UserNotifications
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var backgroundCompletionHandler: (() -> Void)?
-    var checkedCodeSignature: Bool = false
-    
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        // get Code Signature and nil check
-        if !checkedCodeSignature {
-            let codeSign = self.getCodeSignature()
-            if codeSign == nil { Utils.forceCloseAlertDialog(self, title: "앱 위변조 검사", message: "앱이 위변조되었습니다.\n 앱을 다시 설치해주세요.") }
-            else {
-//                print("this app's Code Signature : \(codeSign!)")
-                   
-                // Code Signature Same Check
-                validateCodeSignature(codeSign!)
-            }
-           
-        }
-        
-    }
-  
+      
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         if UserDefaults.standard.string(forKey: Key.AppID) == nil{
@@ -48,12 +30,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             })
         }
         
-        
-        
-        
         do {
             try Network.reachability = Reachability(hostname: Conf.SecurityUrl)
-        }catch {
+        } catch {
             switch error as? Network.Error {
                 case let .failedToCreateWith(hostname)?:
                     print("Network error:\nFailed to create reachability object With host named:", hostname)
@@ -67,37 +46,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     print(error)
             }
         }
+        
         return true
     }
-
-    /* Mach-o 에서 code signature 값 얻기 */
-    func getCodeSignature() -> String? {
-        let obj = MachOSignature()
-        let dic = obj.loadCodeSignature()
-        if dic != nil {
-            return dic![AnyHashable(J.J11)] as? String
-        }
-        else {
-            return nil
-        }
+    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        // get Code Signature and nil check
+        Utils.checkSignature()
     }
-    
-    /* code signature 일치 여부 판단 */
-    func validateCodeSignature(_ codeSign: String) {
-        let api = API.init()
-        api.postCodeSign(codeSign: codeSign) { (result) -> Void in
-            if(result) {
-                print("mach-o Code Signature 일치!")
-                self.checkedCodeSignature = true
-            }
-            else {
-                print("mach-o Code Signature 불일치! 종료합니다.")
-                Utils.forceCloseAlertDialog(self, title: "앱 위변조 검사", message: "앱이 위변조되었습니다.\n 앱을 다시 설치해주세요.") 
-            }
-        }
-    }
-    
-    
+   
     // MARK: UISceneSession Lifecycle
 
     @available(iOS 13.0, *)

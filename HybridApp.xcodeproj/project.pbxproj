@@ -46,30 +46,6 @@
 		E8D134AA24AACC8D000C286E /* (null) in Embed Frameworks */ = {isa = PBXBuildFile; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		CC91F7B12498CB9F00F7CF18 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CC91F7A82498CB9F00F7CF18 /* MachOKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D02FEB361890FF88004E88ED;
-			remoteInfo = MachOKit;
-		};
-		CC91F7B32498CB9F00F7CF18 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CC91F7A82498CB9F00F7CF18 /* MachOKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D02FEB4D1890FF88004E88ED;
-			remoteInfo = MachOKitTests;
-		};
-		CC91F7B52498CB9F00F7CF18 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CC91F7A82498CB9F00F7CF18 /* MachOKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D0A3BB741A68EB9D00D663A0;
-			remoteInfo = libMachO;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		E8D134AB24AACC8D000C286E /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -108,7 +84,6 @@
 		CC8A52D22484D9FA005E9387 /* KeyChain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyChain.swift; sourceTree = "<group>"; };
 		CC8A52D42484E14A005E9387 /* URLObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLObserver.swift; sourceTree = "<group>"; };
 		CC8BDF8C2496EC6300889624 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
-		CC91F7A82498CB9F00F7CF18 /* MachOKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = MachOKit.xcodeproj; path = "../MachO-Kit/MachOKit.xcodeproj"; sourceTree = "<group>"; };
 		CC93996A2485DA4A0004AD4F /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		CC93996C24860AC30004AD4F /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		CC93996F24862C180004AD4F /* Demo */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Demo; sourceTree = "<group>"; };
@@ -211,23 +186,12 @@
 			path = HTTP;
 			sourceTree = "<group>";
 		};
-		CC91F7A92498CB9F00F7CF18 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				CC91F7B22498CB9F00F7CF18 /* MachOKit.framework */,
-				CC91F7B42498CB9F00F7CF18 /* MachOKitTests.xctest */,
-				CC91F7B62498CB9F00F7CF18 /* libMachO.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		CC9B3411246CFABC00FD9FCA = {
 			isa = PBXGroup;
 			children = (
 				E87EAE0724AC5ACE00E192B9 /* HybridApp-Bridging-Header.h */,
 				E87EADFE24AC599200E192B9 /* MachOSignature.h */,
 				E87EAE0224AC599200E192B9 /* MachOSignature.m */,
-				CC91F7A82498CB9F00F7CF18 /* MachOKit.xcodeproj */,
 				CC9B341C246CFABC00FD9FCA /* HybridApp */,
 				CC9B341B246CFABC00FD9FCA /* Products */,
 				95958184BA9A414F6306906B /* Pods */,
@@ -313,42 +277,12 @@
 			mainGroup = CC9B3411246CFABC00FD9FCA;
 			productRefGroup = CC9B341B246CFABC00FD9FCA /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = CC91F7A92498CB9F00F7CF18 /* Products */;
-					ProjectRef = CC91F7A82498CB9F00F7CF18 /* MachOKit.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				CC9B3419246CFABC00FD9FCA /* HybridApp */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		CC91F7B22498CB9F00F7CF18 /* MachOKit.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = MachOKit.framework;
-			remoteRef = CC91F7B12498CB9F00F7CF18 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		CC91F7B42498CB9F00F7CF18 /* MachOKitTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = MachOKitTests.xctest;
-			remoteRef = CC91F7B32498CB9F00F7CF18 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		CC91F7B62498CB9F00F7CF18 /* libMachO.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libMachO.a;
-			remoteRef = CC91F7B52498CB9F00F7CF18 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		CC9B3418246CFABC00FD9FCA /* Resources */ = {
@@ -588,14 +522,14 @@
 				CODE_SIGN_ENTITLEMENTS = HybridApp/HybridApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7DN6R6S4F9;
+				DEVELOPMENT_TEAM = 7V78M894K4;
 				INFOPLIST_FILE = HybridApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "kr.lay.Hybrid-App1";
+				PRODUCT_BUNDLE_IDENTIFIER = "kr.lay.Hybrid-App2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "HybridApp-Bridging-Header.h";

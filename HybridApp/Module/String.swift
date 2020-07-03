@@ -57,3 +57,9 @@ struct J {
     static let J10 = "/Library/MobileSubstrate/MobileSubstrate.dylib"
     static let J11 = "EntitlementsHash"
 }
+
+struct C {
+    static let C1 = "check"
+    static let C2 = "The app has been tampered with."
+    static let C3 = "OK"
+}

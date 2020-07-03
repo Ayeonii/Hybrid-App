@@ -81,23 +81,32 @@ class Utils: NSObject {
         result["msg"] = nil
         return result
     }
-
-    // 홈 화면으로 강제 이동
-    static func moveHome() -> Void {
-        UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
-    }
+    
+    static func checkSignature() {
+        let obj = MachOSignature()
+        guard let dic = obj.loadCodeSignature() else {
+            forceCloseAlertDialog()
+            return
+        }
+        guard let codeSign = dic[AnyHashable(J.J11)] as? String else {
+            forceCloseAlertDialog()
+            return
+        }
+        API.init().postCodeSign(codeSign: codeSign) { (result) -> Void in
+            if !result {
+               forceCloseAlertDialog()
+            }
+        }
+   }
     
     // 강제 종료 alert dialog
-    static func forceCloseAlertDialog(_ appWindow : AppDelegate, title: String, message: String) -> Void {
-        let dialog = UIAlertController (title : title, message : message, preferredStyle: .alert)
+    static func forceCloseAlertDialog() -> Void {
+        let dialog = UIAlertController (title : C.C1, message : C.C2, preferredStyle: .alert)
         
-        dialog.addAction(UIAlertAction(title: "OK", style: .default, handler: {(action: UIAlertAction!) in
-            moveHome()
+        dialog.addAction(UIAlertAction(title: C.C3, style: .default, handler: {(action: UIAlertAction!) in
+            UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
         }))
         
-        appWindow.window?.rootViewController?.present(dialog, animated: true, completion: nil)
+        UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.rootViewController?.present(dialog, animated: true, completion: nil)
     }
 }
-
-
-

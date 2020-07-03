@@ -44,12 +44,12 @@
 	</dict>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>$(PRODUCT_NAME) 는 미디어 접근 권한을 필요로합니다. 허용 안함 시 일부 기능이 동작하지 않습니다.</string>
-	<key>NSFaceIDUsageDescription</key>
-	<string>$(PRODUCT_NAME) 는 생체 인증 권한을 필요로합니다. 허용 안함 시 일부 기능이 동작하지 않습니다.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) 는 카메라 권한을 필요로 합니다. 허용 안함 시 일부 기능이 동작하지 않습니다.</string>
 	<key>NSContactsUsageDescription</key>
 	<string>$(DEVELOPMENT_LANGUAGE) 는 연락처 접근 권한을 필요로 합니다. 허용 안함 시 일부 기능이 동작하지 않습니다. </string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>$(PRODUCT_NAME) 는 생체 인증 권한을 필요로합니다. 허용 안함 시 일부 기능이 동작하지 않습니다.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>항상 위치 접근을 허용합니다.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
