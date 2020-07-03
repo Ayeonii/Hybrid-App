@@ -68,13 +68,7 @@ class WebPopup : NSObject, WKUIDelegate, WKNavigationDelegate{
                 self.urlObserver.url = self.createWebView.url!
  
                 WKWebView.animate(withDuration: 0.2, animations: {()->Void in
-                    let height = self.createWebView!.frame.height
-                    let width = self.createWebView!.frame.width
-                    let yPos = self.currentVC.view.frame.height / 2 - height / 2
-                    let xPos = self.currentVC.view.frame.width / 2 - width / 2
-                    self.createWebView!.frame = CGRect(x: xPos, y: yPos,
-                                                       width: width,
-                                                       height: height)
+                    self.createWebView?.frame.origin.y = self.currentVC.view.frame.height / 2 - self.createWebView!.frame.height / 2
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
                         self.indicator = LoadingView(self.currentVC.view)
                         self.indicator.showActivityIndicator(text: Msg.Loading, nil)
