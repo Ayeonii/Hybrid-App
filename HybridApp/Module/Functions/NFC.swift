@@ -16,40 +16,34 @@ class NFC : NSObject{
     private var detectedMessages = Array<NFCNDEFMessage>()
     private var currentVC : UIViewController
     private var session : NFCNDEFReaderSession?
-
-
     
     init(_ currentVC : UIViewController){
         self.currentVC = currentVC
     }
     
-    func nfcReadingFunction () -> (FlexAction, Array<Any?>)-> Void {
-        return { (action, _) -> Void in
-            guard NFCNDEFReaderSession.readingAvailable else {
-                DispatchQueue.main.async {
-                    let alertController = UIAlertController (
-                                                title: "Scanning Not Supported",
-                                                message : "This device doesn't support tag scanning.",
-                                                preferredStyle : .alert)
-                    alertController.addAction(UIAlertAction(title: "OK", style: .default, handler : nil))
-                    self.currentVC.present(alertController, animated: true, completion: nil)
-                }
-                return
+    lazy var nfcReading = FlexClosure.action { (action, _) in
+        guard NFCNDEFReaderSession.readingAvailable else {
+            DispatchQueue.main.async {
+                let alertController = UIAlertController (
+                                            title: "Scanning Not Supported",
+                                            message : "This device doesn't support tag scanning.",
+                                            preferredStyle : .alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler : nil))
+                self.currentVC.present(alertController, animated: true, completion: nil)
             }
-            self.session = NFCNDEFReaderSession(delegate: self, queue: nil, invalidateAfterFirstRead: false)
-            self.session?.alertMessage = ""
-            self.session?.begin()
+            return
         }
+        self.session = NFCNDEFReaderSession(delegate: self, queue: nil, invalidateAfterFirstRead: false)
+        self.session?.alertMessage = ""
+        self.session?.begin()
     }
     
-    
-    func nfcWriteFunction () -> (FlexAction, Array<Any?>)-> Void? {
-        return { (action, _) -> Void in
-            self.session = NFCNDEFReaderSession(delegate: self, queue: nil, invalidateAfterFirstRead: false)
-            self.session?.alertMessage = "Hold your iPhone near an NDEF tag to write the message."
-            self.session?.begin()
-        }
+    lazy var nfcWrite = FlexClosure.action { (action, _) in
+        self.session = NFCNDEFReaderSession(delegate: self, queue: nil, invalidateAfterFirstRead: false)
+        self.session?.alertMessage = "Hold your iPhone near an NDEF tag to write the message."
+        self.session?.begin()
     }
+    
 }
 
 extension NFC : NFCNDEFReaderSessionDelegate {

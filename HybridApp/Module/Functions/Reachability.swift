@@ -160,11 +160,9 @@ class CheckNetwork{
         self.currentVC = currentVC
     }
     
-    func checkNetworkConnect () -> (FlexAction, Array<Any?>) -> Void {
-        return{ (action, argumnet) -> Void in
-            self.flexAction = action
-            self.updateNetworkStatusCheck()
-        }
+    lazy var checkNetwork = FlexClosure.action { (action, argument) in
+        self.flexAction = action
+        self.updateNetworkStatusCheck()
     }
     
     func updateNetworkStatusCheck() {
@@ -195,7 +193,6 @@ class CheckNetwork{
         print("HostName:", Network.reachability!.hostname ?? "nil")
         print("Reachable:", Network.reachability!.isReachable)
         print("Wifi:", Network.reachability!.isReachableViaWiFi)
-
     }
     
     @objc func statusManager(_ notification: NSNotification) {

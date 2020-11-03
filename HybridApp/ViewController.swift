@@ -22,60 +22,61 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         let _ = ListeningObserver(self.urlObserver)
+        
+        mWebView = FlexWebView(frame: self.view.frame, component: component)
 
-        component.setAction("Location", Location(self).locationFunction())
+        component.setAction("Location", Location(self).location)
          
-        component.setAction("RootingCheck", CheckRooting().checkRootingFunction(self))
+        component.setAction("RootingCheck", CheckRooting(self).checkRooting)
         
-        component.setInterface ("Notification", Notification(self).notifiFunction())
+        component.boolInterface("Notification", Notification(self).notifiFunction)
         
-        component.setInterface ("LocalRepository", User().userDefaultFunction())
+        component.stringInterface("LocalRepository", User().userDefault)
         
-        component.setInterface ("UniqueAppID"){_ in return UserDefaults.standard.string(forKey: Key.AppID)}
+        component.stringInterface("UniqueAppID") { _ in return UserDefaults.standard.string(forKey: Key.AppID) ?? "null" }
         
-        component.setInterface ("Toast", Toast().toastFunction(self))
+        component.voidInterface("Toast", Toast(self).toast)
         
-        component.setInterface ("UniqueDeviceID", KeyChain().keyChainInit())
+        component.stringInterface("UniqueDeviceID", KeyChain().keyChainInit)
         
-        component.setInterface ("WebPopup", WebPopup().popupFunction(component))
+        component.voidInterface("WebPopup", WebPopup(component).popup)
         
-        component.setAction("CameraByDeviceRatio", CameraPhotos(self).cameraFunction())
+        component.setAction("CameraByDeviceRatio", CameraPhotos(self).camera)
         
-        component.setAction("CameraByRatio", CameraPhotos(self).cameraFunction())
+        component.setAction("CameraByRatio", CameraPhotos(self).camera)
              
-        component.setAction("PhotoByDeviceRatio", CameraPhotos(self).photosFunction())
+        component.setAction("PhotoByDeviceRatio", CameraPhotos(self).photos)
         
-        component.setAction("PhotoByRatio", CameraPhotos(self).photosFunction())
+        component.setAction("PhotoByRatio", CameraPhotos(self).photos)
         
-        component.setAction("MultiPhotoByDeviceRatio", CameraPhotos(self).MultiplePhotosFunction())
+        component.setAction("MultiPhotoByDeviceRatio", CameraPhotos(self).multiplePhotos)
         
-        component.setAction("MultiPhotoByRatio", CameraPhotos(self).MultiplePhotosFunction())
+        component.setAction("MultiPhotoByRatio", CameraPhotos(self).multiplePhotos)
     
-        component.setAction("Dialog", Dialog().dialogFunction(self))
+        component.setAction("Dialog", Dialog(self).dialog)
         
-        component.setAction("Authentication", BioAuth().authFunction())
+        component.setAction("Authentication", BioAuth().auth)
         
-        component.setAction("Network", CheckNetwork(self).checkNetworkConnect())
+        component.setAction("Network", CheckNetwork(self).checkNetwork)
         
-        component.setAction("QRCodeScan", QRCodeScan(self).codeScanFunction())
+        component.setAction("QRCodeScan", QRCodeScan(self).codeScan)
         
-        component.setAction ("SendSMS", Message().sendMessge(self))
+        component.setAction("SendSMS", Message(self).sendMessage)
         
-        component.setAction ("FileDownload", FileDownload().startFileDownload(component))
+        component.setAction("FileDownload", FileDownload(component).startFileDownload)
                 
         #if canImport(CoreNFC)
-        component.setAction ("NFCReading", NFC(self).nfcReadingFunction())
+        component.setAction("NFCReading", NFC(self).nfcReading)
         #endif
 
         component.setBaseUrl(Conf.BaseUrl)
         
-        mWebView = FlexWebView(frame: self.view.frame, component: component)
+        
         mWebView.translatesAutoresizingMaskIntoConstraints = false
         mWebView.scrollView.bounces = false
         view.addSubview(mWebView)
         
         mWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html", inDirectory: "Demo")!)))
-//        mWebView.load(URLRequest(url: URL(fileURLWithPath: Bundle.main.path(forResource: "index", ofType: "html", inDirectory: "Script")!)))
 
         urlObserver.url = mWebView.url!
         

@@ -20,19 +20,18 @@ class FileDownload : NSObject, URLSessionDelegate{
     private var component : FlexComponent!
     private var loadingView : LoadingView!
     private var progressLabel = UILabel()
-
     
-    func startFileDownload (_ component : FlexComponent) -> (FlexAction, Array<Any?>) -> Void {
-        return { (action, argument) -> Void in
-
-            Utils.setUserHistory(forKey: "FileDownloadBtn")
-            
-            self.component = component
-            self.flexAction  = action
-            self.fileURL = argument[0] as? String
-            self.component.evalFlexFunc("result", sendData: "Download Start!")
-            self.fileDownload()
-        }
+    init(_ component: FlexComponent) {
+        self.component = component
+    }
+    
+    lazy var startFileDownload = FlexClosure.action { (action, argument) in
+        Utils.setUserHistory(forKey: "FileDownloadBtn")
+        
+        self.flexAction  = action
+        self.fileURL = argument[0].asString()
+        self.component.evalFlexFunc("result", sendData: "Download Start!")
+        self.fileDownload()
     }
     
     func fileDownload() {

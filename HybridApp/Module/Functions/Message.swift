@@ -20,31 +20,34 @@ class Message : NSObject, MFMessageComposeViewControllerDelegate {
     private var flexAction : FlexAction!
     private var result : [String:Any] = [:]
     
-    func sendMessge (_ currentVC : UIViewController)  -> (FlexAction, Array<Any?>?) -> Void {
-        return { (action, argument) -> Void in
-            
-            Utils.setUserHistory(forKey: "SendMessageBtn")
-            self.result["data"] = false
-            self.result["msg"] = nil
-            
-            if let number = argument?[0] as? String, let message = argument?[1] as? String {
-                DispatchQueue.main.async {
-                    let messageComposer = MFMessageComposeViewController()
-                    messageComposer.messageComposeDelegate = self
-                    if MFMessageComposeViewController.canSendText(){
-                        self.flexAction = action
-                        messageComposer.recipients = [number]
-                        messageComposer.body = message
-                        currentVC.present(messageComposer, animated: true, completion: nil)
-                    } else {
-                        self.result["msg"] = "메세지를 보낼 수 없습니다."
-                        action.promiseReturn(self.result)
-                    }
+    private let currentVC : UIViewController
+    
+    init(_ currentVC : UIViewController){
+        self.currentVC = currentVC
+    }
+    
+    lazy var sendMessage = FlexClosure.action { (action, argument) in
+        Utils.setUserHistory(forKey: "SendMessageBtn")
+        self.result["data"] = false
+        self.result["msg"] = nil
+        
+        if let number = argument[0].asString(), let message = argument[1].asString() {
+            DispatchQueue.main.async {
+                let messageComposer = MFMessageComposeViewController()
+                messageComposer.messageComposeDelegate = self
+                if MFMessageComposeViewController.canSendText(){
+                    self.flexAction = action
+                    messageComposer.recipients = [number]
+                    messageComposer.body = message
+                    self.currentVC.present(messageComposer, animated: true, completion: nil)
+                } else {
+                    self.result["msg"] = "메세지를 보낼 수 없습니다."
+                    action.promiseReturn(self.result)
                 }
-            }else {
-                self.result["msg"] = "전화번호와 내용을 적어주세요"
-                action.promiseReturn(self.result)
             }
+        } else {
+            self.result["msg"] = "전화번호와 내용을 적어주세요"
+            action.promiseReturn(self.result)
         }
     }
     

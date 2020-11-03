@@ -10,14 +10,20 @@ import UIKit
 
 class LoadingView {
     
-    let viewForActivityIndicator = UIView()
-    let backgroundView = UIView()
-    let view: UIView
-    let activityIndicatorView = UIActivityIndicatorView()
-    let loadingTextLabel = UILabel()
+    var viewForActivityIndicator: UIView!
+    var backgroundView: UIView!
+    var view: UIView!
+    var activityIndicatorView: UIActivityIndicatorView!
+    var loadingTextLabel: UILabel!
     
-    init(_ view : UIView){
+    init(_ view : UIView) {
         self.view = view
+        DispatchQueue.main.async {
+            self.viewForActivityIndicator = UIView()
+            self.backgroundView = UIView()
+            self.activityIndicatorView = UIActivityIndicatorView()
+            self.loadingTextLabel = UILabel()
+        }
     }
     
     func showActivityIndicator(text: String,  _ handler : (() -> Void)? = nil) {

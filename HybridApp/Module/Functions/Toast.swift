@@ -7,21 +7,24 @@
 //
 
 import UIKit
+import FlexHybridApp
 
 class Toast: NSObject {
     
-    func toastFunction(_ currentVC : UIViewController) -> (Array<Any?>) -> Any? {
-        return { (argument) -> Any? in
-       
-            let message = argument[0] as! String
-            let isShort = argument[1] as! Bool
-            DispatchQueue.main.async {
-                ToastView.show(currentVC.view, msg: message, isShort: isShort)
-            }
-            return true
+    private let currentVC : UIViewController
+    
+    init(_ currentVC : UIViewController){
+        self.currentVC = currentVC
+    }
+    
+    lazy var toast = FlexClosure.void { (argument) in
+        let message = argument[0].asString() ?? ""
+        let isShort = argument[1].asBool() ?? true
+        DispatchQueue.main.async {
+            ToastView.show(self.currentVC.view, msg: message, isShort: isShort)
         }
     }
-
+    
 }
 
 class ToastView: UILabel {

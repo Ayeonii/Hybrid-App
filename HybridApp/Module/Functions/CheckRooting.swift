@@ -13,28 +13,31 @@ import FlexHybridApp
  권한 / 루팅체킹 모듈
  */
 class CheckRooting {
+    
+    private let currentVC : UIViewController
+    
+    init(_ currentVC : UIViewController){
+        self.currentVC = currentVC
+    }
+    
+    lazy var checkRooting = FlexClosure.action { (action, _) in
+        Utils.setUserHistory(forKey: "RootingCheckBtn")
+        var result = ""
         
-    func checkRootingFunction (_ currentVC : UIViewController) -> ((FlexAction, Array<Any?>) -> Void) {
-        return{ (action, _) -> Void in
-            
-            Utils.setUserHistory(forKey: "RootingCheckBtn")
-            var result = ""
-            
-            DispatchQueue.main.async{
-                if self.hasJailbreak() {
-                    result = "탈옥되었습니다."
-                    let dialog = UIAlertController(title: nil, message: PathString.nonAuth, preferredStyle: .alert)
-                    let action = UIAlertAction(title: "확인", style: .default){
-                        (action:UIAlertAction!) in
-                        exit(0)
-                    }
-                    dialog.addAction(action)
-                    currentVC.present(dialog, animated: true, completion: nil)
-                } else {
-                    result = "탈옥되지 않았습니다."
+        DispatchQueue.main.async{
+            if self.hasJailbreak() {
+                result = "탈옥되었습니다."
+                let dialog = UIAlertController(title: nil, message: PathString.nonAuth, preferredStyle: .alert)
+                let action = UIAlertAction(title: "확인", style: .default){
+                    (action:UIAlertAction!) in
+                    exit(0)
                 }
-                action.promiseReturn(result)
+                dialog.addAction(action)
+                self.currentVC.present(dialog, animated: true, completion: nil)
+            } else {
+                result = "탈옥되지 않았습니다."
             }
+            action.promiseReturn(result)
         }
     }
     

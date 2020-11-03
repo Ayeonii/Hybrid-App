@@ -9,10 +9,12 @@
 import UIKit
 import AVFoundation
 import FlexHybridApp
+
 /*
  QR코드스캔 모듈
  */
 class QRCodeScan : NSObject {
+    
     private var currentVC : UIViewController
     private var captureSession : AVCaptureSession?
     private var flexAction : FlexAction?
@@ -20,42 +22,41 @@ class QRCodeScan : NSObject {
     private var tempView : UIView!
     var resultValue: [String:Any] = [:]
 
-    init (_ viewController : UIViewController){
+    init (_ viewController : UIViewController) {
         self.currentVC = viewController
     }
     
-    func codeScanFunction() -> (FlexAction, Array<Any?>) -> Void {
-        let loadingView = LoadingView(currentVC.view)
-        return { (action, _) -> Void in
-            
+    lazy var codeScan = FlexClosure.action { (action, _) in
+        DispatchQueue.main.async {
             Utils.setUserHistory(forKey: "QRCodeScanBtn")
+            
+            let loadingView = LoadingView(self.currentVC.view)
             loadingView.showActivityIndicator(text: Msg.Loading, nil)
            
             if let captureSession = self.createCaptureSession() {
                 self.captureSession = captureSession
                 self.flexAction = action
                 self.requestCaptureSessionStartRunning()
-                DispatchQueue.main.async {
-                    self.tempView = UIView(frame: self.currentVC.view.bounds)
-                    self.tempView?.backgroundColor = UIColor.black.withAlphaComponent(0.7)
-                    self.currentVC.view.addSubview(self.tempView!)
-                    self.previewLayer = self.createPreviewLayer(withCaptureSession : captureSession)
-                    self.tempView.layer.addSublayer(self.previewLayer)
-                    
-                    let cancelBtn = UIButton(frame: CGRect(x: 0, y: self.currentVC.view.frame.height - 60, width: self.currentVC.view.frame.width / 3.5 , height: 50))
-                    cancelBtn.center = CGPoint(x: self.currentVC.view.frame.size.width / 2.0, y : self.currentVC.view.frame.height - 60)
-                    cancelBtn.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-                    cancelBtn.layer.cornerRadius = 25
-                    cancelBtn.setTitle("취소", for: .normal)
-                    cancelBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-                    cancelBtn.addTarget(self, action: #selector(self.requestCaptureSessionStopRunning(sender:)), for: .touchUpInside)
-                    self.tempView.addSubview(cancelBtn)
-                    self.tempView.bringSubviewToFront(cancelBtn)
-                }
+                self.tempView = UIView(frame: self.currentVC.view.bounds)
+                self.tempView?.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+                self.currentVC.view.addSubview(self.tempView!)
+                self.previewLayer = self.createPreviewLayer(withCaptureSession : captureSession)
+                self.tempView.layer.addSublayer(self.previewLayer)
+                
+                let cancelBtn = UIButton(frame: CGRect(x: 0, y: self.currentVC.view.frame.height - 60, width: self.currentVC.view.frame.width / 3.5 , height: 50))
+                cancelBtn.center = CGPoint(x: self.currentVC.view.frame.size.width / 2.0, y : self.currentVC.view.frame.height - 60)
+                cancelBtn.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+                cancelBtn.layer.cornerRadius = 25
+                cancelBtn.setTitle("취소", for: .normal)
+                cancelBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+                cancelBtn.addTarget(self, action: #selector(self.requestCaptureSessionStopRunning(sender:)), for: .touchUpInside)
+                self.tempView.addSubview(cancelBtn)
+                self.tempView.bringSubviewToFront(cancelBtn)
             }
             loadingView.stopActivityIndicator()
         }
     }
+    
 }
 
 extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate {
@@ -177,4 +178,5 @@ extension QRCodeScan : AVCaptureMetadataOutputObjectsDelegate {
         
         return previewLayer
     }
+    
 }

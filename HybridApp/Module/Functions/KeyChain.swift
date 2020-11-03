@@ -7,23 +7,24 @@
 //
 
 import UIKit
+import FlexHybridApp
 import KeychainAccess
 
 class KeyChain: NSObject {
-    func keyChainInit() -> (Array<Any?>?) -> Any? {
-        return {(_) -> String in
-            let keychain = Keychain(service: "kr.lay.HybridApp")
-            guard keychain["UUID"] != nil else {
-                do {
-                    try keychain
-                        .accessibility(.afterFirstUnlock)
-                        .set(UUID().uuidString, key: "UUID")
-                } catch let error {
-                    print("error: \(error)")
-                }
-                return keychain["UUID"]!
+    
+    lazy var keyChainInit = FlexClosure.string { (_) -> String in
+        let keychain = Keychain(service: "kr.lay.HybridApp")
+        guard keychain["UUID"] != nil else {
+            do {
+                try keychain
+                    .accessibility(.afterFirstUnlock)
+                    .set(UUID().uuidString, key: "UUID")
+            } catch let error {
+                print("error: \(error)")
             }
             return keychain["UUID"]!
         }
+        return keychain["UUID"]!
     }
+    
 }

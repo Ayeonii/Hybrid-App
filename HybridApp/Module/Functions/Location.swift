@@ -24,13 +24,12 @@ class Location: NSObject, CLLocationManagerDelegate{
         locationManager.delegate = self
     }
     
-    func locationFunction() -> ((FlexAction, Array<Any?>) -> Void) {
-        return { (action, _ ) -> Void  in
-            Utils.setUserHistory(forKey: "LocationBtn")
-            self.locationAction = action
-            self.getLocation()
-        }
+    lazy var location = FlexClosure.action { (action, _) in
+        Utils.setUserHistory(forKey: "LocationBtn")
+        self.locationAction = action
+        self.getLocation()
     }
+    
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         getLocation()

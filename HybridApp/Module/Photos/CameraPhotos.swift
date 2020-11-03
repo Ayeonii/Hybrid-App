@@ -23,7 +23,7 @@ struct ModuleType {
 class CameraPhotos : NSObject {
     
     private let currentVC : UIViewController
-    private let dialog = Dialog()
+    private let dialog: Dialog!
     private var flagImageSave = false
     private var imageAction : FlexAction? = nil
     private var ratio : CGFloat!
@@ -35,155 +35,147 @@ class CameraPhotos : NSObject {
     init(_ currentVC : UIViewController){
         self.currentVC = currentVC
         self.loadingView = LoadingView(currentVC.view)
+        self.dialog = Dialog(currentVC)
         super.init()
         self.imagePicker = UIImagePickerController()
         imagePicker.delegate = self
     }
     
-    func cameraFunction() -> (FlexAction, Array<Any?>) -> Void {
-        return { (action, arguments) -> Void in
-            
-            Utils.setUserHistory(forKey: "CameraBtn")
-            
-            self.ratio = arguments[0] as? CGFloat
-            if arguments.count > 1 {
-                self.isWidth =  arguments[1] as? Bool
-            }
-            
-            var result = Utils.genResult()
+    lazy var camera = FlexClosure.action { (action, arguments) in
+        Utils.setUserHistory(forKey: "CameraBtn")
+        
+        self.ratio = CGFloat(arguments[0].asDouble() ?? 1)
+        if arguments.count > 1 {
+            self.isWidth = arguments[1].asBool()
+        }
+        
+        var result = Utils.genResult()
 
-            let cameraAuthorizationsStatus : AVAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
-            
-            switch cameraAuthorizationsStatus {
-            case .authorized :
-                self.imageAction = action
-                self.cameraPhotosAction(ModuleType.camera)
-            case .denied :
-                Utils.setAuthAlertAction(currentVC : self.currentVC,  dialog: Utils.authDialog)
-                result["msg"] = AuthrizeStatus.denied
-                action.promiseReturn(result)
-            case .notDetermined:
-                AVCaptureDevice.requestAccess(for: AVMediaType.video) { (response) in
-                    if response {
-                        self.imageAction = action
-                        self.cameraPhotosAction(ModuleType.camera)
-                    } else {
-                        self.dialog.makeDialog(self.currentVC, title : "알림", message : "해당 권한이 거부되었습니다." , btn: ["basic": "확인"] , type : true, animated : true, promiseAction : nil)
-                        result["msg"] = AuthrizeStatus.denied
-                        action.promiseReturn(result)
-                    }
-                }
-            case .restricted:
-                result["msg"] = AuthrizeStatus.restricted
-                action.promiseReturn(result)
-            default:
-                result["msg"] = Msg.UnknownError
-                action.promiseReturn(result)
-            }
-        }
-    }
-    
-    //Photos를 실행시키는 모듈
-    func photosFunction() -> (FlexAction, Array<Any?>) -> Void  {
-        return { (action, arguments) -> Void in
-            Utils.setUserHistory(forKey: "PhotoBtn")
-            
-            self.ratio = arguments[0] as? CGFloat
-            if arguments.count > 1 {
-                self.isWidth =  arguments[1] as? Bool
-            }
-            
-            var result = Utils.genResult()
-            
-            let photoAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
-            switch photoAuthorizationStatus{
-            case .authorized:
-                self.imageAction = action
-                self.cameraPhotosAction(ModuleType.photos)
-            case .denied:
-                result["msg"] = AuthrizeStatus.denied
-                action.promiseReturn(result)
-                Utils.setAuthAlertAction(currentVC : self.currentVC,  dialog: Utils.authDialog)
-            case .notDetermined:
-                PHPhotoLibrary.requestAuthorization({(status) in
-                    switch status {
-                    case .authorized :
-                        self.imageAction = action
-                        self.cameraPhotosAction(ModuleType.photos)
-                    case .denied :
-                        self.dialog.makeDialog(self.currentVC, title : "알림", message : "해당 권한이 거부되었습니다." , btn: ["basic": "확인"] , type : true, animated : true, promiseAction: nil)
-                        result["msg"] = AuthrizeStatus.denied
-                        action.promiseReturn(result)
-                    default:
-                        result["msg"] = Msg.UnknownError
-                        action.promiseReturn(result)
-                    }
-                })
-            case .restricted:
-                result["msg"] = AuthrizeStatus.restricted
-                action.promiseReturn(result)
-            default:
-                result["msg"] = Msg.UnknownError
-                action.promiseReturn(result)
-            }
-        }
-    }
-    
-    //사진 여러장 선택
-    func MultiplePhotosFunction() -> (FlexAction, Array<Any?>) -> Void {
-        return { (action, arguments) -> Void in
-            
-            Utils.setUserHistory(forKey: "MultiplePhotoBtn")
+        let cameraAuthorizationsStatus : AVAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
+        
+        switch cameraAuthorizationsStatus {
+        case .authorized :
             self.imageAction = action
-            
-            var result = Utils.genResult()
-            result["auth"] = true
-            
-            self.ratio = arguments[0] as? CGFloat
-            if arguments.count > 1 {
-                self.isWidth =  arguments[1] as? Bool
-            }
-            
-            var imageArray = [DKAsset]()
-            var multiImageArray = [String]()
-            
-            DispatchQueue.main.async {
-                let multiPicker = DKImagePickerController()
-                multiPicker.maxSelectableCount = 10
-                multiPicker.showsCancelButton = true
-                multiPicker.allowsLandscape = false
-                multiPicker.assetType = .allPhotos
-                multiPicker.didCancel = {
-                    result["msg"] = Msg.Cancel
-                    self.imageAction?.promiseReturn(result)
+            self.cameraPhotosAction(ModuleType.camera)
+        case .denied :
+            Utils.setAuthAlertAction(currentVC : self.currentVC,  dialog: Utils.authDialog)
+            result["msg"] = AuthrizeStatus.denied
+            action.promiseReturn(result)
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: AVMediaType.video) { (response) in
+                if response {
+                    self.imageAction = action
+                    self.cameraPhotosAction(ModuleType.camera)
+                } else {
+                    self.dialog.makeDialog(title : "알림", message : "해당 권한이 거부되었습니다." , btn: ["basic": "확인"] , type : true, animated : true, promiseAction : nil)
+                    result["msg"] = AuthrizeStatus.denied
+                    action.promiseReturn(result)
                 }
-                multiPicker.maxSelectableCount = 5
-                multiPicker.viewWillAppear(true)
-                multiPicker.didSelectAssets = { (assets : [DKAsset]) in
-                    DispatchQueue.main.async {
-                        DispatchQueue(label: "indicatorQueue").async {
-                            self.loadingView.showActivityIndicator(text: Msg.Loading, nil )
-                        }
-                        DispatchQueue(label: "indicatorQueue").async {
-                            imageArray.append(contentsOf: assets)
-                            multiImageArray = imageArray.map {
-                                let captureImage = self.getAsset(asset: $0.originalAsset.self!)
-                                let resizeImageg = self.resizeImage(image: captureImage, ratio: self.ratio, isWidth: self.isWidth)
-                                let imageData : NSData = resizeImageg.jpegData(compressionQuality: 0.25)! as NSData
-                                let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
-                                let encodedString = strBase64.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? ""
-                                return "data:image/jpeg;base64," + encodedString
-                            }
-                            result["data"] = multiImageArray
-                            self.imageAction?.promiseReturn(result)
-                            self.loadingView.stopActivityIndicator()
-                        }
-                    }
-                }
-                self.currentVC.present(multiPicker, animated : true)
             }
+        case .restricted:
+            result["msg"] = AuthrizeStatus.restricted
+            action.promiseReturn(result)
+        default:
+            result["msg"] = Msg.UnknownError
+            action.promiseReturn(result)
         }
     }
+    
+    lazy var photos = FlexClosure.action { (action, arguments) in
+        Utils.setUserHistory(forKey: "PhotoBtn")
+        
+        self.ratio = CGFloat(arguments[0].asDouble() ?? 1)
+        if arguments.count > 1 {
+            self.isWidth = arguments[1].asBool()
+        }
+        
+        var result = Utils.genResult()
+        
+        let photoAuthorizationStatus = PHPhotoLibrary.authorizationStatus()
+        switch photoAuthorizationStatus{
+        case .authorized:
+            self.imageAction = action
+            self.cameraPhotosAction(ModuleType.photos)
+        case .denied:
+            result["msg"] = AuthrizeStatus.denied
+            action.promiseReturn(result)
+            Utils.setAuthAlertAction(currentVC : self.currentVC,  dialog: Utils.authDialog)
+        case .notDetermined:
+            PHPhotoLibrary.requestAuthorization({(status) in
+                switch status {
+                case .authorized :
+                    self.imageAction = action
+                    self.cameraPhotosAction(ModuleType.photos)
+                case .denied :
+                    self.dialog.makeDialog(title : "알림", message : "해당 권한이 거부되었습니다." , btn: ["basic": "확인"] , type : true, animated : true, promiseAction: nil)
+                    result["msg"] = AuthrizeStatus.denied
+                    action.promiseReturn(result)
+                default:
+                    result["msg"] = Msg.UnknownError
+                    action.promiseReturn(result)
+                }
+            })
+        case .restricted:
+            result["msg"] = AuthrizeStatus.restricted
+            action.promiseReturn(result)
+        default:
+            result["msg"] = Msg.UnknownError
+            action.promiseReturn(result)
+        }
+    }
+    
+    lazy var multiplePhotos = FlexClosure.action { (action, arguments) in
+        Utils.setUserHistory(forKey: "MultiplePhotoBtn")
+        self.imageAction = action
+        
+        var result = Utils.genResult()
+        result["auth"] = true
+        
+        self.ratio = CGFloat(arguments[0].asDouble() ?? 1)
+        if arguments.count > 1 {
+            self.isWidth = arguments[1].asBool()
+        }
+        
+        var imageArray = [DKAsset]()
+        var multiImageArray = [String]()
+        
+        DispatchQueue.main.async {
+            let multiPicker = DKImagePickerController()
+            multiPicker.maxSelectableCount = 10
+            multiPicker.showsCancelButton = true
+            multiPicker.allowsLandscape = false
+            multiPicker.assetType = .allPhotos
+            multiPicker.didCancel = {
+                result["msg"] = Msg.Cancel
+                self.imageAction?.promiseReturn(result)
+            }
+            multiPicker.maxSelectableCount = 5
+            multiPicker.viewWillAppear(true)
+            multiPicker.didSelectAssets = { (assets : [DKAsset]) in
+                DispatchQueue.main.async {
+                    DispatchQueue(label: "indicatorQueue").async {
+                        self.loadingView.showActivityIndicator(text: Msg.Loading, nil )
+                    }
+                    DispatchQueue(label: "indicatorQueue").async {
+                        imageArray.append(contentsOf: assets)
+                        multiImageArray = imageArray.map {
+                            let captureImage = self.getAsset(asset: $0.originalAsset.self!)
+                            let resizeImageg = self.resizeImage(image: captureImage, ratio: self.ratio, isWidth: self.isWidth)
+                            let imageData : NSData = resizeImageg.jpegData(compressionQuality: 0.25)! as NSData
+                            let strBase64 = imageData.base64EncodedString(options: .lineLength64Characters)
+                            let encodedString = strBase64.addingPercentEncoding(withAllowedCharacters: .alphanumerics) ?? ""
+                            return "data:image/jpeg;base64," + encodedString
+                        }
+                        result["data"] = multiImageArray
+                        self.imageAction?.promiseReturn(result)
+                        self.loadingView.stopActivityIndicator()
+                    }
+                }
+            }
+            self.currentVC.present(multiPicker, animated : true)
+        }
+    }
+    
 }
 
 extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -203,7 +195,7 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
                 } else {
                     result["msg"] = Msg.NoCamera
                     self.imageAction?.promiseReturn(result)
-                    self.dialog.makeDialog(self.currentVC, title : "경고", message : "카메라를 실행할 수 없습니다." , btn: ["basic": "확인"] , type : true, animated : true, promiseAction: nil)
+                    self.dialog.makeDialog(title : "경고", message : "카메라를 실행할 수 없습니다." , btn: ["basic": "확인"] , type : true, animated : true, promiseAction: nil)
                 }
             case ModuleType.photos:
                 if (UIImagePickerController.isSourceTypeAvailable(.photoLibrary)) {
@@ -215,7 +207,7 @@ extension CameraPhotos :  UIImagePickerControllerDelegate, UINavigationControlle
                 }else{
                     result["msg"] = Msg.NoPhotos
                     self.imageAction?.promiseReturn(result)
-                    self.dialog.makeDialog(self.currentVC, title : "경고", message : "사진을 실행할 수 없습니다." , btn: ["basic": "확인"] , type :true, animated : true, promiseAction: nil)
+                    self.dialog.makeDialog(title : "경고", message : "사진을 실행할 수 없습니다." , btn: ["basic": "확인"] , type :true, animated : true, promiseAction: nil)
                 }
             default:
                 result["msg"] = Msg.UnknownError
